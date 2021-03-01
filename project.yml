@@ -17,6 +17,11 @@ schemes:
       targets:
         - Tests
 
+  TheMovieDBExample:
+    build:
+      targets:
+        TheMovieDBExample: all
+
   BasicExample:
     build:
       targets:
@@ -47,6 +52,17 @@ targets:
     configFiles:
       Debug: xcconfigs/Hooks.xcconfig
       Release: xcconfigs/Hooks.xcconfig
+
+  TheMovieDBExample:
+    type: application
+    platform: iOS
+    sources:
+      - Examples/TheMovieDB
+    dependencies:
+      - target: Hooks
+    configFiles:
+      Debug: xcconfigs/Example-TheMovieDB.xcconfig
+      Release: xcconfigs/Example-TheMovieDB.xcconfig
 
   BasicExample:
     type: application

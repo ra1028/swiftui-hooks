@@ -50,6 +50,9 @@ jobs:
       - name: Build for watchOS
         run: set -o pipefail && xcodebuild build -scheme Hooks -configuration Release -sdk watchsimulator -destination 'platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm' ENABLE_TESTABILITY=YES | xcpretty -c
 
+      - name: Build TheMovieDBExample
+        run: set -o pipefail && xcodebuild build -scheme TheMovieDBExample -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro' ENABLE_TESTABILITY=YES | xcpretty -c
+
       - name: Build BasicExample
         run: set -o pipefail && xcodebuild build -scheme BasicExample -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro' ENABLE_TESTABILITY=YES | xcpretty -c
 

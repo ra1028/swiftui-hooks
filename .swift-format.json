@@ -39,7 +39,7 @@
         "NoVoidReturnOnFunctionSignature": true,
         "OneCasePerLine": true,
         "OneVariableDeclarationPerLine": true,
-        "OnlyOneTrailingClosureArgument": true,
+        "OnlyOneTrailingClosureArgument": false,
         "OrderedImports": true,
         "ReturnVoidInsteadOfEmptyTuple": true,
         "UseLetInEveryBoundCaseVariable": true,

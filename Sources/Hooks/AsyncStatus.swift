@@ -25,14 +25,14 @@ public enum AsyncStatus<Success, Failure: Error> {
     /// If this instance represents a `pending` or a `running`, this returns nil.
     public var result: Result<Success, Failure>? {
         switch self {
-            case .pending, .running:
-                return nil
+        case .pending, .running:
+            return nil
 
-            case .success(let success):
-                return .success(success)
+        case .success(let success):
+            return .success(success)
 
-            case .failure(let error):
-                return .failure(error)
+        case .failure(let error):
+            return .failure(error)
         }
     }
 
@@ -55,17 +55,17 @@ public enum AsyncStatus<Success, Failure: Error> {
     /// - Returns: An `AsyncStatus` instance, either from the closure or the previous `.success`.
     public func flatMap<NewSuccess>(_ transform: (Success) -> AsyncStatus<NewSuccess, Failure>) -> AsyncStatus<NewSuccess, Failure> {
         switch self {
-            case .pending:
-                return .pending
+        case .pending:
+            return .pending
 
-            case .running:
-                return .running
+        case .running:
+            return .running
 
-            case .success(let value):
-                return transform(value)
+        case .success(let value):
+            return transform(value)
 
-            case .failure(let error):
-                return .failure(error)
+        case .failure(let error):
+            return .failure(error)
         }
     }
 
@@ -74,17 +74,17 @@ public enum AsyncStatus<Success, Failure: Error> {
     /// - Returns: An `AsyncStatus` instance, either from the closure or the previous `.failure`.
     public func flatMapError<NewFailure: Error>(_ transform: (Failure) -> AsyncStatus<Success, NewFailure>) -> AsyncStatus<Success, NewFailure> {
         switch self {
-            case .pending:
-                return .pending
+        case .pending:
+            return .pending
 
-            case .running:
-                return .running
+        case .running:
+            return .running
 
-            case .success(let value):
-                return .success(value)
+        case .success(let value):
+            return .success(value)
 
-            case .failure(let error):
-                return transform(error)
+        case .failure(let error):
+            return transform(error)
         }
     }
 
@@ -96,14 +96,14 @@ public enum AsyncStatus<Success, Failure: Error> {
     /// - Returns:  The success value, if the instance represents a success,If the status is `pending` or `running`, this returns nil. .
     public func get() throws -> Success? {
         switch self {
-            case .pending, .running:
-                return nil
+        case .pending, .running:
+            return nil
 
-            case .success(let value):
-                return value
+        case .success(let value):
+            return value
 
-            case .failure(let error):
-                throw error
+        case .failure(let error):
+            throw error
         }
     }
 }

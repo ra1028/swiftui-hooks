@@ -142,7 +142,7 @@ final class AsyncStatusTests: XCTestCase {
             nil,
             nil,
             100,
-            nil
+            nil,
         ]
 
         for (status, expected) in zip(statuses, expected) {

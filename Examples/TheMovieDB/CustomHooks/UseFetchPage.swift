@@ -17,21 +17,10 @@ func useFetchPage<Response: Decodable>(
         results.current += response.results
     }
 
-    guard page.current == 0 else {
-        return (status: .success(results.current), fetch: fetch)
-    }
+    let newStatus =
+        page.current == 0
+        ? status.map { _ in results.current }
+        : .success(results.current)
 
-    switch status {
-    case .pending:
-        return (status: .pending, fetch: fetch)
-
-    case .running:
-        return (status: .running, fetch: fetch)
-
-    case .success:
-        return (status: .success(results.current), fetch: fetch)
-
-    case .failure(let error):
-        return (status: .failure(error), fetch: fetch)
-    }
+    return (status: newStatus, fetch: fetch)
 }

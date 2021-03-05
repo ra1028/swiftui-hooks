@@ -18,7 +18,7 @@ struct TopRatedMoviesPage: HookView {
                     failure(error, onReload: fetch)
 
                 case .pending, .running:
-                    ProgressView()
+                    loading
                 }
             }
             .navigationTitle("Top Rated Movies")
@@ -29,6 +29,10 @@ struct TopRatedMoviesPage: HookView {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: fetch)
+    }
+
+    var loading: some View {
+        ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     func failure(_ error: URLError, onReload: @escaping () -> Void) -> some View {

@@ -14,11 +14,5 @@ func useNetworkImage(for path: String, size: NetworkImageSize) -> UIImage? {
             .receive(on: DispatchQueue.main)
     }
 
-    switch status {
-    case .success(let image):
-        return image
-
-    case .failure, .pending, .running:
-        return nil
-    }
+    return try? status.get() ?? nil
 }

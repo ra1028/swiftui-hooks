@@ -32,7 +32,7 @@ final class WithTemporaryHookScopeTests: XCTestCase {
         initialValue: Value,
         compute: @escaping (Value) -> Value
     ) -> Value {
-        TestHook(initialValue: initialValue, compute: compute).use()
+        useHook(TestHook(initialValue: initialValue, compute: compute))
     }
 
     func testUse() {

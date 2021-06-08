@@ -76,9 +76,9 @@ final class HookDispatcherTests: XCTestCase {
         let deferredHook = TestHook(computation: .always, shouldDeferredCompute: true)
 
         dispatcher.scoped(environment: EnvironmentValues()) {
-            let value1 = alwaysHook.use()
-            let value2 = onceHook.use()
-            let value3 = deferredHook.use()
+            let value1 = useHook(alwaysHook)
+            let value2 = useHook(onceHook)
+            let value3 = useHook(deferredHook)
 
             XCTAssertEqual(value1, 1)  // Compute always
             XCTAssertEqual(value2, 1)  // Compute once
@@ -86,9 +86,9 @@ final class HookDispatcherTests: XCTestCase {
         }
 
         dispatcher.scoped(environment: EnvironmentValues()) {
-            let value1 = alwaysHook.use()
-            let value2 = onceHook.use()
-            let value3 = deferredHook.use()
+            let value1 = useHook(alwaysHook)
+            let value2 = useHook(onceHook)
+            let value3 = useHook(deferredHook)
 
             XCTAssertEqual(value1, 2)  // Compute always
             XCTAssertEqual(value2, 1)  // Already computed once
@@ -96,9 +96,9 @@ final class HookDispatcherTests: XCTestCase {
         }
 
         dispatcher.scoped(environment: EnvironmentValues()) {
-            let value1 = alwaysHook.use()
-            let value2 = onceHook.use()
-            let value3 = deferredHook.use()
+            let value1 = useHook(alwaysHook)
+            let value2 = useHook(onceHook)
+            let value3 = useHook(deferredHook)
 
             XCTAssertEqual(value1, 3)  // Compute always
             XCTAssertEqual(value2, 1)  // Already computed once
@@ -115,10 +115,10 @@ final class HookDispatcherTests: XCTestCase {
         let hook4 = TestHook(disposeCounter: disposeCounter)
 
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
-            let value1 = hook1.use()  // Int
-            hook2.use()  // Void
-            let value3 = hook3.use()  // Int
-            let value4 = hook4.use()  // Int
+            let value1 = useHook(hook1)
+            useHook(hook2)
+            let value3 = useHook(hook3)
+            let value4 = useHook(hook4)
 
             XCTAssertEqual(value1, 1)
             XCTAssertEqual(value3, 1)
@@ -126,10 +126,10 @@ final class HookDispatcherTests: XCTestCase {
         }
 
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
-            let value1 = hook1.use()
+            let value1 = useHook(hook1)
             // _ = hook2.use()
-            let value3 = hook3.use()  // Type mismatched here: Void -> Int
-            let value4 = hook4.use()
+            let value3 = useHook(hook3)
+            let value4 = useHook(hook4)
 
             XCTAssertEqual(value1, 2)  // Works correctly
             XCTAssertEqual(value3, 1)  // State is initialized
@@ -144,10 +144,10 @@ final class HookDispatcherTests: XCTestCase {
         XCTAssertEqual(disposeCounter.count, 3)
 
         dispatcher.scoped(disablesAssertion: false, environment: EnvironmentValues()) {
-            let value1 = hook1.use()
+            let value1 = useHook(hook1)
             // _ = hook2.use()
-            let value3 = hook3.use()
-            let value4 = hook4.use()
+            let value3 = useHook(hook3)
+            let value4 = useHook(hook4)
 
             XCTAssertEqual(value1, 3)  // Works correctly
             XCTAssertEqual(value3, 2)  // Works correctly
@@ -164,9 +164,9 @@ final class HookDispatcherTests: XCTestCase {
 
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
             // There are 2 hooks
-            let value1 = hook1.use()
-            let value2 = hook2.use()
-            let value3 = hook3.use()
+            let value1 = useHook(hook1)
+            let value2 = useHook(hook2)
+            let value3 = useHook(hook3)
 
             XCTAssertEqual(value1, 1)
             XCTAssertEqual(value2, 1)
@@ -175,7 +175,7 @@ final class HookDispatcherTests: XCTestCase {
 
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
             // There is 1 hook
-            let value1 = hook1.use()
+            let value1 = useHook(hook1)
             // let value2 = hook2.use()
             // let value3 = hook3.use()
 
@@ -188,9 +188,9 @@ final class HookDispatcherTests: XCTestCase {
         XCTAssertEqual(disposeCounter.count, 2)
 
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
-            let value1 = hook1.use()
-            let value2 = hook2.use()
-            let value3 = hook3.use()
+            let value1 = useHook(hook1)
+            let value2 = useHook(hook2)
+            let value3 = useHook(hook3)
 
             XCTAssertEqual(value1, 3)  // Works correctly
             XCTAssertEqual(value2, 1)  // Previous state is initialized
@@ -198,9 +198,9 @@ final class HookDispatcherTests: XCTestCase {
         }
 
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
-            let value1 = hook1.use()
-            let value2 = hook2.use()
-            let value3 = hook3.use()
+            let value1 = useHook(hook1)
+            let value2 = useHook(hook2)
+            let value3 = useHook(hook3)
 
             XCTAssertEqual(value1, 4)  // Works correctly
             XCTAssertEqual(value2, 2)  // Works correctly
@@ -216,8 +216,8 @@ final class HookDispatcherTests: XCTestCase {
 
         dispatcher?
             .scoped(environment: EnvironmentValues()) {
-                _ = hook1.use()
-                _ = hook2.use()
+                _ = useHook(hook1)
+                _ = useHook(hook2)
             }
 
         XCTAssertEqual(disposeCounter.count, 0)

@@ -20,7 +20,7 @@ final class HookTests: XCTestCase {
         XCTAssertFalse(hook.isComputed)
 
         dispatcher.scoped(environment: EnvironmentValues()) {
-            hook.use()
+            useHook(hook)
         }
 
         XCTAssertTrue(hook.isComputed)

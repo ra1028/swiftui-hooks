@@ -17,7 +17,12 @@ public func usePublisher<P: Publisher>(
     _ computation: HookComputation,
     _ makePublisher: @escaping () -> P
 ) -> AsyncStatus<P.Output, P.Failure> {
-    PublisherHook(computation: computation, makePublisher: makePublisher).use()
+    useHook(
+        PublisherHook(
+            computation: computation,
+            makePublisher: makePublisher
+        )
+    )
 }
 
 internal struct PublisherHook<P: Publisher>: Hook {

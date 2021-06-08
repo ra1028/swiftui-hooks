@@ -19,6 +19,7 @@
 		2CEA24339B3F42A4CFF86841 /* UseReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E41F26D994357565AA99982 /* UseReducer.swift */; };
 		2E853BB425DB2EA70FAFDC91 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FEF1E623FB1A99A8CE2C52 /* SceneDelegate.swift */; };
 		2F0F93ADF2C561F1AB43C172 /* HookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE554373C87B3EBF853656AE /* HookTests.swift */; };
+		3E5EAEB881AF3D10624D8D12 /* UseHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DDE4B237CE2E7552A9894D /* UseHook.swift */; };
 		430A12A2342F769095DD0472 /* UsePublisherSubscribe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E448CD02D18EDF5EE5E431 /* UsePublisherSubscribe.swift */; };
 		434F26EDC7E08A8D4DD95BDD /* StateHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5890D260F408A3F35736A1B7 /* StateHookTests.swift */; };
 		45D0F926D4945C9F2FD25DFC /* Hooks.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0BE1A622B9E20FEDCF8AF1B /* Hooks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -211,6 +212,7 @@
 		AF72C617DD1EFA8E773C9933 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0BE1A622B9E20FEDCF8AF1B /* Hooks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hooks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B65D363DE233CD9012F55BE6 /* WithTemporaryHookScopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithTemporaryHookScopeTests.swift; sourceTree = "<group>"; };
+		B8DDE4B237CE2E7552A9894D /* UseHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseHook.swift; sourceTree = "<group>"; };
 		B9083B0E78D374BDA5C13E05 /* TheMovieDBExample.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TheMovieDBExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF79181B9FC0A79358C375C9 /* Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C11E72A6A91A637AF3E0D17D /* PublisherSubscribeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherSubscribeTests.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				1E6FB5498BCA211AA8D95310 /* UseContext.swift */,
 				0020121CF653D18FB163AE50 /* UseEffect.swift */,
 				69F611A657F17B2D69B02BB4 /* UseEnvironment.swift */,
+				B8DDE4B237CE2E7552A9894D /* UseHook.swift */,
 				1362C44D7A5B7E4533EEB1BE /* UseLayoutEffect.swift */,
 				8737E81665722CF51F32A21B /* UseMemo.swift */,
 				F9D3AC7B5A6545FA50743EB3 /* UsePublisher.swift */,
@@ -635,6 +638,7 @@
 				96C6BD504F07B49653C89E5F /* UseContext.swift in Sources */,
 				55A6953CB64F43219EF93958 /* UseEffect.swift in Sources */,
 				FAAC96B396867EF9CBD41738 /* UseEnvironment.swift in Sources */,
+				3E5EAEB881AF3D10624D8D12 /* UseHook.swift in Sources */,
 				472084B7DB5B6E97C342E87F /* UseLayoutEffect.swift in Sources */,
 				52A4A45653CCCE9CEB71DF87 /* UseMemo.swift in Sources */,
 				8F8C80AEBEAEE0AB6DE68ACA /* UsePublisher.swift in Sources */,

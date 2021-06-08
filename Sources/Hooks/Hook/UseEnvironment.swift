@@ -7,7 +7,7 @@ import SwiftUI
 /// - Parameter keyPath: A key path to a specific resulting value.
 /// - Returns: A environment value from the view's environment.
 public func useEnvironment<Value>(_ keyPath: KeyPath<EnvironmentValues, Value>) -> Value {
-    EnvironmentHook(keyPath: keyPath).use()
+    useHook(EnvironmentHook(keyPath: keyPath))
 }
 
 internal struct EnvironmentHook<Value>: Hook {

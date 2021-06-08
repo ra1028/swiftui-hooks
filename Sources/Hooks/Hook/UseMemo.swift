@@ -12,7 +12,7 @@ public func useMemo<Value>(
     _ computation: HookComputation,
     _ makeValue: @escaping () -> Value
 ) -> Value {
-    MemoHook(computation: computation, makeValue: makeValue).use()
+    useHook(MemoHook(computation: computation, makeValue: makeValue))
 }
 
 internal struct MemoHook<Value>: Hook {

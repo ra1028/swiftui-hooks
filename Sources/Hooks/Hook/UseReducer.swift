@@ -25,7 +25,7 @@ public func useReducer<State, Action>(
     _ reducer: @escaping (State, Action) -> State,
     initialState: State
 ) -> (state: State, dispatch: (Action) -> Void) {
-    ReducerHook(reducer: reducer, initialState: initialState).use()
+    useHook(ReducerHook(reducer: reducer, initialState: initialState))
 }
 
 internal struct ReducerHook<State, Action>: Hook {

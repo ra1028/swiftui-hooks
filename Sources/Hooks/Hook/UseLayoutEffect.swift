@@ -15,10 +15,11 @@ public func useLayoutEffect(
     _ computation: HookComputation,
     _ effect: @escaping () -> (() -> Void)?
 ) {
-    EffectHook(
-        computation: computation,
-        shouldDeferredCompute: false,
-        effect: effect
+    useHook(
+        EffectHook(
+            computation: computation,
+            shouldDeferredCompute: false,
+            effect: effect
+        )
     )
-    .use()
 }

@@ -9,7 +9,7 @@ import SwiftUI
 /// - Parameter initialState: An initial state.
 /// - Returns: A `Binding<State>` wrapping current state.
 public func useState<State>(_ initialState: State) -> Binding<State> {
-    StateHook(initialState: initialState).use()
+    useHook(StateHook(initialState: initialState))
 }
 
 internal struct StateHook<State>: Hook {

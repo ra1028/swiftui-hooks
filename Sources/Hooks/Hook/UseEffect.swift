@@ -18,12 +18,13 @@ public func useEffect(
     _ computation: HookComputation,
     _ effect: @escaping () -> (() -> Void)?
 ) {
-    EffectHook(
-        computation: computation,
-        shouldDeferredCompute: true,
-        effect: effect
+    useHook(
+        EffectHook(
+            computation: computation,
+            shouldDeferredCompute: true,
+            effect: effect
+        )
     )
-    .use()
 }
 
 internal struct EffectHook: Hook {

@@ -16,7 +16,7 @@ public func usePublisherSubscribe<P: Publisher>(
     status: AsyncStatus<P.Output, P.Failure>,
     subscribe: () -> Void
 ) {
-    PublisherSubscribeHook(makePublisher: makePublisher).use()
+    useHook(PublisherSubscribeHook(makePublisher: makePublisher))
 }
 
 internal struct PublisherSubscribeHook<P: Publisher>: Hook {

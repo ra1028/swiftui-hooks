@@ -7,7 +7,7 @@
 /// - Parameter initialValue: A initial value that to initialize the ref object to be returned.
 /// - Returns: A mutable ref object.
 public func useRef<T>(_ initialValue: T) -> RefObject<T> {
-    RefHook(initialValue: initialValue).use()
+    useHook(RefHook(initialValue: initialValue))
 }
 
 internal struct RefHook<T>: Hook {

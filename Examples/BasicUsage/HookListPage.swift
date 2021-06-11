@@ -11,16 +11,27 @@ struct HookListPage: HookView {
         ColorSchemeContext.Provider(value: colorScheme) {
             ScrollView {
                 VStack {
-                    useStateRow
-                    useReducerRow
-                    useEffectRow
-                    useLayoutEffectRow
-                    useMemoRow
-                    useRefRow
-                    useEnvironmentRow
-                    usePublisherRow
-                    usePublisherSubscribeRow
-                    useContextRow
+                    Group {
+                        #if swift(>=5.5)
+                            if #available(iOS 15.0, *) {
+                                useAsyncRow
+                            }
+                        #endif
+
+                        useStateRow
+                        useReducerRow
+                        useEffectRow
+                        useLayoutEffectRow
+                    }
+
+                    Group {
+                        useMemoRow
+                        useRefRow
+                        useEnvironmentRow
+                        usePublisherRow
+                        usePublisherSubscribeRow
+                        useContextRow
+                    }
                 }
                 .padding(.vertical, 16)
             }
@@ -29,6 +40,38 @@ struct HookListPage: HookView {
             .colorScheme(colorScheme.wrappedValue)
         }
     }
+
+    #if swift(>=5.5)
+        @available(iOS 15.0, *)
+        var useAsyncRow: some View {
+            let status = useAsync(.once) { () -> UIImage? in
+                let url = URL(string: "https://source.unsplash.com/random")!
+                let (data, _) = try await URLSession.shared.data(from: url)
+                return UIImage(data: data)
+            }
+
+            return Row("useAsync") {
+                Group {
+                    switch status {
+                    case .pending, .running:
+                        ProgressView()
+
+                    case .failure(let error):
+                        Text(error.localizedDescription)
+
+                    case .success(let image):
+                        image.map { uiImage in
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                        }
+                    }
+                }
+                .frame(width: 100, height: 100)
+                .clipped()
+            }
+        }
+    #endif
 
     var useStateRow: some View {
         let count = useState(0)

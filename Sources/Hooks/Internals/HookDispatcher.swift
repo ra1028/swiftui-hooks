@@ -17,6 +17,13 @@ internal final class HookDispatcher: ObservableObject {
         }
     }
 
+    func clear() {
+        for record in records.reversed() {
+            record.element.dispose()
+        }
+        records = LinkedList<HookRecordProtocol>()
+    }
+
     func use<H: Hook>(_ hook: H) -> H.Value {
         assertMainThread()
 

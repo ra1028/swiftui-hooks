@@ -52,6 +52,7 @@ private struct HookScopeBody<Content: View>: View {
 
     var body: some View {
         dispatcher.scoped(environment: environment, content)
+            .onDisappear() { dispatcher.clear() }
     }
 }
 
@@ -76,6 +77,7 @@ private struct HookScopeCompatBody<Content: View>: View {
 
         var body: some View {
             dispatcher.scoped(environment: environment, content)
+                .onDisappear() { dispatcher.clear() }
         }
     }
 

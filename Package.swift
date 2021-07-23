@@ -1,5 +1,6 @@
 // swift-tools-version:5.3
 
+import Foundation
 import PackageDescription
 
 let package = Package(
@@ -22,3 +23,7 @@ let package = Package(
     ],
     swiftLanguageVersions: [.v5]
 )
+
+if ProcessInfo.processInfo.environment["WATCHOS"] == "true" {
+    package.targets.removeAll(where: \.isTest)
+}

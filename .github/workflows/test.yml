@@ -6,58 +6,66 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    branches:
+      - main
 jobs:
   test:
-    name: Test on macOS
+    name: Test
     runs-on: macos-10.15
     strategy:
       matrix:
         xcode_version:
-          - "12.4"
+          - 12.4
+          # Should revisit these versions once Big sur will be available.
+          # - 12.5.1
+          # - 13.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode_version }}.app
-      LEGACY_XCODE_APP: /Applications/Xcode_11.2.1.app
-      LEGACY_TARGET_OS: 13.2.2
-      LEGACY_RUNTIME_NAME: com.apple.CoreSimulator.SimRuntime.iOS-13-2
-      LEGACY_TARGET_DEVICE: iPhone 11 Pro
     steps:
       - uses: actions/checkout@v2
       - name: Show environments
         run: |
           swift --version
           xcodebuild -version
-          pod --version
+      - name: Test for macOS
+        run: xcodebuild test -scheme Hooks -destination 'platform=macOS'
+      - name: Test for iOS
+        run: xcodebuild test -scheme Hooks -destination 'platform=iOS Simulator,name=iPhone 12 Pro'
+      - name: Test for tvOS
+        run: xcodebuild test -scheme Hooks -destination 'platform=tvOS Simulator,name=Apple TV'
+      - name: Build for watchOS
+        run: WATCHOS=true xcodebuild build -scheme Hooks -destination 'platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm'
 
-      - name: Podspec lint
-        run: pod lib lint Hooks.podspec --allow-warnings --verbose
-
-      - name: Prepare legacy OS simulator
+  build-examples:
+    name: Compatibility Test
+    runs-on: macos-10.15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.4.app
+      OLD_XCODE_APP: /Applications/Xcode_11.7.app
+      OLD_TARGET_OS: 13.7
+      OLD_RUNTIME_NAME: com.apple.CoreSimulator.SimRuntime.iOS-13-7
+      PLATFORM: platform=iOS Simulator,name=iPhone 12 Pro
+      OLD_PLATFORM: platform=iOS Simulator,name=iPhone 11 Pro,OS=$OLD_TARGET_OS
+    steps:
+      - uses: actions/checkout@v2
+      - name: Show environments
+        run: |
+          swift --version
+          xcodebuild -version
+      - name: Prepare old OS simulator
         run: |
           sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
-          sudo ln -s $LEGACY_XCODE_APP/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ $LEGACY_TARGET_OS.simruntime
+          sudo ln -s $OLD_XCODE_APP/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ $OLD_TARGET_OS.simruntime
           xcrun simctl list runtimes
-          xcrun simctl list devices $LEGACY_TARGET_OS
-
-      - name: Test for macOS
-        run: set -o pipefail && xcodebuild build-for-testing test-without-building -scheme Hooks -configuration Release ENABLE_TESTABILITY=YES | xcpretty -c
-
-      - name: Test for iOS
-        run: set -o pipefail && xcodebuild build-for-testing test-without-building -scheme Hooks -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro' ENABLE_TESTABILITY=YES | xcpretty -c
-
-      - name: Test for tvOS
-        run: set -o pipefail && xcodebuild build-for-testing test-without-building -scheme Hooks -configuration Release -sdk appletvsimulator -destination 'platform=tvOS Simulator,name=Apple TV' ENABLE_TESTABILITY=YES | xcpretty -c
-
-      - name: Build for watchOS
-        run: set -o pipefail && xcodebuild build -scheme Hooks -configuration Release -sdk watchsimulator -destination 'platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm' ENABLE_TESTABILITY=YES | xcpretty -c
-
+          xcrun simctl list devices $OLD_TARGET_OS
+      - name: Change directory
+        run: cd Examples
       - name: Build TheMovieDBExample
-        run: set -o pipefail && xcodebuild build -scheme TheMovieDBExample -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro' ENABLE_TESTABILITY=YES | xcpretty -c
-
+        run: xcodebuild build -scheme TheMovieDB -destination $PLATFORM
       - name: Build BasicExample
-        run: set -o pipefail && xcodebuild build -scheme BasicExample -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro' ENABLE_TESTABILITY=YES | xcpretty -c
-
-      - name: Build LegacyExample
-        run: set -o pipefail && xcodebuild build -scheme LegacyExample -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=$LEGACY_TARGET_DEVICE,OS=$LEGACY_TARGET_OS" ENABLE_TESTABILITY=YES | xcpretty -c
-
-      - name: Build for Package.swift
-        run: set -o pipefail && rm -rf SwiftUI-Hooks.xcodeproj && xcodebuild build -scheme Hooks -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12 Pro' ENABLE_TESTABILITY=YES | xcpretty -c
+        run: xcodebuild build -scheme Basic -destination $PLATFORM
+      - name: Build Legacy
+        run: xcodebuild build -scheme Legacy -destination $PLATFORM
+      - name: Build Legacy with iOS13
+        run: xcodebuild build -scheme Legacy -destination $OLD_PLATFORM

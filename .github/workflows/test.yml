@@ -29,13 +29,13 @@ jobs:
           swift --version
           xcodebuild -version
       - name: Test for macOS
-        run: xcodebuild test -scheme Hooks -destination 'platform=macOS'
+        run: xcodebuild test -scheme Hooks -destination "platform=macOS"
       - name: Test for iOS
-        run: xcodebuild test -scheme Hooks -destination 'platform=iOS Simulator,name=iPhone 12 Pro'
+        run: xcodebuild test -scheme Hooks -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Test for tvOS
-        run: xcodebuild test -scheme Hooks -destination 'platform=tvOS Simulator,name=Apple TV'
+        run: xcodebuild test -scheme Hooks -destination "platform=tvOS Simulator,name=Apple TV"
       - name: Build for watchOS
-        run: WATCHOS=true xcodebuild build -scheme Hooks -destination 'platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm'
+        run: WATCHOS=true xcodebuild build -scheme Hooks -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm"
 
   build-examples:
     name: Compatibility Test
@@ -45,8 +45,9 @@ jobs:
       OLD_XCODE_APP: /Applications/Xcode_11.7.app
       OLD_TARGET_OS: 13.7
       OLD_RUNTIME_NAME: com.apple.CoreSimulator.SimRuntime.iOS-13-7
-      PLATFORM: platform=iOS Simulator,name=iPhone 12 Pro
-      OLD_PLATFORM: platform=iOS Simulator,name=iPhone 11 Pro,OS=$OLD_TARGET_OS
+    defaults:
+      run:
+        working-directory: Examples
     steps:
       - uses: actions/checkout@v2
       - name: Show environments
@@ -59,13 +60,11 @@ jobs:
           sudo ln -s $OLD_XCODE_APP/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ $OLD_TARGET_OS.simruntime
           xcrun simctl list runtimes
           xcrun simctl list devices $OLD_TARGET_OS
-      - name: Change directory
-        run: cd Examples
-      - name: Build TheMovieDBExample
-        run: xcodebuild build -scheme TheMovieDB -destination $PLATFORM
-      - name: Build BasicExample
-        run: xcodebuild build -scheme Basic -destination $PLATFORM
+      - name: Build TheMovieDB
+        run: xcodebuild build -scheme TheMovieDB -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+      - name: Build Basic
+        run: xcodebuild build -scheme Basic -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Legacy
-        run: xcodebuild build -scheme Legacy -destination $PLATFORM
+        run: xcodebuild build -scheme Legacy -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Legacy with iOS13
-        run: xcodebuild build -scheme Legacy -destination $OLD_PLATFORM
+        run: xcodebuild build -scheme Legacy -destination "platform=iOS Simulator,name=iPhone 11 Pro,OS=$OLD_TARGET_OS"

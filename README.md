@@ -493,24 +493,6 @@ Xcode menu `File > Swift Packages > Add Package Dependency`.
 Repository: https://github.com/ra1028/SwiftUI-Hooks
 ```
 
-### [Carthage](https://github.com/Carthage/Carthage)
-
-Cartfile
-
-```ruby
-github "ra1028/SwiftUI-Hooks"
-```
-
-### [CocoaPods](https://cocoapods.org)
-
-Doesn't support CocoaPods master repository.  
-
-Podfile
-
-```ruby
-pod 'Hooks' :git => 'https://github.com/ra1028/SwiftUI-Hooks.git'
-```
-
 ---
 
 ## License

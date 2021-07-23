@@ -20,19 +20,6 @@ build/
 archive/
 *.xcframework
 
-## Gem
-.bundle
-vendor
-
-## npm
-node_modules
-
-## Carthage
-Carthage/Build
-
-## CocoaPods
-Pods/
-
 ## SwiftPM
 .swiftpm
 .build

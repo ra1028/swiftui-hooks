@@ -1,0 +1,69 @@
+name: Examples
+options:
+  bundleIdPrefix: com.ryo.swiftui-hooks-examples
+  createIntermediateGroups: true
+settings:
+  CODE_SIGNING_REQUIRED: NO
+  CODE_SIGN_IDENTITY:
+  CODE_SIGN_STYLE: Manual
+  EXCLUDED_ARCHS[sdk=iphoneos*]: x86_64
+  EXCLUDED_ARCHS[sdk=iphonesimulator*]: arm64
+  EXCLUDED_ARCHS[sdk=appletv*]: x86_64
+  EXCLUDED_ARCHS[sdk=appletvsimulator*]: arm64
+
+schemes:
+  TheMovieDB:
+    build:
+      targets:
+        TheMovieDB: all
+
+  Basic:
+    build:
+      targets:
+        Basic: all
+
+  Legacy:
+    build:
+      targets:
+        Legacy: all
+
+packages:
+  Hooks:
+    path: ..
+
+targets:
+  TheMovieDB:
+    type: application
+    platform: iOS
+    sources:
+      - TheMovieDB
+    dependencies:
+      - package: Hooks
+    deploymentTarget: 14.0
+    settings:
+      SUPPORTED_PLATFORMS: iphoneos iphonesimulator
+      TARGETED_DEVICE_FAMILY: 1,2
+  Basic:
+    type: application
+    platform: iOS
+    sources:
+      - Basic
+    dependencies:
+      - package: Hooks
+    deploymentTarget: 14.0
+    settings:
+      SUPPORTED_PLATFORMS: iphoneos iphonesimulator
+      TARGETED_DEVICE_FAMILY: 1,2
+
+  Legacy:
+    type: application
+    platform: iOS
+    sources:
+      - Legacy
+    dependencies:
+      - package: Hooks
+    deploymentTarget: 13.0
+    settings:
+      configs:
+        SUPPORTED_PLATFORMS: iphoneos iphonesimulator appletvos appletvsimulator
+        TARGETED_DEVICE_FAMILY: 1,2,3

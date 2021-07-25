@@ -12,6 +12,10 @@ public final class HookDispatcher: ObservableObject {
     public init() {}
 
     deinit {
+        disposeAll()
+    }
+
+    public func disposeAll() {
         for record in records.reversed() {
             record.element.dispose()
         }

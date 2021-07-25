@@ -13,12 +13,23 @@ let package = Package(
     ],
     products: [
         .library(name: "Hooks", targets: ["Hooks"]),
+        .library(name: "HooksTesting", targets: ["HooksTesting"]),
     ],
     targets: [
-        .target(name: "Hooks"),
+        .target(
+            name: "Hooks"
+        ),
+        .target(
+            name: "HooksTesting",
+            dependencies: ["Hooks"]
+        ),
         .testTarget(
             name: "HooksTests",
-            dependencies: ["Hooks"]
+            dependencies: ["HooksTesting"]
+        ),
+        .testTarget(
+            name: "HooksTestingTests",
+            dependencies: ["HooksTesting"]
         ),
     ],
     swiftLanguageVersions: [.v5]

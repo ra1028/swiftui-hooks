@@ -22,7 +22,9 @@ internal struct StateHook<State>: Hook {
 
     func makeValue(coordinator: Coordinator) -> Binding<State> {
         Binding(
-            get: { coordinator.state.state },
+            get: { [state = coordinator.state.state] in
+                state
+            },
             set: { newState in
                 coordinator.state.state = newState
                 coordinator.updateView()

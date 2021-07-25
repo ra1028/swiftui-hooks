@@ -36,14 +36,6 @@ public protocol Hook {
 }
 
 public extension Hook {
-    /// Register the hook to the view and returns its value.
-    /// Must be called at the function top level within scope of the HookScope or the HookView.hookBody`.
-    /// - Returns: A value that this hook provides.
-    @available(*, deprecated, message: "This function will be removed soon. Use toplevel `useHook` instead.")
-    func use() -> Value {
-        useHook(self)
-    }
-
     /// Indicates whether the value should be computed after all hooks have been evaluated.
     /// Default is `false`.
     var shouldDeferredCompute: Bool { false }

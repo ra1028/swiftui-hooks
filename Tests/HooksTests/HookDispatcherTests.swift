@@ -127,7 +127,6 @@ final class HookDispatcherTests: XCTestCase {
 
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
             let value1 = useHook(hook1)
-            // _ = hook2.use()
             let value3 = useHook(hook3)
             let value4 = useHook(hook4)
 
@@ -145,7 +144,6 @@ final class HookDispatcherTests: XCTestCase {
 
         dispatcher.scoped(disablesAssertion: false, environment: EnvironmentValues()) {
             let value1 = useHook(hook1)
-            // _ = hook2.use()
             let value3 = useHook(hook3)
             let value4 = useHook(hook4)
 
@@ -176,8 +174,6 @@ final class HookDispatcherTests: XCTestCase {
         dispatcher.scoped(disablesAssertion: true, environment: EnvironmentValues()) {
             // There is 1 hook
             let value1 = useHook(hook1)
-            // let value2 = hook2.use()
-            // let value3 = hook3.use()
 
             XCTAssertEqual(value1, 2)  // Works correctly
         }

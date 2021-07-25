@@ -141,21 +141,21 @@ struct HookListPage: HookView {
     }
 
     var usePublisherRow: some View {
-        let status = usePublisher(.once) {
+        let phase = usePublisher(.once) {
             Timer.publish(every: 1, on: .main, in: .common)
                 .autoconnect()
                 .prepend(Date())
         }
 
         return Row("usePublisher") {
-            if case .success(let date) = status {
+            if case .success(let date) = phase {
                 Text(DateFormatter.time.string(from: date))
             }
         }
     }
 
     var usePublisherSubscribeRow: some View {
-        let (status, subscribe) = usePublisherSubscribe {
+        let (phase, subscribe) = usePublisherSubscribe {
             Just(UUID())
                 .map(\.uuidString)
                 .delay(for: .seconds(1), scheduler: DispatchQueue.main)
@@ -163,7 +163,7 @@ struct HookListPage: HookView {
 
         return Row("usePublisherSubscribe") {
             Group {
-                switch status {
+                switch phase {
                 case .running:
                     ProgressView()
 

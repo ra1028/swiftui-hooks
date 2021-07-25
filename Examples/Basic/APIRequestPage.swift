@@ -7,25 +7,25 @@ struct Post: Codable {
     let body: String
 }
 
-func useFetchPosts() -> (status: AsyncStatus<[Post], Error>, fetch: () -> Void) {
+func useFetchPosts() -> (phase: AsyncPhase<[Post], Error>, fetch: () -> Void) {
     let url = URL(string: "https://jsonplaceholder.typicode.com/posts").unsafelyUnwrapped
-    let (status, subscribe) = usePublisherSubscribe {
+    let (phase, subscribe) = usePublisherSubscribe {
         URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .decode(type: [Post].self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
     }
 
-    return (status: status, fetch: subscribe)
+    return (phase: phase, fetch: subscribe)
 }
 
 struct APIRequestPage: HookView {
     var hookBody: some View {
-        let (status, fetch) = useFetchPosts()
+        let (phase, fetch) = useFetchPosts()
 
         return ScrollView {
             VStack {
-                switch status {
+                switch phase {
                 case .running:
                     ProgressView()
 

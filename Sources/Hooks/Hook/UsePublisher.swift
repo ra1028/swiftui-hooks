@@ -1,22 +1,22 @@
 import Combine
 
-/// A hook to use the most recent status of asynchronous operation of the passed publisher.
+/// A hook to use the most recent phase of asynchronous operation of the passed publisher.
 /// The publisher will be subscribed at the first computation and will be re-subscribed according to the strategy specified with the passed `computation`.
-/// Triggers a view update when the asynchronous status has been changed.
+/// Triggers a view update when the asynchronous phase has been changed.
 ///
-///     let status = usePublisher(.once) {
+///     let phase = usePublisher(.once) {
 ///         URLSession.shared.dataTaskPublisher(for: url)
 ///     }
 ///
 /// - Parameters:
 ///   - computation: A computation strategy that to determine when to subscribe the effect function again.
 ///   - makePublisher: A closure that to create a new publisher to be subscribed.
-/// - Returns: A most recent publisher status.
+/// - Returns: A most recent publisher phase.
 @discardableResult
 public func usePublisher<P: Publisher>(
     _ computation: HookComputation,
     _ makePublisher: @escaping () -> P
-) -> AsyncStatus<P.Output, P.Failure> {
+) -> AsyncPhase<P.Output, P.Failure> {
     useHook(
         PublisherHook(
             computation: computation,
@@ -34,15 +34,15 @@ internal struct PublisherHook<P: Publisher>: Hook {
         State()
     }
 
-    func makeValue(coordinator: Coordinator) -> AsyncStatus<P.Output, P.Failure> {
-        coordinator.state.status
+    func makeValue(coordinator: Coordinator) -> AsyncPhase<P.Output, P.Failure> {
+        coordinator.state.phase
     }
 
     func compute(coordinator: Coordinator) {
         coordinator.state.cancellable = makePublisher()
             .handleEvents(
                 receiveSubscription: { _ in
-                    coordinator.state.status = .running
+                    coordinator.state.phase = .running
                     coordinator.updateView()
                 }
             )
@@ -50,7 +50,7 @@ internal struct PublisherHook<P: Publisher>: Hook {
                 receiveCompletion: { completion in
                     switch completion {
                     case .failure(let error):
-                        coordinator.state.status = .failure(error)
+                        coordinator.state.phase = .failure(error)
 
                     case .finished:
                         break
@@ -58,7 +58,7 @@ internal struct PublisherHook<P: Publisher>: Hook {
                     coordinator.updateView()
                 },
                 receiveValue: { output in
-                    coordinator.state.status = .success(output)
+                    coordinator.state.phase = .success(output)
                     coordinator.updateView()
                 }
             )
@@ -71,7 +71,7 @@ internal struct PublisherHook<P: Publisher>: Hook {
 
 internal extension PublisherHook {
     final class State {
-        var status = AsyncStatus<P.Output, P.Failure>.pending
+        var phase = AsyncPhase<P.Output, P.Failure>.pending
         var cancellable: AnyCancellable?
     }
 }

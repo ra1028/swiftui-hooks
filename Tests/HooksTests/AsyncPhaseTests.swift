@@ -1,9 +1,9 @@
 import Hooks
 import XCTest
 
-final class AsyncStatusTests: XCTestCase {
+final class AsyncPhaseTests: XCTestCase {
     func testIsPending() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
@@ -17,13 +17,13 @@ final class AsyncStatusTests: XCTestCase {
             false,
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.isPending, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.isPending, expected)
         }
     }
 
     func testIsRunning() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
@@ -37,13 +37,13 @@ final class AsyncStatusTests: XCTestCase {
             false,
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.isRunning, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.isRunning, expected)
         }
     }
 
     func testIsSuccess() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
@@ -57,13 +57,13 @@ final class AsyncStatusTests: XCTestCase {
             false,
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.isSuccess, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.isSuccess, expected)
         }
     }
 
     func testIsFailure() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
@@ -77,13 +77,13 @@ final class AsyncStatusTests: XCTestCase {
             true,
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.isFailure, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.isFailure, expected)
         }
     }
 
     func testValue() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
@@ -97,13 +97,13 @@ final class AsyncStatusTests: XCTestCase {
             nil,
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.value, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.value, expected)
         }
     }
 
     func testError() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
@@ -117,13 +117,13 @@ final class AsyncStatusTests: XCTestCase {
             URLError(.badURL),
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.error, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.error, expected)
         }
     }
 
     func testResult() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
@@ -137,95 +137,95 @@ final class AsyncStatusTests: XCTestCase {
             .failure(URLError(.badURL)),
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.result, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.result, expected)
         }
     }
 
     func testMap() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
             .failure(URLError(.badURL)),
         ]
 
-        let expected: [AsyncStatus<Int, URLError>] = [
+        let expected: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(100),
             .failure(URLError(.badURL)),
         ]
 
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(status.map { _ in 100 }, expected)
+        for (phase, expected) in zip(phases, expected) {
+            XCTAssertEqual(phase.map { _ in 100 }, expected)
         }
     }
 
     func testMapError() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
             .failure(URLError(.badURL)),
         ]
 
-        let expected: [AsyncStatus<Int, URLError>] = [
+        let expected: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
             .failure(URLError(.cancelled)),
         ]
 
-        for (status, expected) in zip(statuses, expected) {
+        for (phase, expected) in zip(phases, expected) {
             XCTAssertEqual(
-                status.mapError { _ in URLError(.cancelled) },
+                phase.mapError { _ in URLError(.cancelled) },
                 expected
             )
         }
     }
 
     func testFlatMap() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
             .failure(URLError(.badURL)),
         ]
 
-        let expected: [AsyncStatus<Int, URLError>] = [
+        let expected: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .failure(URLError(.callIsActive)),
             .failure(URLError(.badURL)),
         ]
 
-        for (status, expected) in zip(statuses, expected) {
+        for (phase, expected) in zip(phases, expected) {
             XCTAssertEqual(
-                status.flatMap { _ in .failure(URLError(.callIsActive)) },
+                phase.flatMap { _ in .failure(URLError(.callIsActive)) },
                 expected
             )
         }
     }
 
     func testFlatMapError() {
-        let statuses: [AsyncStatus<Int, URLError>] = [
+        let phases: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
             .failure(URLError(.badURL)),
         ]
 
-        let expected: [AsyncStatus<Int, URLError>] = [
+        let expected: [AsyncPhase<Int, URLError>] = [
             .pending,
             .running,
             .success(0),
             .success(100),
         ]
 
-        for (status, expected) in zip(statuses, expected) {
+        for (phase, expected) in zip(phases, expected) {
             XCTAssertEqual(
-                status.flatMapError { _ in .success(100) },
+                phase.flatMapError { _ in .success(100) },
                 expected
             )
         }

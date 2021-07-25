@@ -1,15 +1,15 @@
 import Combine
 import SwiftUI
 
-internal final class HookDispatcher: ObservableObject {
-    private(set) static weak var current: HookDispatcher?
+public final class HookDispatcher: ObservableObject {
+    internal private(set) static weak var current: HookDispatcher?
+
+    public let objectWillChange = PassthroughSubject<(), Never>()
 
     private var records = LinkedList<HookRecordProtocol>()
     private var scopedState: ScopedHookState?
 
-    let objectWillChange = PassthroughSubject<(), Never>()
-
-    init() {}
+    public init() {}
 
     deinit {
         for record in records.reversed() {
@@ -17,7 +17,7 @@ internal final class HookDispatcher: ObservableObject {
         }
     }
 
-    func use<H: Hook>(_ hook: H) -> H.Value {
+    public func use<H: Hook>(_ hook: H) -> H.Value {
         assertMainThread()
 
         guard let scopedState = scopedState else {
@@ -84,7 +84,7 @@ internal final class HookDispatcher: ObservableObject {
         }
     }
 
-    func scoped<Result>(
+    public func scoped<Result>(
         disablesAssertion: Bool = false,
         environment: EnvironmentValues,
         _ body: () throws -> Result

@@ -90,20 +90,39 @@ final class HookTesterTests: XCTestCase {
     }
 
     func testEnvironment() {
-        var environment = EnvironmentValues()
-        environment.testValue = 0
-
-        let tester = HookTester(environment: environment) {
+        let tester = HookTester {
             useEnvironment(\.testValue)
+        } scope: {
+            $0.environment(\.testValue, 0)
         }
-        environment.testValue = 1
+
         XCTAssertEqual(tester.value, 0)
+    }
+
+    func testContext() {
+        enum Value: Int {
+            case a, b, c
+        }
+
+        typealias ValueContext = Context<Value>
+
+        let tester = HookTester {
+            useContext(ValueContext.self)
+        } scope: {
+            $0.context(ValueContext.self, .a)
+        }
+
+        XCTAssertEqual(tester.value, .a)
     }
 }
 
 private extension EnvironmentValues {
+    private enum TestValueKey: EnvironmentKey {
+        static var defaultValue: Int? { nil }
+    }
+
     var testValue: Int? {
-        get { self[Context<Int>.self] }
-        set { self[Context<Int>.self] = newValue }
+        get { self[TestValueKey.self] }
+        set { self[TestValueKey.self] = newValue }
     }
 }

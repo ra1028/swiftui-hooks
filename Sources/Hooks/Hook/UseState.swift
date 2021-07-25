@@ -12,7 +12,7 @@ public func useState<State>(_ initialState: State) -> Binding<State> {
     useHook(StateHook(initialState: initialState))
 }
 
-internal struct StateHook<State>: Hook {
+private struct StateHook<State>: Hook {
     let initialState: State
     let computation = HookComputation.once
 
@@ -33,7 +33,7 @@ internal struct StateHook<State>: Hook {
     }
 }
 
-internal extension StateHook {
+private extension StateHook {
     final class Ref {
         var state: State
 

@@ -28,7 +28,7 @@ public func useReducer<State, Action>(
     useHook(ReducerHook(reducer: reducer, initialState: initialState))
 }
 
-internal struct ReducerHook<State, Action>: Hook {
+private struct ReducerHook<State, Action>: Hook {
     let reducer: (State, Action) -> State
     let initialState: State
     let computation = HookComputation.always
@@ -58,7 +58,7 @@ internal struct ReducerHook<State, Action>: Hook {
     }
 }
 
-internal extension ReducerHook {
+private extension ReducerHook {
     final class Ref {
         var state: State
         var nextAction: Action?

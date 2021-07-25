@@ -117,7 +117,7 @@ final class HookTesterTests: XCTestCase {
 }
 
 private extension EnvironmentValues {
-    private enum TestValueKey: EnvironmentKey {
+    enum TestValueKey: EnvironmentKey {
         static var defaultValue: Int? { nil }
     }
 

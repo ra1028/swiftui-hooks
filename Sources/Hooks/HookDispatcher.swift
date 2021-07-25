@@ -19,6 +19,8 @@ public final class HookDispatcher: ObservableObject {
         for record in records.reversed() {
             record.element.dispose()
         }
+
+        records = LinkedList()
     }
 
     public func use<H: Hook>(_ hook: H) -> H.Value {

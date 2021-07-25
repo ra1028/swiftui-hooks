@@ -25,7 +25,7 @@ public func usePublisher<P: Publisher>(
     )
 }
 
-internal struct PublisherHook<P: Publisher>: Hook {
+private struct PublisherHook<P: Publisher>: Hook {
     let computation: HookComputation
     let shouldDeferredCompute = true
     let makePublisher: () -> P
@@ -40,12 +40,6 @@ internal struct PublisherHook<P: Publisher>: Hook {
 
     func compute(coordinator: Coordinator) {
         coordinator.state.cancellable = makePublisher()
-            .handleEvents(
-                receiveSubscription: { _ in
-                    coordinator.state.phase = .running
-                    coordinator.updateView()
-                }
-            )
             .sink(
                 receiveCompletion: { completion in
                     switch completion {
@@ -69,9 +63,9 @@ internal struct PublisherHook<P: Publisher>: Hook {
     }
 }
 
-internal extension PublisherHook {
+private extension PublisherHook {
     final class State {
-        var phase = AsyncPhase<P.Output, P.Failure>.pending
+        var phase = AsyncPhase<P.Output, P.Failure>.running
         var cancellable: AnyCancellable?
     }
 }

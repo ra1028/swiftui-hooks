@@ -19,7 +19,7 @@ public func usePublisherSubscribe<P: Publisher>(
     useHook(PublisherSubscribeHook(makePublisher: makePublisher))
 }
 
-internal struct PublisherSubscribeHook<P: Publisher>: Hook {
+private struct PublisherSubscribeHook<P: Publisher>: Hook {
     let makePublisher: () -> P
     let computation = HookComputation.once
 
@@ -73,7 +73,7 @@ internal struct PublisherSubscribeHook<P: Publisher>: Hook {
     }
 }
 
-internal extension PublisherSubscribeHook {
+private extension PublisherSubscribeHook {
     final class State {
         var phase = AsyncPhase<P.Output, P.Failure>.pending
         var isDisposed = false

@@ -9,11 +9,11 @@ func useNetworkImage(for path: String, size: NetworkImageSize) -> UIImage? {
             .appendingPathComponent(path)
     }
 
-    let status = usePublisher(.preserved(by: [path, size.rawValue])) {
+    let phase = usePublisher(.preserved(by: [path, size.rawValue])) {
         URLSession.shared.dataTaskPublisher(for: makeURL())
             .map { data, _ in UIImage(data: data) }
             .receive(on: DispatchQueue.main)
     }
 
-    return status.value ?? nil
+    return phase.value ?? nil
 }

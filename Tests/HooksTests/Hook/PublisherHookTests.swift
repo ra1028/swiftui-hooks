@@ -12,7 +12,7 @@ final class PublisherHookTests: XCTestCase {
 
         let state = hook.makeState()
 
-        XCTAssertEqual(state.status, .pending)
+        XCTAssertEqual(state.phase, .pending)
         XCTAssertNil(state.cancellable)
     }
 
@@ -27,11 +27,11 @@ final class PublisherHookTests: XCTestCase {
                 updateView: {}
             )
 
-        coordinator.state.status = .success(100)
+        coordinator.state.phase = .success(100)
 
-        let status = hook.makeValue(coordinator: coordinator)
+        let phase = hook.makeValue(coordinator: coordinator)
 
-        XCTAssertEqual(status, .success(100))
+        XCTAssertEqual(phase, .success(100))
     }
 
     func testCompute() {
@@ -50,28 +50,28 @@ final class PublisherHookTests: XCTestCase {
             )
 
         XCTAssertNil(coordinator.state.cancellable)
-        XCTAssertEqual(coordinator.state.status, .pending)
+        XCTAssertEqual(coordinator.state.phase, .pending)
         XCTAssertEqual(viewUpdatedCount, 0)
 
         hook.compute(coordinator: coordinator)
 
         XCTAssertNotNil(coordinator.state.cancellable)
-        XCTAssertEqual(coordinator.state.status, .running)
+        XCTAssertEqual(coordinator.state.phase, .running)
         XCTAssertEqual(viewUpdatedCount, 1)
 
         subject.send(0)
 
-        XCTAssertEqual(coordinator.state.status, .success(0))
+        XCTAssertEqual(coordinator.state.phase, .success(0))
         XCTAssertEqual(viewUpdatedCount, 2)
 
         subject.send(1)
 
-        XCTAssertEqual(coordinator.state.status, .success(1))
+        XCTAssertEqual(coordinator.state.phase, .success(1))
         XCTAssertEqual(viewUpdatedCount, 3)
 
         subject.send(completion: .failure(URLError(.badURL)))
 
-        XCTAssertEqual(coordinator.state.status, .failure(URLError(.badURL)))
+        XCTAssertEqual(coordinator.state.phase, .failure(URLError(.badURL)))
         XCTAssertEqual(viewUpdatedCount, 4)
     }
 

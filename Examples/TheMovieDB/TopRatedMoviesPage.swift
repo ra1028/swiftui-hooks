@@ -3,12 +3,12 @@ import SwiftUI
 
 struct TopRatedMoviesPage: HookView {
     var hookBody: some View {
-        let (status, fetch) = useFetchTopRatedMovies()
+        let (phase, fetch) = useFetchTopRatedMovies()
         let selectedMovie = useState(nil as Movie?)
 
         NavigationView {
             Group {
-                switch status {
+                switch phase {
                 case .success(let page):
                     moviesList(page, onLoadMore: fetch) { movie in
                         selectedMovie.wrappedValue = movie

@@ -214,15 +214,15 @@ let colorScheme = useEnvironment(\.colorScheme)  // ColorScheme
 <summary><CODE>usePublisher</CODE></summary>
 
 ```swift
-func usePublisher<P: Publisher>(_ computation: HookComputation, _ makePublisher: @escaping () -> P) -> AsyncStatus<P.Output, P.Failure>
+func usePublisher<P: Publisher>(_ computation: HookComputation, _ makePublisher: @escaping () -> P) -> AsyncPhase<P.Output, P.Failure>
 ```
 
-A hook to use the most recent status of asynchronous operation of the passed publisher.  
+A hook to use the most recent phase of asynchronous operation of the passed publisher.  
 The publisher will be subscribed at the first computation and will be re-subscribed according to the strategy specified with the passed `computation`.  
-Triggers a view update when the asynchronous status has been changed.  
+Triggers a view update when the asynchronous phase has been changed.  
 
 ```swift
-let status = usePublisher(.once) {
+let phase = usePublisher(.once) {
     URLSession.shared.dataTaskPublisher(for: url)
 }
 ```
@@ -233,14 +233,14 @@ let status = usePublisher(.once) {
 <summary><CODE>usePublisherSubscribe</CODE></summary>
 
 ```swift
-func usePublisherSubscribe<P: Publisher>(_ makePublisher: @escaping () -> P) -> (status: AsyncStatus<P.Output, P.Failure>, subscribe: () -> Void)
+func usePublisherSubscribe<P: Publisher>(_ makePublisher: @escaping () -> P) -> (phase: AsyncPhase<P.Output, P.Failure>, subscribe: () -> Void)
 ```
 
-A hook to use the most recent status of asynchronous operation of the passed publisher, and a `subscribe` function to be started to subscribe arbitrary timing.  
-Update the view with the asynchronous status change.  
+A hook to use the most recent phase of asynchronous operation of the passed publisher, and a `subscribe` function to be started to subscribe arbitrary timing.  
+Update the view with the asynchronous phase change.  
 
 ```swift
-let (status, subscribe) = usePublisherSubscribe {
+let (phase, subscribe) = usePublisherSubscribe {
     URLSession.shared.dataTaskPublisher(for: url)
 }
 ```

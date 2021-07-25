@@ -12,7 +12,7 @@ final class PublisherSubscribeHookTests: XCTestCase {
 
         let state = hook.makeState()
 
-        XCTAssertEqual(state.status, .pending)
+        XCTAssertEqual(state.phase, .pending)
         XCTAssertFalse(state.isDisposed)
         XCTAssertNil(state.cancellable)
     }
@@ -33,7 +33,7 @@ final class PublisherSubscribeHookTests: XCTestCase {
             )
 
         XCTAssertNil(coordinator.state.cancellable)
-        XCTAssertEqual(coordinator.state.status, .pending)
+        XCTAssertEqual(coordinator.state.phase, .pending)
         XCTAssertEqual(viewUpdatedCount, 0)
 
         let (_, subscribe) = hook.makeValue(coordinator: coordinator)
@@ -41,28 +41,28 @@ final class PublisherSubscribeHookTests: XCTestCase {
         subject.send(0)
 
         XCTAssertNil(coordinator.state.cancellable)
-        XCTAssertEqual(coordinator.state.status, .pending)
+        XCTAssertEqual(coordinator.state.phase, .pending)
         XCTAssertEqual(viewUpdatedCount, 0)
 
         subscribe()
 
         XCTAssertNotNil(coordinator.state.cancellable)
-        XCTAssertEqual(coordinator.state.status, .running)
+        XCTAssertEqual(coordinator.state.phase, .running)
         XCTAssertEqual(viewUpdatedCount, 1)
 
         subject.send(0)
 
-        XCTAssertEqual(coordinator.state.status, .success(0))
+        XCTAssertEqual(coordinator.state.phase, .success(0))
         XCTAssertEqual(viewUpdatedCount, 2)
 
         subject.send(1)
 
-        XCTAssertEqual(coordinator.state.status, .success(1))
+        XCTAssertEqual(coordinator.state.phase, .success(1))
         XCTAssertEqual(viewUpdatedCount, 3)
 
         subject.send(completion: .failure(URLError(.badURL)))
 
-        XCTAssertEqual(coordinator.state.status, .failure(URLError(.badURL)))
+        XCTAssertEqual(coordinator.state.phase, .failure(URLError(.badURL)))
         XCTAssertEqual(viewUpdatedCount, 4)
     }
 
@@ -88,7 +88,7 @@ final class PublisherSubscribeHookTests: XCTestCase {
         subscribe()
 
         XCTAssertNil(coordinator.state.cancellable)
-        XCTAssertEqual(coordinator.state.status, .pending)
+        XCTAssertEqual(coordinator.state.phase, .pending)
         XCTAssertEqual(viewUpdatedCount, 0)
     }
 

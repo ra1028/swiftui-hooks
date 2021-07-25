@@ -6,7 +6,7 @@ func useFetch<Response: Decodable>(
     path: String,
     parameters: [String: String] = [:],
     onReceiveResponse: ((Response) -> Void)? = nil
-) -> (status: AsyncStatus<Response, URLError>, fetch: () -> Void) {
+) -> (phase: AsyncPhase<Response, URLError>, fetch: () -> Void) {
     func makeURLRequest() -> URLRequest {
         let url = URL(string: "https://api.themoviedb.org/3").unsafelyUnwrapped.appendingPathComponent(path)
         var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true).unsafelyUnwrapped
@@ -25,7 +25,7 @@ func useFetch<Response: Decodable>(
         return urlRequest
     }
 
-    let (status, subscribe) = usePublisherSubscribe {
+    let (phase, subscribe) = usePublisherSubscribe {
         URLSession.shared.dataTaskPublisher(for: makeURLRequest())
             .map(\.data)
             .decode(type: Response.self, decoder: jsonDecoder)
@@ -34,7 +34,7 @@ func useFetch<Response: Decodable>(
             .handleEvents(receiveOutput: onReceiveResponse)
     }
 
-    return (status: status, fetch: subscribe)
+    return (phase: phase, fetch: subscribe)
 }
 
 private let jsonDecoder: JSONDecoder = {

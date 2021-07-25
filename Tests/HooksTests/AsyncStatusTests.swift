@@ -230,35 +230,4 @@ final class AsyncStatusTests: XCTestCase {
             )
         }
     }
-
-    func testGet() throws {
-        let statuses: [AsyncStatus<Int, URLError>] = [
-            .pending,
-            .running,
-            .success(100),
-        ]
-
-        let expected: [Int?] = [
-            nil,
-            nil,
-            100,
-            nil,
-        ]
-
-        for (status, expected) in zip(statuses, expected) {
-            XCTAssertEqual(
-                try status.get(),
-                expected
-            )
-        }
-
-        do {
-            let error = URLError(.badServerResponse)
-            _ = try AsyncStatus<Int, URLError>.failure(error).get()
-        }
-        catch {
-            let error = error as? URLError
-            XCTAssertEqual(error, URLError(.badServerResponse))
-        }
-    }
 }

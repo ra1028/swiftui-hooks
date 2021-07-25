@@ -127,25 +127,6 @@ public enum AsyncStatus<Success, Failure: Error> {
             return transform(error)
         }
     }
-
-    /// Returns the success value as a throwing expression.
-    /// If this instance represents a `pending` or a `running`, this returns nil.
-    ///
-    /// Use this method to retrieve the value of this status if it represents a success, or to catch the value if it represents a failure.
-    /// - Throws: The failure value, if the instance represents a failure.
-    /// - Returns:  The success value, if the instance represents a success,If the status is `pending` or `running`, this returns nil. .
-    public func get() throws -> Success? {
-        switch self {
-        case .pending, .running:
-            return nil
-
-        case .success(let value):
-            return value
-
-        case .failure(let error):
-            throw error
-        }
-    }
 }
 
 extension AsyncStatus: Equatable where Success: Equatable, Failure: Equatable {}

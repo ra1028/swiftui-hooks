@@ -13,7 +13,7 @@ final class HookTests: XCTestCase {
         }
     }
 
-    func testUse() {
+    func testUseHook() {
         let dispatcher = HookDispatcher()
         let hook = TestHook()
 

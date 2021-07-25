@@ -2,6 +2,26 @@ import Hooks
 import XCTest
 
 final class AsyncStatusTests: XCTestCase {
+    func testIsPending() {
+        let statuses: [AsyncStatus<Int, URLError>] = [
+            .pending,
+            .running,
+            .success(0),
+            .failure(URLError(.badURL)),
+        ]
+
+        let expected = [
+            true,
+            false,
+            false,
+            false,
+        ]
+
+        for (status, expected) in zip(statuses, expected) {
+            XCTAssertEqual(status.isPending, expected)
+        }
+    }
+
     func testIsRunning() {
         let statuses: [AsyncStatus<Int, URLError>] = [
             .pending,
@@ -19,6 +39,46 @@ final class AsyncStatusTests: XCTestCase {
 
         for (status, expected) in zip(statuses, expected) {
             XCTAssertEqual(status.isRunning, expected)
+        }
+    }
+
+    func testIsSuccess() {
+        let statuses: [AsyncStatus<Int, URLError>] = [
+            .pending,
+            .running,
+            .success(0),
+            .failure(URLError(.badURL)),
+        ]
+
+        let expected = [
+            false,
+            false,
+            true,
+            false,
+        ]
+
+        for (status, expected) in zip(statuses, expected) {
+            XCTAssertEqual(status.isSuccess, expected)
+        }
+    }
+
+    func testIsFailure() {
+        let statuses: [AsyncStatus<Int, URLError>] = [
+            .pending,
+            .running,
+            .success(0),
+            .failure(URLError(.badURL)),
+        ]
+
+        let expected = [
+            false,
+            false,
+            false,
+            true,
+        ]
+
+        for (status, expected) in zip(statuses, expected) {
+            XCTAssertEqual(status.isFailure, expected)
         }
     }
 

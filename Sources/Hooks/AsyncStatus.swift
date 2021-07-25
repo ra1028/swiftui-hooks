@@ -13,9 +13,33 @@ public enum AsyncStatus<Success, Failure: Error> {
     /// Represents a success status meaning that the operation provided an error with failure.
     case failure(Failure)
 
+    /// Returns a Boolean value indicating whether this instance represents a `pending`.
+    public var isPending: Bool {
+        guard case .pending = self else {
+            return false
+        }
+        return true
+    }
+
     /// Returns a Boolean value indicating whether this instance represents a `running`.
     public var isRunning: Bool {
         guard case .running = self else {
+            return false
+        }
+        return true
+    }
+
+    /// Returns a Boolean value indicating whether this instance represents a `success`.
+    public var isSuccess: Bool {
+        guard case .success = self else {
+            return false
+        }
+        return true
+    }
+
+    /// Returns a Boolean value indicating whether this instance represents a `failure`.
+    public var isFailure: Bool {
+        guard case .failure = self else {
             return false
         }
         return true

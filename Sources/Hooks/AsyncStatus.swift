@@ -13,12 +13,52 @@ public enum AsyncStatus<Success, Failure: Error> {
     /// Represents a success status meaning that the operation provided an error with failure.
     case failure(Failure)
 
+    /// Returns a Boolean value indicating whether this instance represents a `pending`.
+    public var isPending: Bool {
+        guard case .pending = self else {
+            return false
+        }
+        return true
+    }
+
     /// Returns a Boolean value indicating whether this instance represents a `running`.
     public var isRunning: Bool {
         guard case .running = self else {
             return false
         }
         return true
+    }
+
+    /// Returns a Boolean value indicating whether this instance represents a `success`.
+    public var isSuccess: Bool {
+        guard case .success = self else {
+            return false
+        }
+        return true
+    }
+
+    /// Returns a Boolean value indicating whether this instance represents a `failure`.
+    public var isFailure: Bool {
+        guard case .failure = self else {
+            return false
+        }
+        return true
+    }
+
+    /// Returns a success value if this instance is `success`, otherwise returns `nil`.
+    public var value: Success? {
+        guard case .success(let value) = self else {
+            return nil
+        }
+        return value
+    }
+
+    /// Returns an error if this instance is `failure`, otherwise returns `nil`.
+    public var error: Failure? {
+        guard case .failure(let error) = self else {
+            return nil
+        }
+        return error
     }
 
     /// Returns a result converted from the status.
@@ -85,25 +125,6 @@ public enum AsyncStatus<Success, Failure: Error> {
 
         case .failure(let error):
             return transform(error)
-        }
-    }
-
-    /// Returns the success value as a throwing expression.
-    /// If this instance represents a `pending` or a `running`, this returns nil.
-    ///
-    /// Use this method to retrieve the value of this status if it represents a success, or to catch the value if it represents a failure.
-    /// - Throws: The failure value, if the instance represents a failure.
-    /// - Returns:  The success value, if the instance represents a success,If the status is `pending` or `running`, this returns nil. .
-    public func get() throws -> Success? {
-        switch self {
-        case .pending, .running:
-            return nil
-
-        case .success(let value):
-            return value
-
-        case .failure(let error):
-            throw error
         }
     }
 }

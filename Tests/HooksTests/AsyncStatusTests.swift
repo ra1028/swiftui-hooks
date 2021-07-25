@@ -82,6 +82,46 @@ final class AsyncStatusTests: XCTestCase {
         }
     }
 
+    func testValue() {
+        let statuses: [AsyncStatus<Int, URLError>] = [
+            .pending,
+            .running,
+            .success(0),
+            .failure(URLError(.badURL)),
+        ]
+
+        let expected: [Int?] = [
+            nil,
+            nil,
+            0,
+            nil,
+        ]
+
+        for (status, expected) in zip(statuses, expected) {
+            XCTAssertEqual(status.value, expected)
+        }
+    }
+
+    func testError() {
+        let statuses: [AsyncStatus<Int, URLError>] = [
+            .pending,
+            .running,
+            .success(0),
+            .failure(URLError(.badURL)),
+        ]
+
+        let expected: [URLError?] = [
+            nil,
+            nil,
+            nil,
+            URLError(.badURL),
+        ]
+
+        for (status, expected) in zip(statuses, expected) {
+            XCTAssertEqual(status.error, expected)
+        }
+    }
+
     func testResult() {
         let statuses: [AsyncStatus<Int, URLError>] = [
             .pending,

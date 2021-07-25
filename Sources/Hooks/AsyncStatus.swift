@@ -45,6 +45,22 @@ public enum AsyncStatus<Success, Failure: Error> {
         return true
     }
 
+    /// Returns a success value if this instance is `success`, otherwise returns `nil`.
+    public var value: Success? {
+        guard case .success(let value) = self else {
+            return nil
+        }
+        return value
+    }
+
+    /// Returns an error if this instance is `failure`, otherwise returns `nil`.
+    public var error: Failure? {
+        guard case .failure(let error) = self else {
+            return nil
+        }
+        return error
+    }
+
     /// Returns a result converted from the status.
     /// If this instance represents a `pending` or a `running`, this returns nil.
     public var result: Result<Success, Failure>? {

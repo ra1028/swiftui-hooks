@@ -29,13 +29,13 @@ jobs:
           swift --version
           xcodebuild -version
       - name: Test for macOS
-        run: xcodebuild test -scheme Hooks -destination "platform=macOS"
+        run: xcodebuild test -scheme Hooks-Package -destination "platform=macOS"
       - name: Test for iOS
-        run: xcodebuild test -scheme Hooks -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+        run: xcodebuild test -scheme Hooks-Package -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Test for tvOS
-        run: xcodebuild test -scheme Hooks -destination "platform=tvOS Simulator,name=Apple TV"
+        run: xcodebuild test -scheme Hooks-Package -destination "platform=tvOS Simulator,name=Apple TV"
       - name: Build for watchOS
-        run: WATCHOS=true xcodebuild build -scheme Hooks -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm"
+        run: WATCHOS=true xcodebuild build -scheme Hooks-Package -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm"
 
   build-examples:
     name: Build examples

@@ -9,75 +9,52 @@ public final class HookTester<Parameter, Value> {
     private var currentParameter: Parameter
     private let hook: (Parameter) -> Value
     private let dispatcher = HookDispatcher()
-    private var scopeValues = ScopeValues()
+    private let environment: EnvironmentValues
     private var cancellable: AnyCancellable?
 
     public init(
         _ initialParameter: Parameter,
         _ hook: @escaping (Parameter) -> Value,
-        scope: (ScopeValues) -> ScopeValues = { $0 }
+        environment: (inout EnvironmentValues) -> Void = { _ in }
     ) {
+        var environmentValues = EnvironmentValues()
+        environment(&environmentValues)
+
         self.currentParameter = initialParameter
         self.hook = hook
-        self.scopeValues = scope(scopeValues)
         self.value = dispatcher.scoped(
-            environment: scopeValues.environment,
+            environment: environmentValues,
             { hook(initialParameter) }
         )
         self.valueHistory = [value]
+        self.environment = environmentValues
         self.cancellable = dispatcher.objectWillChange
             .sink(receiveValue: { [weak self] in
-                self?.rerender()
+                self?.update()
             })
     }
 
     public convenience init(
         _ hook: @escaping (Parameter) -> Value,
-        scope: (ScopeValues) -> ScopeValues = { $0 }
+        environment: (inout EnvironmentValues) -> Void = { _ in }
     ) where Parameter == Void {
-        self.init((), hook, scope: scope)
+        self.init((), hook, environment: environment)
     }
 
-    public func rerender(_ parameter: Parameter) {
+    public func update(with parameter: Parameter) {
         value = dispatcher.scoped(
-            environment: scopeValues.environment,
+            environment: environment,
             { hook(parameter) }
         )
         valueHistory.append(value)
         currentParameter = parameter
     }
 
-    public func rerender() {
-        rerender(currentParameter)
+    public func update() {
+        update(with: currentParameter)
     }
 
-    public func unmount() {
+    public func dispose() {
         dispatcher.disposeAll()
-    }
-}
-
-public extension HookTester {
-    struct ScopeValues {
-        internal var environment = EnvironmentValues()
-
-        private func mutating(_ body: (inout Self) -> Void) -> Self {
-            var container = self
-            body(&container)
-            return container
-        }
-
-        public func environment<V>(
-            _ keyPath: WritableKeyPath<EnvironmentValues, V>,
-            _ value: V
-        ) -> Self {
-            mutating { $0.environment[keyPath: keyPath] = value }
-        }
-
-        public func context<V>(
-            _ context: Context<V>.Type,
-            _ value: V
-        ) -> Self {
-            mutating { $0.environment[context] = value }
-        }
     }
 }

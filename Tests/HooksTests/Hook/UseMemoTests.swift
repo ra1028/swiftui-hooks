@@ -16,12 +16,12 @@ final class UseMemoTests: XCTestCase {
         XCTAssertEqual(tester.value, 0)
 
         value = 1
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 1)
 
         value = 2
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 2)
     }
@@ -37,12 +37,12 @@ final class UseMemoTests: XCTestCase {
         XCTAssertEqual(tester.value, 0)
 
         value = 1
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 0)
 
         value = 2
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 0)
     }
@@ -59,13 +59,13 @@ final class UseMemoTests: XCTestCase {
         XCTAssertEqual(tester.value, 0)
 
         value = 1
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 0)
 
         flag.toggle()
         value = 2
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 2)
     }

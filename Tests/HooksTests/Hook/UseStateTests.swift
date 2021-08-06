@@ -20,8 +20,8 @@ final class UseStateTests: XCTestCase {
 
         XCTAssertEqual(tester.value.wrappedValue, 2)
 
-        tester.unmount()
-        tester.rerender()
+        tester.dispose()
+        tester.update()
 
         XCTAssertEqual(tester.value.wrappedValue, 0)
     }
@@ -33,11 +33,11 @@ final class UseStateTests: XCTestCase {
 
         XCTAssertEqual(tester.value.wrappedValue, 0)
 
-        tester.rerender(1)
+        tester.update(with: 1)
 
         XCTAssertEqual(tester.value.wrappedValue, 0)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value.wrappedValue, 0)
     }

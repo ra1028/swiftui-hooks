@@ -31,7 +31,7 @@ final class HookTesterTests: XCTestCase {
         )
     }
 
-    func testRerender() {
+    func testUpdateWithParameter() {
         let tester = HookTester(0) { value in
             useMemo(.preserved(by: value)) {
                 value
@@ -40,18 +40,18 @@ final class HookTesterTests: XCTestCase {
 
         XCTAssertEqual(tester.value, 0)
 
-        tester.rerender(1)
+        tester.update(with: 1)
 
         XCTAssertEqual(tester.value, 1)
 
-        tester.rerender(2)
+        tester.update(with: 2)
 
         XCTAssertEqual(tester.value, 2)
 
         XCTAssertEqual(tester.valueHistory, [0, 1, 2])
     }
 
-    func testRerenderWithoutParameter() {
+    func testUpdate() {
         var value = 0
         let tester = HookTester {
             useMemo(.always) {
@@ -62,19 +62,19 @@ final class HookTesterTests: XCTestCase {
         XCTAssertEqual(tester.value, 0)
 
         value = 1
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 1)
 
         value = 2
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(tester.value, 2)
 
         XCTAssertEqual(tester.valueHistory, [0, 1, 2])
     }
 
-    func testUnmount() {
+    func testDispose() {
         var isCleanedup = false
         let tester = HookTester {
             useEffect(.once) {
@@ -84,7 +84,7 @@ final class HookTesterTests: XCTestCase {
 
         XCTAssertFalse(isCleanedup)
 
-        tester.unmount()
+        tester.dispose()
 
         XCTAssertTrue(isCleanedup)
     }
@@ -92,8 +92,8 @@ final class HookTesterTests: XCTestCase {
     func testEnvironment() {
         let tester = HookTester {
             useEnvironment(\.testValue)
-        } scope: {
-            $0.environment(\.testValue, 0)
+        } environment: {
+            $0.testValue = 0
         }
 
         XCTAssertEqual(tester.value, 0)
@@ -108,8 +108,8 @@ final class HookTesterTests: XCTestCase {
 
         let tester = HookTester {
             useContext(ValueContext.self)
-        } scope: {
-            $0.context(ValueContext.self, .a)
+        } environment: {
+            $0[ValueContext.self] = .a
         }
 
         XCTAssertEqual(tester.value, .a)

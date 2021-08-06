@@ -20,12 +20,12 @@ final class UsePublisherTests: XCTestCase {
 
         XCTAssertEqual(tester.value.value, 0)
 
-        tester.rerender(1)
+        tester.update(with: 1)
         subject.send()
 
         XCTAssertEqual(tester.value.value, 1)
 
-        tester.rerender(2)
+        tester.update(with: 2)
         subject.send()
 
         XCTAssertEqual(tester.value.value, 2)
@@ -45,12 +45,12 @@ final class UsePublisherTests: XCTestCase {
 
         XCTAssertEqual(tester.value.value, 0)
 
-        tester.rerender(1)
+        tester.update(with: 1)
         subject.send()
 
         XCTAssertEqual(tester.value.value, 0)
 
-        tester.rerender(2)
+        tester.update(with: 2)
         subject.send()
 
         XCTAssertEqual(tester.value.value, 0)
@@ -70,17 +70,17 @@ final class UsePublisherTests: XCTestCase {
 
         XCTAssertEqual(tester.value.value, 0)
 
-        tester.rerender((1, false))
+        tester.update(with: (1, false))
         subject.send()
 
         XCTAssertEqual(tester.value.value, 0)
 
-        tester.rerender((2, true))
+        tester.update(with: (2, true))
         subject.send()
 
         XCTAssertEqual(tester.value.value, 2)
 
-        tester.rerender((3, true))
+        tester.update(with: (3, true))
         subject.send()
 
         XCTAssertEqual(tester.value.value, 2)
@@ -111,7 +111,7 @@ final class UsePublisherTests: XCTestCase {
 
         XCTAssertEqual(tester.value, .running)
 
-        tester.unmount()
+        tester.dispose()
         subject.send(1)
 
         XCTAssertEqual(tester.value, .running)

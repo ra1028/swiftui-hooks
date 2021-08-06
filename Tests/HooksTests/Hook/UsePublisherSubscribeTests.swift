@@ -24,13 +24,13 @@ final class UsePublisherSubscribeTests: XCTestCase {
 
         XCTAssertEqual(tester.value.phase.value, 0)
 
-        tester.rerender(1)
+        tester.update(with: 1)
         tester.value.subscribe()
         subject.send()
 
         XCTAssertEqual(tester.value.phase.value, 1)
 
-        tester.rerender(2)
+        tester.update(with: 2)
         tester.value.subscribe()
         subject.send()
 
@@ -70,7 +70,7 @@ final class UsePublisherSubscribeTests: XCTestCase {
 
         XCTAssertEqual(tester.value.phase, .running)
 
-        tester.unmount()
+        tester.dispose()
         subject.send(1)
 
         XCTAssertEqual(tester.value.phase, .running)

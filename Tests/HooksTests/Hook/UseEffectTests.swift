@@ -17,11 +17,11 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 2)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 3)
     }
@@ -38,11 +38,11 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 1)
     }
@@ -60,16 +60,16 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 1)
 
         flag.toggle()
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 2)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 2)
     }
@@ -85,16 +85,16 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(cleanupCount, 0)
 
-        tester.unmount()
+        tester.dispose()
 
         XCTAssertEqual(cleanupCount, 1)
 
-        tester.unmount()
+        tester.dispose()
 
         XCTAssertEqual(cleanupCount, 1)
 
-        tester.rerender()
-        tester.unmount()
+        tester.update()
+        tester.dispose()
         XCTAssertEqual(cleanupCount, 2)
     }
 
@@ -110,11 +110,11 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 2)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 3)
     }
@@ -131,11 +131,11 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 1)
     }
@@ -153,16 +153,16 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(effectCount, 1)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 1)
 
         flag.toggle()
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 2)
 
-        tester.rerender()
+        tester.update()
 
         XCTAssertEqual(effectCount, 2)
     }
@@ -178,16 +178,16 @@ final class UseEffectTests: XCTestCase {
 
         XCTAssertEqual(cleanupCount, 0)
 
-        tester.unmount()
+        tester.dispose()
 
         XCTAssertEqual(cleanupCount, 1)
 
-        tester.unmount()
+        tester.dispose()
 
         XCTAssertEqual(cleanupCount, 1)
 
-        tester.rerender()
-        tester.unmount()
+        tester.update()
+        tester.dispose()
         XCTAssertEqual(cleanupCount, 2)
     }
 }

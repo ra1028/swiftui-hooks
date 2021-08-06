@@ -14,7 +14,7 @@ final class UseRefTests: XCTestCase {
 
         XCTAssertEqual(ref.current, 0)
 
-        tester.rerender()
+        tester.update()
         tester.value.current = 1
 
         XCTAssertTrue(tester.value === ref)
@@ -28,7 +28,7 @@ final class UseRefTests: XCTestCase {
 
         XCTAssertEqual(tester.value.current, 0)
 
-        tester.rerender(1)
+        tester.update(with: 1)
 
         XCTAssertEqual(tester.value.current, 0)
     }

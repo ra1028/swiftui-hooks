@@ -8,8 +8,8 @@ final class UseEnvironmentTests: XCTestCase {
     func testValue() {
         let tester = HookTester {
             useEnvironment(\.testValue)
-        } scope: {
-            $0.environment(\.testValue, 100)
+        } environment: {
+            $0.testValue = 100
         }
 
         XCTAssertEqual(tester.value, 100)

@@ -2,7 +2,7 @@ import Combine
 import Hooks
 import SwiftUI
 
-/// A testing tool that simulates the behaviors of a given hook on a view
+/// A testing tool that simulates the behaviors on a view of a given hook
 /// and manages the resulting values.
 public final class HookTester<Parameter, Value> {
     /// The latest result value that the given Hook was executed.
@@ -17,7 +17,7 @@ public final class HookTester<Parameter, Value> {
     private let environment: EnvironmentValues
     private var cancellable: AnyCancellable?
 
-    /// Creates a new tester that simulates the behavior of a given hook on a view
+    /// Creates a new tester that simulates the behavior on a view of a given hook
     /// and manages the resulting values.
     /// - Parameters:
     ///   - initialParameter: An initial value of the parameter passed when calling the hook.
@@ -45,7 +45,7 @@ public final class HookTester<Parameter, Value> {
             })
     }
 
-    /// Creates a new tester that simulates the behavior of a given hook on a view
+    /// Creates a new tester that simulates the behavior on a view of a given hook
     /// and manages the resulting values.
     /// - Parameters:
     ///   - hook: A closure for running the hook under test.

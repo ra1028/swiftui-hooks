@@ -403,24 +403,35 @@ See also: [Building Your Own React Hooks](https://reactjs.org/docs/hooks-custom.
 ## How to Test Your Custom Hooks
 
 So far, we have explained that hooks should be called within `HookScope` or `HookView`. Then, how can the custom hook you have created be tested?  
-For such purposes, there is an API to create a temporary hook scope independent of SwiftUI view.  
+To making unit testing of your custom hooks easy, SwiftUI-Hooks provides a simple and complete test utility library `HooksTesting`.  
 
-Within the `withTemporaryHookScope` function, you can launch the hook scope multiple times to test state transitions in cases such as when the SwiftUI view is evaluated multiple times.
+`HookTester` enables unit testing independent of UI of custom hooks by simulating the behavior on the view of a given hook and managing the result values.  
 
-For example:
+Example:  
 
 ```swift
-withTemporaryHookScope { scope in
-    scope {
-        let count = useState(0)
-        count.wrappedValue = 1
+// Your custom hook.
+func useCounter() -> (count: Int, increment: () -> Void) {
+    let count = useState(0)
+
+    let increment = {
+        count.wrappedValue += 1
     }
 
-    scope {
-        let count = useState(0)
-        XCTAssertEqual(count.wrappedValue, 1)  // The previous state is preserved.
-    }
+    return (count: count.wrappedValue, increment: increment)
 }
+```
+
+```swift
+let tester = HookTester {
+    useCounter()
+}
+
+XCTAssertEqual(tester.value.count, 0)
+
+tester.value.increment()
+
+XCTAssertEqual(tester.value.count, 1)
 ```
 
 ---

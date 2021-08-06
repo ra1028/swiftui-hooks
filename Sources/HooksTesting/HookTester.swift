@@ -2,8 +2,13 @@ import Combine
 import Hooks
 import SwiftUI
 
+/// A testing tool that simulates the behaviors of a given hook on a view
+/// and manages the resulting values.
 public final class HookTester<Parameter, Value> {
+    /// The latest result value that the given Hook was executed.
     public private(set) var value: Value
+
+    /// A history of the resulting values of the given Hook being executed.
     public private(set) var valueHistory: [Value]
 
     private var currentParameter: Parameter
@@ -12,6 +17,12 @@ public final class HookTester<Parameter, Value> {
     private let environment: EnvironmentValues
     private var cancellable: AnyCancellable?
 
+    /// Creates a new tester that simulates the behavior of a given hook on a view
+    /// and manages the resulting values.
+    /// - Parameters:
+    ///   - initialParameter: An initial value of the parameter passed when calling the hook.
+    ///   - hook: A closure for calling the hook under test.
+    ///   - environment: A closure for mutating an `EnvironmentValues` that to be used for testing environment.
     public init(
         _ initialParameter: Parameter,
         _ hook: @escaping (Parameter) -> Value,
@@ -34,6 +45,11 @@ public final class HookTester<Parameter, Value> {
             })
     }
 
+    /// Creates a new tester that simulates the behavior of a given hook on a view
+    /// and manages the resulting values.
+    /// - Parameters:
+    ///   - hook: A closure for running the hook under test.
+    ///   - environment: A closure for mutating an `EnvironmentValues` that to be used for testing environment.
     public convenience init(
         _ hook: @escaping (Parameter) -> Value,
         environment: (inout EnvironmentValues) -> Void = { _ in }
@@ -41,6 +57,8 @@ public final class HookTester<Parameter, Value> {
         self.init((), hook, environment: environment)
     }
 
+    /// Simulate a view update and re-call the hook under test with a given parameter.
+    /// - Parameter parameter: A parameter value passed when calling the hook.
     public func update(with parameter: Parameter) {
         value = dispatcher.scoped(
             environment: environment,
@@ -50,10 +68,12 @@ public final class HookTester<Parameter, Value> {
         currentParameter = parameter
     }
 
+    /// Simulate a view update and re-call the hook under test with the latest parameter that already applied.
     public func update() {
         update(with: currentParameter)
     }
 
+    /// Simulate view unmounting and disposes the hook under test.
     public func dispose() {
         dispatcher.disposeAll()
     }

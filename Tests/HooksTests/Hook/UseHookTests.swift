@@ -1,6 +1,6 @@
+import HooksTesting
 import SwiftUI
 import XCTest
-import HooksTesting
 
 @testable import Hooks
 

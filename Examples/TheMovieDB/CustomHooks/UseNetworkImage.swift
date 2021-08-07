@@ -2,7 +2,11 @@ import Combine
 import Hooks
 import UIKit
 
-func useNetworkImage(for path: String, size: NetworkImageSize) -> UIImage? {
+func useNetworkImage(for path: String?, size: NetworkImageSize) -> UIImage? {
+    guard let path = path else {
+        return nil
+    }
+
     func makeURL() -> URL {
         URL(string: "https://image.tmdb.org/t/p/\(size.rawValue)")
             .unsafelyUnwrapped

@@ -116,9 +116,11 @@ struct MovieDetailPage: HookView {
                 .font(.title)
                 .bold()
 
-            Text(movie.overview)
-                .font(.system(size: 24))
-                .foregroundColor(Color(.secondaryLabel))
+            if let overview = movie.overview {
+                Text(overview)
+                    .font(.system(size: 24))
+                    .foregroundColor(Color(.secondaryLabel))
+            }
         }
     }
 }

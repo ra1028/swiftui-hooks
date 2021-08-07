@@ -20,13 +20,13 @@ struct CounterPage: HookView {
             Text(String(format: "%02d", count.wrappedValue))
                 .lineLimit(1)
                 .minimumScaleFactor(0.1)
-                .font(.system(size: 100, weight: .heavy, design: .rounded))
+                .font(.system(size: 100, weight: .heavy, design: .monospaced))
                 .padding(30)
                 .frame(width: 200, height: 200)
                 .background(Color(.secondarySystemBackground))
-                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.2), radius: 3, y: 3)
+                .clipShape(Circle())
 
-            Stepper(value: count, in: 0...(.max)) { EmptyView() }.fixedSize()
+            Stepper(value: count, in: 0...(.max), label: EmptyView.init).fixedSize()
 
             Toggle("Auto +", isOn: isAutoIncrement).fixedSize()
         }

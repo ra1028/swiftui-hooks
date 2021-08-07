@@ -18,10 +18,10 @@ schemes:
       targets:
         TheMovieDB: all
 
-  Basic:
+  BasicUsage:
     build:
       targets:
-        Basic: all
+        BasicUsage: all
 
   Legacy:
     build:
@@ -47,11 +47,11 @@ targets:
       base:
         SUPPORTED_PLATFORMS: iphoneos iphonesimulator
         TARGETED_DEVICE_FAMILY: 1,2
-  Basic:
+  BasicUsage:
     type: application
     platform: iOS
     sources:
-      - Basic
+      - BasicUsage
     dependencies:
       - package: Hooks
     deploymentTarget: 14.0

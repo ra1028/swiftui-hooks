@@ -432,6 +432,10 @@ XCTAssertEqual(tester.value.count, 0)
 tester.value.increment()
 
 XCTAssertEqual(tester.value.count, 1)
+
+tester.update()  // Simulates view's update.
+
+XCTAssertEqual(tester.value.count, 1)
 ```
 
 ---

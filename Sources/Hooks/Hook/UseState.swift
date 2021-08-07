@@ -22,8 +22,8 @@ private struct StateHook<State>: Hook {
 
     func makeValue(coordinator: Coordinator) -> Binding<State> {
         Binding(
-            get: { [state = coordinator.state.state] in
-                state
+            get: {
+                coordinator.state.state
             },
             set: { newState in
                 assertMainThread()

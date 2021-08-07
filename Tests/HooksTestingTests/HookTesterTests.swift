@@ -17,18 +17,17 @@ final class HookTesterTests: XCTestCase {
     }
 
     func testValueHistory() {
-        let tester = HookTester {
-            useState(0)
+        let tester = HookTester(0) { value in
+            useMemo(.always) {
+                value
+            }
         }
 
-        tester.value.wrappedValue = 1
-        tester.value.wrappedValue = 2
-        tester.value.wrappedValue = 3
+        tester.update(with: 1)
+        tester.update(with: 2)
+        tester.update(with: 3)
 
-        XCTAssertEqual(
-            tester.valueHistory.map(\.wrappedValue),
-            [0, 1, 2, 3]
-        )
+        XCTAssertEqual(tester.valueHistory, [0, 1, 2, 3])
     }
 
     func testUpdateWithParameter() {

@@ -23,10 +23,10 @@ schemes:
       targets:
         BasicUsage: all
 
-  Legacy:
+  Todo:
     build:
       targets:
-        Legacy: all
+        Todo: all
 
 packages:
   Hooks:
@@ -62,11 +62,11 @@ targets:
         SUPPORTED_PLATFORMS: iphoneos iphonesimulator
         TARGETED_DEVICE_FAMILY: 1,2
 
-  Legacy:
+  Todo:
     type: application
     platform: iOS
     sources:
-      - Legacy
+      - Todo
     dependencies:
       - package: Hooks
     deploymentTarget: 13.0

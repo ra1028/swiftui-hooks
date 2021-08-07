@@ -95,6 +95,7 @@ final class UseEffectTests: XCTestCase {
 
         tester.update()
         tester.dispose()
+
         XCTAssertEqual(cleanupCount, 2)
     }
 

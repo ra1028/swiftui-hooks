@@ -41,4 +41,15 @@ final class UseStateTests: XCTestCase {
 
         XCTAssertEqual(tester.value.wrappedValue, 0)
     }
+
+    func testDispose() {
+        let tester = HookTester {
+            useState(0)
+        }
+
+        tester.dispose()
+        tester.value.wrappedValue = 1
+
+        XCTAssertEqual(tester.value.wrappedValue, 0)
+    }
 }

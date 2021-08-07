@@ -49,4 +49,23 @@ final class UseReducerTests: XCTestCase {
 
         XCTAssertEqual(tester.value.state, 0)
     }
+
+    func testDispose() {
+        var isReduced = false
+
+        func reducer(state: Int, action: Int) -> Int {
+            isReduced = true
+            return state + action
+        }
+
+        let tester = HookTester {
+            useReducer(reducer, initialState: 0)
+        }
+
+        tester.dispose()
+        tester.value.dispatch(1)
+
+        XCTAssertEqual(tester.value.state, 0)
+        XCTAssertFalse(isReduced)
+    }
 }

@@ -26,16 +26,27 @@ private struct StateHook<State>: Hook {
                 state
             },
             set: { newState in
+                assertMainThread()
+
+                guard !coordinator.state.isDisposed else {
+                    return
+                }
+
                 coordinator.state.state = newState
                 coordinator.updateView()
             }
         )
+    }
+
+    func dispose(state: Ref) {
+        state.isDisposed = true
     }
 }
 
 private extension StateHook {
     final class Ref {
         var state: State
+        var isDisposed = false
 
         init(initialState: State) {
             state = initialState

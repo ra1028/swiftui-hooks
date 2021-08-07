@@ -104,7 +104,7 @@ final class UsePublisherTests: XCTestCase {
     func testDispose() {
         let subject = PassthroughSubject<Int, Never>()
         let tester = HookTester {
-            usePublisher(.once) {
+            usePublisher(.always) {
                 subject
             }
         }

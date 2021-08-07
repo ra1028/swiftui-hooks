@@ -57,22 +57,28 @@ final class UsePublisherSubscribeTests: XCTestCase {
     }
 
     func testDispose() {
+        var isSubscribed = false
         let subject = PassthroughSubject<Int, Never>()
         let tester = HookTester {
             usePublisherSubscribe {
-                subject
+                subject.handleEvents(receiveSubscription: { _ in
+                    isSubscribed = true
+                })
             }
         }
 
         XCTAssertEqual(tester.value.phase, .pending)
 
-        tester.value.subscribe()
-
-        XCTAssertEqual(tester.value.phase, .running)
-
         tester.dispose()
         subject.send(1)
 
-        XCTAssertEqual(tester.value.phase, .running)
+        XCTAssertEqual(tester.value.phase, .pending)
+        XCTAssertFalse(isSubscribed)
+
+        tester.value.subscribe()
+        subject.send(2)
+
+        XCTAssertEqual(tester.value.phase, .pending)
+        XCTAssertFalse(isSubscribed)
     }
 }

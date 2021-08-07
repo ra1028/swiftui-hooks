@@ -11,7 +11,7 @@ public func useContext<T>(_ context: Context<T>.Type) -> T {
     useHook(ContextHook(context: context))
 }
 
-internal struct ContextHook<T>: Hook {
+private struct ContextHook<T>: Hook {
     let context: Context<T>.Type
     let computation = HookComputation.once
 

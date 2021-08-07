@@ -10,7 +10,7 @@ public func useRef<T>(_ initialValue: T) -> RefObject<T> {
     useHook(RefHook(initialValue: initialValue))
 }
 
-internal struct RefHook<T>: Hook {
+private struct RefHook<T>: Hook {
     let initialValue: T
     let computation = HookComputation.once
 

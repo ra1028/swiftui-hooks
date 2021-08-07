@@ -28,7 +28,7 @@ public func useReducer<State, Action>(
     useHook(ReducerHook(reducer: reducer, initialState: initialState))
 }
 
-internal struct ReducerHook<State, Action>: Hook {
+private struct ReducerHook<State, Action>: Hook {
     let reducer: (State, Action) -> State
     let initialState: State
     let computation = HookComputation.always
@@ -37,11 +37,19 @@ internal struct ReducerHook<State, Action>: Hook {
         Ref(initialState: initialState)
     }
 
-    func makeValue(coordinator: Coordinator) -> (state: State, dispatch: (Action) -> Void) {
+    func makeValue(coordinator: Coordinator) -> (
+        state: State,
+        dispatch: (Action) -> Void
+    ) {
         (
             state: coordinator.state.state,
             dispatch: { action in
                 assertMainThread()
+
+                guard !coordinator.state.isDisposed else {
+                    return
+                }
+
                 coordinator.state.nextAction = action
                 coordinator.updateView()
             }
@@ -56,12 +64,18 @@ internal struct ReducerHook<State, Action>: Hook {
         coordinator.state.state = reducer(coordinator.state.state, action)
         coordinator.state.nextAction = nil
     }
+
+    func dispose(state: Ref) {
+        state.isDisposed = true
+        state.nextAction = nil
+    }
 }
 
-internal extension ReducerHook {
+private extension ReducerHook {
     final class Ref {
         var state: State
         var nextAction: Action?
+        var isDisposed = false
 
         init(initialState: State) {
             state = initialState

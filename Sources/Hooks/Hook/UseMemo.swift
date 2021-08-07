@@ -15,7 +15,7 @@ public func useMemo<Value>(
     useHook(MemoHook(computation: computation, makeValue: makeValue))
 }
 
-internal struct MemoHook<Value>: Hook {
+private struct MemoHook<Value>: Hook {
     let computation: HookComputation
     let makeValue: () -> Value
 
@@ -32,7 +32,7 @@ internal struct MemoHook<Value>: Hook {
     }
 }
 
-internal extension MemoHook {
+private extension MemoHook {
     final class State {
         var value: Value?
     }

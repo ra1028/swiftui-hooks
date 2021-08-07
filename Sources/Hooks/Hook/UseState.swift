@@ -12,7 +12,7 @@ public func useState<State>(_ initialState: State) -> Binding<State> {
     useHook(StateHook(initialState: initialState))
 }
 
-internal struct StateHook<State>: Hook {
+private struct StateHook<State>: Hook {
     let initialState: State
     let computation = HookComputation.once
 
@@ -22,18 +22,31 @@ internal struct StateHook<State>: Hook {
 
     func makeValue(coordinator: Coordinator) -> Binding<State> {
         Binding(
-            get: { coordinator.state.state },
+            get: {
+                coordinator.state.state
+            },
             set: { newState in
+                assertMainThread()
+
+                guard !coordinator.state.isDisposed else {
+                    return
+                }
+
                 coordinator.state.state = newState
                 coordinator.updateView()
             }
         )
     }
+
+    func dispose(state: Ref) {
+        state.isDisposed = true
+    }
 }
 
-internal extension StateHook {
+private extension StateHook {
     final class Ref {
         var state: State
+        var isDisposed = false
 
         init(initialState: State) {
             state = initialState

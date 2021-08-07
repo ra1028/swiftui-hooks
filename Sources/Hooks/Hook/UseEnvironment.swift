@@ -10,7 +10,7 @@ public func useEnvironment<Value>(_ keyPath: KeyPath<EnvironmentValues, Value>) 
     useHook(EnvironmentHook(keyPath: keyPath))
 }
 
-internal struct EnvironmentHook<Value>: Hook {
+private struct EnvironmentHook<Value>: Hook {
     let keyPath: KeyPath<EnvironmentValues, Value>
     let computation = HookComputation.once
 

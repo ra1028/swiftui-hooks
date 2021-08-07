@@ -13,10 +13,10 @@ settingGroups:
     EXCLUDED_ARCHS[sdk=appletvsimulator*]: arm64
 
 schemes:
-  TheMovieDB:
+  TheMovieDB-MVVM:
     build:
       targets:
-        TheMovieDB: all
+        TheMovieDB-MVVM: all
 
   BasicUsage:
     build:
@@ -33,11 +33,11 @@ packages:
     path: ..
 
 targets:
-  TheMovieDB:
+  TheMovieDB-MVVM:
     type: application
     platform: iOS
     sources:
-      - TheMovieDB
+      - TheMovieDB-MVVM
     dependencies:
       - package: Hooks
     deploymentTarget: 14.0

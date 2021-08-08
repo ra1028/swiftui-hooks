@@ -61,10 +61,10 @@ jobs:
           xcrun simctl list runtimes
           xcrun simctl list devices $OLD_TARGET_OS
       - name: Build TheMovieDB
-        run: xcodebuild build -scheme TheMovieDB -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+        run: xcodebuild build -scheme TheMovieDB-MVVM -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Basic
-        run: xcodebuild build -scheme Basic -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+        run: xcodebuild build -scheme BasicUsage -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Legacy
-        run: xcodebuild build -scheme Legacy -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+        run: xcodebuild build -scheme Todo -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Legacy with iOS13
-        run: xcodebuild build -scheme Legacy -destination "platform=iOS Simulator,name=iPhone 11 Pro,OS=$OLD_TARGET_OS"
+        run: xcodebuild build -scheme Todo -destination "platform=iOS Simulator,name=iPhone 11 Pro,OS=$OLD_TARGET_OS"

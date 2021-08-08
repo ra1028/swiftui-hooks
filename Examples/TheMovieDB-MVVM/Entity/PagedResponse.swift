@@ -7,3 +7,5 @@ struct PagedResponse<T: Decodable>: Decodable {
         page < totalPages
     }
 }
+
+extension PagedResponse: Equatable where T: Equatable {}

@@ -62,6 +62,8 @@ jobs:
           xcrun simctl list devices $OLD_TARGET_OS
       - name: Build TheMovieDB
         run: xcodebuild build -scheme TheMovieDB-MVVM -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+      - name: Test TheMovieDB
+        run: xcodebuild test -scheme TheMovieDB-MVVM-Tests -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Basic
         run: xcodebuild build -scheme BasicUsage -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Legacy

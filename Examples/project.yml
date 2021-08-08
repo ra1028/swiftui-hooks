@@ -17,6 +17,17 @@ schemes:
     build:
       targets:
         TheMovieDB-MVVM: all
+    test:
+      targets:
+        - TheMovieDB-MVVM-Tests
+
+  TheMovieDB-MVVM-Tests:
+    build:
+      targets:
+        TheMovieDB-MVVM-Tests: all
+    test:
+      targets:
+        - TheMovieDB-MVVM-Tests
 
   BasicUsage:
     build:
@@ -47,6 +58,15 @@ targets:
       base:
         SUPPORTED_PLATFORMS: iphoneos iphonesimulator
         TARGETED_DEVICE_FAMILY: 1,2
+
+  TheMovieDB-MVVM-Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - TheMovieDB-MVVM-Tests
+    dependencies:
+      - target: TheMovieDB-MVVM
+
   BasicUsage:
     type: application
     platform: iOS

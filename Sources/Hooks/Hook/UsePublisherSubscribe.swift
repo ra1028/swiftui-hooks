@@ -40,13 +40,10 @@ private struct PublisherSubscribeHook<P: Publisher>: Hook {
                     return
                 }
 
+                coordinator.state.phase = .running
+                coordinator.updateView()
+
                 coordinator.state.cancellable = makePublisher()
-                    .handleEvents(
-                        receiveSubscription: { _ in
-                            coordinator.state.phase = .running
-                            coordinator.updateView()
-                        }
-                    )
                     .sink(
                         receiveCompletion: { completion in
                             switch completion {

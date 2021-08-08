@@ -8,7 +8,7 @@ struct Post: Codable {
 }
 
 func useFetchPosts() -> (phase: AsyncPhase<[Post], Error>, fetch: () -> Void) {
-    let url = URL(string: "https://jsonplaceholder.typicode.com/posts").unsafelyUnwrapped
+    let url = URL(string: "https://jsonplaceholder.typicode.com/posts")!
     let (phase, subscribe) = usePublisherSubscribe {
         URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)

@@ -4,6 +4,7 @@ import SwiftUI
 struct TopRatedMoviesPage: HookView {
     var hookBody: some View {
         let viewModel = useTopRatedMoviesViewModel()
+        let dependency = useContext(Context<Dependency>.self)
 
         NavigationView {
             ZStack {
@@ -22,7 +23,9 @@ struct TopRatedMoviesPage: HookView {
             .navigationTitle("Top Rated Movies")
             .background(Color(.secondarySystemBackground).ignoresSafeArea())
             .sheet(item: viewModel.selectedMovie) { movie in
-                MovieDetailPage(movie: movie)
+                Context.Provider(value: dependency) {
+                    MovieDetailPage(movie: movie)
+                }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -65,7 +68,7 @@ struct TopRatedMoviesPage: HookView {
 
     func movieCard(_ movie: Movie, onPressed: @escaping () -> Void) -> some View {
         HookScope {
-            let image = useNetworkImage(for: movie.posterPath, size: .medium)
+            let image = useMovieImage(for: movie.posterPath, size: .medium)
 
             Button(action: onPressed) {
                 VStack(alignment: .leading, spacing: .zero) {
@@ -76,6 +79,7 @@ struct TopRatedMoviesPage: HookView {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+                                .clipped()
                         }
                     }
                     .aspectRatio(CGSize(width: 3, height: 4), contentMode: .fit)
@@ -104,6 +108,7 @@ struct TopRatedMoviesPage: HookView {
                     }
                     .padding(8)
                     .frame(height: 100, alignment: .top)
+                    .frame(maxWidth: .infinity)
 
                     Spacer(minLength: .zero)
                 }

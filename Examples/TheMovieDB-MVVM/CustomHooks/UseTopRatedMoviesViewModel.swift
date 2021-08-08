@@ -49,12 +49,9 @@ func useTopRatedMoviesViewModel() -> TopRatedMoviesViewModel {
 
 private func useLoadMovies() -> (phase: AsyncPhase<PagedResponse<Movie>, URLError>, load: (Int) -> Void) {
     let page = useRef(0)
+    let service = useContext(Context<Dependency>.self).service
     let (phase, load) = usePublisherSubscribe {
-        URLSession.shared.dataTaskPublisher(for: makeMoviesRequest(page: page.current))
-            .map(\.data)
-            .decode(type: PagedResponse<Movie>.self, decoder: jsonDecoder)
-            .mapError { $0 as? URLError ?? URLError(.cannotDecodeContentData) }
-            .receive(on: DispatchQueue.main)
+        service.getTopRated(page: page.current)
     }
 
     return (

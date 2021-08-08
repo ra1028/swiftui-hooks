@@ -49,7 +49,7 @@ struct TopRatedMoviesPage: HookView {
                     footer: Group {
                         if viewModel.hasNextPage {
                             ProgressView()
-                                .frame(maxWidth: .infinity, minHeight: 50)
+                                .frame(maxWidth: .infinity, minHeight: 100)
                                 .onAppear(perform: viewModel.loadNext)
                         }
                     },

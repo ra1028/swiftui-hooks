@@ -2,47 +2,41 @@ import Hooks
 import SwiftUI
 
 struct TopRatedMoviesViewModel {
-    let loadPhase: AsyncPhase<[Movie], URLError>
     let selectedMovie: Binding<Movie?>
+    let loadPhase: AsyncPhase<[Movie], URLError>
     let hasNextPage: Bool
     let load: () -> Void
     let loadNext: () -> Void
 }
 
 func useTopRatedMoviesViewModel() -> TopRatedMoviesViewModel {
-    let loadPhase = useRef(AsyncPhase<PagedResponse<Movie>, URLError>.pending)
     let selectedMovie = useState(nil as Movie?)
-    let (newLoadPhase, load) = useLoadMovies()
+    let nextMovies = useRef([Movie]())
+    let (loadPhase, load) = useLoadMovies()
+    let (loadNextPhase, loadNext) = useLoadMovies()
+    let latestResponse = loadNextPhase.value ?? loadPhase.value
 
-    useLayoutEffect(.preserved(by: newLoadPhase.map(\.page))) {
-        if !loadPhase.current.isSuccess {
-            loadPhase.current = newLoadPhase
-        }
-        else if case .success(let response) = newLoadPhase {
-            let lastResults = loadPhase.current.value?.results ?? []
-            let response = PagedResponse(
-                page: response.page,
-                totalPages: response.totalPages,
-                results: lastResults + response.results
-            )
-            loadPhase.current = .success(response)
-        }
+    useLayoutEffect(.preserved(by: loadPhase.isSuccess)) {
+        nextMovies.current = []
+        return nil
+    }
+
+    useLayoutEffect(.preserved(by: loadNextPhase.isSuccess)) {
+        nextMovies.current += loadNextPhase.value?.results ?? []
         return nil
     }
 
     return TopRatedMoviesViewModel(
-        loadPhase: loadPhase.current.map(\.results),
         selectedMovie: selectedMovie,
-        hasNextPage: loadPhase.current.value?.hasNextPage ?? false,
-        load: {
-            loadPhase.current = .pending
-            load(1)
+        loadPhase: loadPhase.map {
+            $0.results + nextMovies.current
         },
+        hasNextPage: latestResponse?.hasNextPage ?? false,
+        load: { load(1) },
         loadNext: {
-            guard let page = loadPhase.current.value?.page else {
-                return
+            if let currentPage = latestResponse?.page {
+                loadNext(currentPage + 1)
             }
-            load(page + 1)
         }
     )
 }

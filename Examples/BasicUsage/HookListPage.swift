@@ -8,7 +8,7 @@ struct HookListPage: HookView {
     var hookBody: some View {
         let colorScheme = useState(useEnvironment(\.colorScheme))
 
-        return ColorSchemeContext.Provider(value: colorScheme) {
+        ColorSchemeContext.Provider(value: colorScheme) {
             ScrollView {
                 VStack {
                     useStateRow
@@ -54,7 +54,12 @@ struct HookListPage: HookView {
         let (count, dispatch) = useReducer(reducer, initialState: 0)
 
         return Row("useReducer") {
-            Stepper(count.description, onIncrement: { dispatch(.plus) }, onDecrement: { dispatch(.minus) })
+            Stepper(
+                count.description,
+                onIncrement: { dispatch(.plus) },
+                onDecrement: { dispatch(.minus) }
+            )
+
             Button("Reset") { dispatch(.reset) }
         }
     }
@@ -108,7 +113,9 @@ struct HookListPage: HookView {
         return Row("useMemo") {
             Circle().fill(randomColor).frame(width: 30, height: 30)
             Spacer()
-            Button("Random", action: { flag.wrappedValue.toggle() })
+            Button("Random") {
+                flag.wrappedValue.toggle()
+            }
         }
     }
 
@@ -128,7 +135,9 @@ struct HookListPage: HookView {
         return Row("useRef") {
             Text("Fibonacci = \(fibonacci.wrappedValue)")
             Spacer()
-            Button("Next", action: { flag.wrappedValue.toggle() })
+            Button("Next") {
+                flag.wrappedValue.toggle()
+            }
         }
     }
 
@@ -162,7 +171,7 @@ struct HookListPage: HookView {
         }
 
         return Row("usePublisherSubscribe") {
-            Group {
+            HStack {
                 switch phase {
                 case .running:
                     ProgressView()

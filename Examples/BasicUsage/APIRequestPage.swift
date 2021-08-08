@@ -23,7 +23,7 @@ struct APIRequestPage: HookView {
     var hookBody: some View {
         let (phase, fetch) = useFetchPosts()
 
-        return ScrollView {
+        ScrollView {
             VStack {
                 switch phase {
                 case .running:

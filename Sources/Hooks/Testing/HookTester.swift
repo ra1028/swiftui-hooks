@@ -1,5 +1,4 @@
 import Combine
-import Hooks
 import SwiftUI
 
 /// A testing tool that simulates the behaviors on a view of a given hook

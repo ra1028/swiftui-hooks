@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "541560F23F052A58879D8F00"
-               BuildableName = "TheMovieDB.app"
-               BlueprintName = "TheMovieDB"
+               BlueprintIdentifier = "1BE56B92EC9A6D5640796206"
+               BuildableName = "TheMovieDB-MVVM.app"
+               BlueprintName = "TheMovieDB-MVVM"
                ReferencedContainer = "container:Examples.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -30,16 +30,28 @@
       onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "87A81926411A12A06729F58D"
+               BuildableName = "TheMovieDB-MVVM-Tests.xctest"
+               BlueprintName = "TheMovieDB-MVVM-Tests"
+               ReferencedContainer = "container:Examples.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "541560F23F052A58879D8F00"
-            BuildableName = "TheMovieDB.app"
-            BlueprintName = "TheMovieDB"
+            BlueprintIdentifier = "1BE56B92EC9A6D5640796206"
+            BuildableName = "TheMovieDB-MVVM.app"
+            BlueprintName = "TheMovieDB-MVVM"
             ReferencedContainer = "container:Examples.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -55,9 +67,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "541560F23F052A58879D8F00"
-            BuildableName = "TheMovieDB.app"
-            BlueprintName = "TheMovieDB"
+            BlueprintIdentifier = "1BE56B92EC9A6D5640796206"
+            BuildableName = "TheMovieDB-MVVM.app"
+            BlueprintName = "TheMovieDB-MVVM"
             ReferencedContainer = "container:Examples.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -72,9 +84,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "541560F23F052A58879D8F00"
-            BuildableName = "TheMovieDB.app"
-            BlueprintName = "TheMovieDB"
+            BlueprintIdentifier = "1BE56B92EC9A6D5640796206"
+            BuildableName = "TheMovieDB-MVVM.app"
+            BlueprintName = "TheMovieDB-MVVM"
             ReferencedContainer = "container:Examples.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

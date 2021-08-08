@@ -1,5 +1,4 @@
 import Combine
-import HooksTesting
 import SwiftUI
 import XCTest
 
@@ -18,17 +17,17 @@ final class UsePublisherTests: XCTestCase {
 
         subject.send()
 
-        XCTAssertEqual(tester.value.value, 0)
+        XCTAssertEqual(tester.value, .running)
 
         tester.update(with: 1)
         subject.send()
 
-        XCTAssertEqual(tester.value.value, 1)
+        XCTAssertEqual(tester.value, .running)
 
         tester.update(with: 2)
         subject.send()
 
-        XCTAssertEqual(tester.value.value, 2)
+        XCTAssertEqual(tester.value, .running)
     }
 
     func testUpdateOnce() {

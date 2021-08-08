@@ -3,69 +3,72 @@ import SwiftUI
 
 struct TopRatedMoviesPage: HookView {
     var hookBody: some View {
-        let (phase, fetch) = useFetchTopRatedMovies()
-        let selectedMovie = useState(nil as Movie?)
+        let viewModel = useTopRatedMoviesViewModel()
+        let dependency = useContext(Context<Dependency>.self)
 
         NavigationView {
-            Group {
-                switch phase {
-                case .success(let page):
-                    moviesList(page, onLoadMore: fetch) { movie in
-                        selectedMovie.wrappedValue = movie
-                    }
+            ZStack {
+                switch viewModel.loadPhase {
+                case .success(let movies):
+                    moviesList(data: movies, viewModel: viewModel)
 
                 case .failure(let error):
-                    failure(error, onReload: fetch)
+                    failure(error, viewModel: viewModel)
 
                 case .pending, .running:
-                    loading
+                    ProgressView()
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("Top Rated Movies")
             .background(Color(.secondarySystemBackground).ignoresSafeArea())
-            .sheet(item: selectedMovie, onDismiss: { selectedMovie.wrappedValue = nil }) { movie in
-                MovieDetailPage(movie: movie)
+            .sheet(item: viewModel.selectedMovie) { movie in
+                Context.Provider(value: dependency) {
+                    MovieDetailPage(movie: movie)
+                }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear(perform: fetch)
+        .onAppear(perform: viewModel.load)
     }
 
-    var loading: some View {
-        ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
+    func failure(_ error: URLError, viewModel: TopRatedMoviesViewModel) -> some View {
+        VStack(spacing: 24) {
+            Text("Failed to load movies").font(.system(.title2))
 
-    func failure(_ error: URLError, onReload: @escaping () -> Void) -> some View {
-        VStack(spacing: 16) {
-            Text("Failed to fetch movies")
-            Button("Reload", action: onReload)
+            Button(action: viewModel.load) {
+                Text("Retry").font(.system(.title3)).bold()
+            }
         }
     }
 
-    @ViewBuilder
-    func moviesList(
-        _ movies: [Movie],
-        onLoadMore: @escaping () -> Void,
-        onSelect: @escaping (Movie) -> Void
-    ) -> some View {
+    func moviesList(data movies: [Movie], viewModel: TopRatedMoviesViewModel) -> some View {
         ScrollView {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 16) {
-                ForEach(movies) { movie in
-                    movieCard(movie) {
-                        onSelect(movie)
+                Section(
+                    footer: Group {
+                        if viewModel.hasNextPage {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, minHeight: 100)
+                                .onAppear(perform: viewModel.loadNext)
+                        }
+                    },
+                    content: {
+                        ForEach(movies) { movie in
+                            movieCard(movie) {
+                                viewModel.selectedMovie.wrappedValue = movie
+                            }
+                        }
                     }
-                }
-
-                Color.clear.onAppear(perform: onLoadMore)
+                )
             }
             .padding(8)
         }
     }
 
-    @ViewBuilder
     func movieCard(_ movie: Movie, onPressed: @escaping () -> Void) -> some View {
         HookScope {
-            let image = useNetworkImage(for: movie.posterPath, size: .medium)
+            let image = useMovieImage(for: movie.posterPath, size: .medium)
 
             Button(action: onPressed) {
                 VStack(alignment: .leading, spacing: .zero) {
@@ -76,6 +79,7 @@ struct TopRatedMoviesPage: HookView {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+                                .clipped()
                         }
                     }
                     .aspectRatio(CGSize(width: 3, height: 4), contentMode: .fit)
@@ -104,6 +108,7 @@ struct TopRatedMoviesPage: HookView {
                     }
                     .padding(8)
                     .frame(height: 100, alignment: .top)
+                    .frame(maxWidth: .infinity)
 
                     Spacer(minLength: .zero)
                 }

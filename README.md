@@ -403,7 +403,7 @@ See also: [Building Your Own React Hooks](https://reactjs.org/docs/hooks-custom.
 ## How to Test Your Custom Hooks
 
 So far, we have explained that hooks should be called within `HookScope` or `HookView`. Then, how can the custom hook you have created be tested?  
-To making unit testing of your custom hooks easy, SwiftUI-Hooks provides a simple and complete test utility library `HooksTesting`.  
+To making unit testing of your custom hooks easy, SwiftUI-Hooks provides a simple and complete test utility library.  
 
 `HookTester` enables unit testing independent of UI of custom hooks by simulating the behavior on the view of a given hook and managing the result values.  
 

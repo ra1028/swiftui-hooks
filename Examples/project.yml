@@ -13,45 +13,42 @@ settingGroups:
     EXCLUDED_ARCHS[sdk=appletvsimulator*]: arm64
 
 schemes:
-  TheMovieDB:
+  TheMovieDB-MVVM:
     build:
       targets:
-        TheMovieDB: all
+        TheMovieDB-MVVM: all
+    test:
+      targets:
+        - TheMovieDB-MVVM-Tests
 
-  Basic:
+  TheMovieDB-MVVM-Tests:
     build:
       targets:
-        Basic: all
+        TheMovieDB-MVVM-Tests: all
+    test:
+      targets:
+        - TheMovieDB-MVVM-Tests
 
-  Legacy:
+  BasicUsage:
     build:
       targets:
-        Legacy: all
+        BasicUsage: all
+
+  Todo:
+    build:
+      targets:
+        Todo: all
 
 packages:
   Hooks:
     path: ..
 
 targets:
-  TheMovieDB:
+  TheMovieDB-MVVM:
     type: application
     platform: iOS
     sources:
-      - TheMovieDB
-    dependencies:
-      - package: Hooks
-    deploymentTarget: 14.0
-    settings:
-      groups:
-        - app
-      base:
-        SUPPORTED_PLATFORMS: iphoneos iphonesimulator
-        TARGETED_DEVICE_FAMILY: 1,2
-  Basic:
-    type: application
-    platform: iOS
-    sources:
-      - Basic
+      - TheMovieDB-MVVM
     dependencies:
       - package: Hooks
     deploymentTarget: 14.0
@@ -62,11 +59,34 @@ targets:
         SUPPORTED_PLATFORMS: iphoneos iphonesimulator
         TARGETED_DEVICE_FAMILY: 1,2
 
-  Legacy:
+  TheMovieDB-MVVM-Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - TheMovieDB-MVVM-Tests
+    dependencies:
+      - target: TheMovieDB-MVVM
+
+  BasicUsage:
     type: application
     platform: iOS
     sources:
-      - Legacy
+      - BasicUsage
+    dependencies:
+      - package: Hooks
+    deploymentTarget: 14.0
+    settings:
+      groups:
+        - app
+      base:
+        SUPPORTED_PLATFORMS: iphoneos iphonesimulator
+        TARGETED_DEVICE_FAMILY: 1,2
+
+  Todo:
+    type: application
+    platform: iOS
+    sources:
+      - Todo
     dependencies:
       - package: Hooks
     deploymentTarget: 13.0

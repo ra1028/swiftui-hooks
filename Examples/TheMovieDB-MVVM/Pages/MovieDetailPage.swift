@@ -59,7 +59,7 @@ struct MovieDetailPage: HookView {
 
     @ViewBuilder
     var backdropImage: some View {
-        let image = useNetworkImage(for: movie.backdropPath, size: .medium)
+        let image = useMovieImage(for: movie.backdropPath, size: .medium)
 
         ZStack {
             Color(.systemGroupedBackground)
@@ -68,6 +68,7 @@ struct MovieDetailPage: HookView {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .clipped()
             }
 
             Color(.systemBackground).colorInvert().opacity(0.8)
@@ -77,7 +78,7 @@ struct MovieDetailPage: HookView {
 
     @ViewBuilder
     var posterImage: some View {
-        let image = useNetworkImage(for: movie.posterPath, size: .medium)
+        let image = useMovieImage(for: movie.posterPath, size: .medium)
 
         ZStack {
             Color(.systemGroupedBackground)
@@ -116,9 +117,11 @@ struct MovieDetailPage: HookView {
                 .font(.title)
                 .bold()
 
-            Text(movie.overview)
-                .font(.system(size: 24))
-                .foregroundColor(Color(.secondaryLabel))
+            if let overview = movie.overview {
+                Text(overview)
+                    .font(.system(size: 24))
+                    .foregroundColor(Color(.secondaryLabel))
+            }
         }
     }
 }

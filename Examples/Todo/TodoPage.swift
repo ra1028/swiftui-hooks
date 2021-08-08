@@ -73,16 +73,14 @@ private struct Row<Content: View>: View {
     }
 
     var body: some View {
-        HookScope {
-            VStack(alignment: .leading) {
-                HStack {
-                    content
-                }
-                .padding(.vertical, 16)
-
-                Divider()
+        VStack(alignment: .leading) {
+            HStack {
+                content
             }
-            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
+
+            Divider()
         }
+        .padding(.horizontal, 24)
     }
 }

@@ -27,7 +27,6 @@ public func usePublisher<P: Publisher>(
 
 private struct PublisherHook<P: Publisher>: Hook {
     let computation: HookComputation
-    let shouldDeferredCompute = false
     let makePublisher: () -> P
 
     func makeState() -> State {

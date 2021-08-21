@@ -38,6 +38,17 @@ schemes:
     build:
       targets:
         Todo: all
+    test:
+      targets:
+        - Todo-UITests
+
+  Todo-UITests:
+    build:
+      targets:
+        Todo-UITests: all
+    test:
+      targets:
+        - Todo-UITests
 
 packages:
   Hooks:
@@ -96,3 +107,12 @@ targets:
       base:
         SUPPORTED_PLATFORMS: iphoneos iphonesimulator appletvos appletvsimulator
         TARGETED_DEVICE_FAMILY: 1,2,3
+
+  Todo-UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: 13.0
+    sources:
+      - Todo-UITests
+    dependencies:
+      - target: Todo

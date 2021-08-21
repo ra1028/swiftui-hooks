@@ -6,7 +6,7 @@ struct CounterPage: HookView {
         let count = useState(0)
         let isAutoIncrement = useState(false)
 
-        useEffect(.preserved(by: isAutoIncrement.wrappedValue)) {
+        useEffect(.prevented(by: isAutoIncrement.wrappedValue)) {
             guard isAutoIncrement.wrappedValue else { return nil }
 
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in

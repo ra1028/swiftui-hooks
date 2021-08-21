@@ -36,6 +36,7 @@ struct TodoPage: HookView {
                     text.wrappedValue = ""
                 }
             )
+            .accessibility(identifier: "input")
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 4)
@@ -48,8 +49,11 @@ struct TodoPage: HookView {
         let todos = useContext(TodoContext.self)
 
         return ForEach(0..<todos.wrappedValue.count, id: \.self) { offset in
+            let todo = todos.wrappedValue[offset]
+
             Row {
-                Text(todos.wrappedValue[offset])
+                Text(todo)
+                    .accessibility(identifier: "todo:" + todo)
                 Spacer()
                 Button(
                     action: { todos.wrappedValue.remove(at: offset) },
@@ -60,6 +64,7 @@ struct TodoPage: HookView {
                             .frame(width: 20, height: 20)
                     }
                 )
+                .accessibility(identifier: "delete:" + todo)
             }
         }
     }

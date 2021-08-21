@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "25301600C3492D579FE1E91C"
-               BuildableName = "Todo.app"
-               BlueprintName = "Todo"
+               BlueprintIdentifier = "EEC38F915B7D99D569F83626"
+               BuildableName = "Todo-UITests.xctest"
+               BlueprintName = "Todo-UITests"
                ReferencedContainer = "container:Examples.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "25301600C3492D579FE1E91C"
-            BuildableName = "Todo.app"
-            BlueprintName = "Todo"
+            BlueprintIdentifier = "EEC38F915B7D99D569F83626"
+            BuildableName = "Todo-UITests.xctest"
+            BlueprintName = "Todo-UITests"
             ReferencedContainer = "container:Examples.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,16 +63,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "25301600C3492D579FE1E91C"
-            BuildableName = "Todo.app"
-            BlueprintName = "Todo"
+            BlueprintIdentifier = "EEC38F915B7D99D569F83626"
+            BuildableName = "Todo-UITests.xctest"
+            BlueprintName = "Todo-UITests"
             ReferencedContainer = "container:Examples.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -84,9 +83,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "25301600C3492D579FE1E91C"
-            BuildableName = "Todo.app"
-            BlueprintName = "Todo"
+            BlueprintIdentifier = "EEC38F915B7D99D569F83626"
+            BuildableName = "Todo-UITests.xctest"
+            BlueprintName = "Todo-UITests"
             ReferencedContainer = "container:Examples.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -1,20 +1,24 @@
 import Combine
 import SwiftUI
 
+/// A class that manages list of states of hooks used inside `HookDispatcher.scoped(disablesAssertion:environment:_)`.
 public final class HookDispatcher: ObservableObject {
     internal private(set) static weak var current: HookDispatcher?
 
+    /// A publisher that emits before the object has changed.
     public let objectWillChange = PassthroughSubject<(), Never>()
 
     private var records = LinkedList<HookRecordProtocol>()
     private var scopedState: ScopedHookState?
 
+    /// Creates a new `HookDispatcher`.
     public init() {}
 
     deinit {
         disposeAll()
     }
 
+    /// Disposes all hooks that already managed with this instance.
     public func disposeAll() {
         for record in records.reversed() {
             record.element.dispose()
@@ -23,6 +27,9 @@ public final class HookDispatcher: ObservableObject {
         records = LinkedList()
     }
 
+    /// Returns given hooks value with managing its state and update it if needed.
+    /// - Parameter hook: A hook to be used.
+    /// - Returns: A value that provided from the given hook.
     public func use<H: Hook>(_ hook: H) -> H.Value {
         assertMainThread()
 
@@ -90,6 +97,13 @@ public final class HookDispatcher: ObservableObject {
         }
     }
 
+    /// Executes the given `body` function that needs `HookDispatcher` instance with managing hooks state.
+    /// - Parameters:
+    ///   - disablesAssertion: A Boolean value indicates whether to disable assertions of hooks rule.
+    ///   - environment: A environment values that can be used for hooks used inside the `body`.
+    ///   - body: A function that needs `HookDispatcher` and is executed inside.
+    /// - Throws: Rethrows an error if the given function throws.
+    /// - Returns: A result value that the given `body` function returns.
     public func scoped<Result>(
         disablesAssertion: Bool = false,
         environment: EnvironmentValues,

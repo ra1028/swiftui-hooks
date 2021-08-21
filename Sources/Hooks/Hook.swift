@@ -1,50 +1,48 @@
-/// `Hook` manages the state and overall behavior of a hook. It has lifecycles to manage the state and when to compute the value.
+/// `Hook` manages the state and overall behavior of a hook. It has lifecycles to manage the state and when to update the value.
 /// It must be immutable, and should not have any state in itself, but should perform appropriate operations on the state managed by the internal system passed to lifecycle functions.
 ///
 /// Use it when your custom hook becomes too complex can not be made with existing hooks composition.
 public protocol Hook {
-    /// The type of state that preserves the value computed by this hook.
+    /// The type of state that is used to preserves the value returned by this hook.
     associatedtype State = Void
 
-    /// The type of value that this hook computes.
+    /// The type of value that this hook returns.
     associatedtype Value
 
     /// The type of contextual information about the state of the hook.
     typealias Coordinator = HookCoordinator<Self>
 
-    /// Indicates when to compute the value that this hook provides.
-    var computation: HookComputation { get }
+    /// A strategy that determines when to update the state.
+    var updateStrategy: HookUpdateStrategy? { get }
 
-    /// Indicates whether the value should be computed after all hooks have been evaluated.
-    var shouldDeferredCompute: Bool { get }
+    /// Indicates whether the value should be updated after all hooks have been evaluated.
+    var shouldDeferredUpdate: Bool { get }
 
     /// Returns a initial state of this hook.
     /// Internal system calls this function to create a state at first time each hook is evaluated.
     func makeState() -> State
 
-    /// Returns a value for each hook call.
+    /// Updates the state when the `updateStrategy` determines that an update is necessary.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func makeValue(coordinator: Coordinator) -> Value
+    func updateState(coordinator: Coordinator)
 
-    /// Compute the value and store it to the state of the hook.
-    /// The timing at which this function is called is specified by `computation`.
+    /// Returns a value which is returned when this hook is called.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func compute(coordinator: Coordinator)
+    func value(coordinator: Coordinator) -> Value
 
     /// Dispose of the state and interrupt running asynchronous operation.
     func dispose(state: State)
 }
 
 public extension Hook {
-    /// Indicates whether the value should be computed after all hooks have been evaluated.
+    /// Indicates whether the value should be updated after other hooks have been updated.
     /// Default is `false`.
-    var shouldDeferredCompute: Bool { false }
+    var shouldDeferredUpdate: Bool { false }
 
-    /// Compute the value and store it to the state of the hook.
-    /// The timing at which this function is called is specified by `computation`.
+    /// Updates the state when the `updateStrategy` determines that an update is necessary.
     /// Does not do anything by default.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func compute(coordinator: Coordinator) {}
+    func updateState(coordinator: Coordinator) {}
 
     /// Dispose of the state and interrupt running asynchronous operation.
     /// Does not do anything by default.
@@ -62,5 +60,5 @@ public extension Hook where Value == Void {
     /// Returns a value for each hook call.
     /// Default is Void.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func makeValue(coordinator: Coordinator) {}
+    func value(coordinator: Coordinator) {}
 }

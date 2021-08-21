@@ -7,21 +7,21 @@ final class UseHookTests: XCTestCase {
     struct TestHook: Hook {
         final class State {
             var flag = false
-            var isComputed = false
+            var isUpdated = false
         }
 
-        let computation = HookComputation.always
+        let updateStrategy: HookUpdateStrategy? = nil
 
         func makeState() -> State {
             State()
         }
 
-        func makeValue(
+        func value(
             coordinator: Coordinator
-        ) -> (flag: Bool, isComputed: Bool, toggleFlag: () -> Void) {
+        ) -> (flag: Bool, isUpdated: Bool, toggleFlag: () -> Void) {
             (
                 flag: coordinator.state.flag,
-                isComputed: coordinator.state.isComputed,
+                isUpdated: coordinator.state.isUpdated,
                 toggleFlag: {
                     coordinator.state.flag.toggle()
                     coordinator.updateView()
@@ -29,8 +29,8 @@ final class UseHookTests: XCTestCase {
             )
         }
 
-        func compute(coordinator: Coordinator) {
-            coordinator.state.isComputed = true
+        func updateState(coordinator: Coordinator) {
+            coordinator.state.isUpdated = true
         }
     }
 
@@ -40,7 +40,7 @@ final class UseHookTests: XCTestCase {
         }
 
         XCTAssertFalse(tester.value.flag)
-        XCTAssertTrue(tester.value.isComputed)
+        XCTAssertTrue(tester.value.isUpdated)
 
         tester.value.toggleFlag()
 

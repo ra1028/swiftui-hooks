@@ -4,27 +4,6 @@ import XCTest
 @testable import Hooks
 
 final class UseMemoTests: XCTestCase {
-    func testAlways() {
-        var value = 0
-        let tester = HookTester {
-            useMemo(.always) { () -> Int in
-                value
-            }
-        }
-
-        XCTAssertEqual(tester.value, 0)
-
-        value = 1
-        tester.update()
-
-        XCTAssertEqual(tester.value, 1)
-
-        value = 2
-        tester.update()
-
-        XCTAssertEqual(tester.value, 2)
-    }
-
     func testOnce() {
         var value = 0
         let tester = HookTester {

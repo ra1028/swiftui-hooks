@@ -45,14 +45,14 @@ public final class HookDispatcher: ObservableObject {
 
             scopedState.currentRecord = records.append(record)
 
-            if hook.shouldDeferredCompute {
-                scopedState.deferredComputeRecords.append(record)
+            if hook.shouldDeferredUpdate {
+                scopedState.deferredUpdateRecords.append(record)
             }
             else {
-                hook.compute(coordinator: coordinator)
+                hook.updateState(coordinator: coordinator)
             }
 
-            return hook.makeValue(coordinator: coordinator)
+            return hook.value(coordinator: coordinator)
         }
 
         defer {
@@ -68,16 +68,16 @@ public final class HookDispatcher: ObservableObject {
             let newRecord = HookRecord(hook: hook, coordinator: coordinator)
             let oldRecord = record.swap(element: newRecord)
 
-            if oldRecord.shouldRecompute(for: hook) {
-                if hook.shouldDeferredCompute {
-                    scopedState.deferredComputeRecords.append(newRecord)
+            if oldRecord.shouldUpdate(newHook: hook) {
+                if hook.shouldDeferredUpdate {
+                    scopedState.deferredUpdateRecords.append(newRecord)
                 }
                 else {
-                    hook.compute(coordinator: coordinator)
+                    hook.updateState(coordinator: coordinator)
                 }
             }
 
-            return hook.makeValue(coordinator: coordinator)
+            return hook.value(coordinator: coordinator)
         }
         else {
             scopedState.assertRecordingFailure(hook: hook, record: record.element)
@@ -111,7 +111,7 @@ public final class HookDispatcher: ObservableObject {
 
         let value = try body()
 
-        scopedState.deferredCompute()
+        scopedState.deferredUpdate()
         scopedState.assertConsumedState()
         sweepRemainingRecords()
 
@@ -143,7 +143,7 @@ private final class ScopedHookState {
     let disablesAssertion: Bool
     let environment: EnvironmentValues
     var currentRecord: LinkedList<HookRecordProtocol>.Node?
-    var deferredComputeRecords = LinkedList<HookRecordProtocol>()
+    var deferredUpdateRecords = LinkedList<HookRecordProtocol>()
 
     init(
         disablesAssertion: Bool,
@@ -155,9 +155,9 @@ private final class ScopedHookState {
         self.currentRecord = currentRecord
     }
 
-    func deferredCompute() {
-        for record in deferredComputeRecords {
-            record.element.compute()
+    func deferredUpdate() {
+        for record in deferredUpdateRecords {
+            record.element.updateState()
         }
     }
 
@@ -207,12 +207,16 @@ private struct HookRecord<H: Hook>: HookRecordProtocol {
         coordinator.state as? H.State
     }
 
-    func shouldRecompute<New: Hook>(for newHook: New) -> Bool {
-        hook.computation.shouldRecompute(for: newHook.computation)
+    func shouldUpdate<New: Hook>(newHook: New) -> Bool {
+        guard let newStrategy = newHook.updateStrategy else {
+            return true
+        }
+
+        return hook.updateStrategy?.dependency != newStrategy.dependency
     }
 
-    func compute() {
-        hook.compute(coordinator: coordinator)
+    func updateState() {
+        hook.updateState(coordinator: coordinator)
     }
 
     func dispose() {
@@ -224,7 +228,7 @@ private protocol HookRecordProtocol {
     var hookName: String { get }
 
     func state<H: Hook>(of hookType: H.Type) -> H.State?
-    func shouldRecompute<New: Hook>(for newHook: New) -> Bool
-    func compute()
+    func shouldUpdate<New: Hook>(newHook: New) -> Bool
+    func updateState()
     func dispose()
 }

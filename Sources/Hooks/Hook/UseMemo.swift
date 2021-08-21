@@ -9,14 +9,19 @@
 ///   - makeValue: A closure that to create a new value.
 /// - Returns: A memoized value.
 public func useMemo<Value>(
-    _ computation: HookComputation,
+    _ updateStrategy: HookUpdateStrategy,
     _ makeValue: @escaping () -> Value
 ) -> Value {
-    useHook(MemoHook(computation: computation, makeValue: makeValue))
+    useHook(
+        MemoHook(
+            updateStrategy: updateStrategy,
+            makeValue: makeValue
+        )
+    )
 }
 
 private struct MemoHook<Value>: Hook {
-    let computation: HookComputation
+    let updateStrategy: HookUpdateStrategy?
     let makeValue: () -> Value
 
     func makeState() -> State {

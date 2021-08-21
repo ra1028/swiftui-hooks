@@ -21,7 +21,7 @@ public func usePublisherSubscribe<P: Publisher>(
 
 private struct PublisherSubscribeHook<P: Publisher>: Hook {
     let makePublisher: () -> P
-    let computation = HookComputation.once
+    let updateStrategy: HookUpdateStrategy? = .once
 
     func makeState() -> State {
         State()

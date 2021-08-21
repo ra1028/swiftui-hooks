@@ -12,8 +12,7 @@ public protocol Hook {
     /// The type of contextual information about the state of the hook.
     typealias Coordinator = HookCoordinator<Self>
 
-    /// Indicates when to compute the value that this hook provides.
-    var computation: HookComputation { get }
+    var updateStrategy: HookUpdateStrategy? { get }
 
     /// Indicates whether the value should be computed after all hooks have been evaluated.
     var shouldDeferredCompute: Bool { get }

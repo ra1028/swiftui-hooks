@@ -31,7 +31,7 @@ public func useReducer<State, Action>(
 private struct ReducerHook<State, Action>: Hook {
     let reducer: (State, Action) -> State
     let initialState: State
-    let computation = HookComputation.always
+    let updateStrategy: HookUpdateStrategy? = nil
 
     func makeState() -> Ref {
         Ref(initialState: initialState)

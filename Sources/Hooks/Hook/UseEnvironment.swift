@@ -12,7 +12,7 @@ public func useEnvironment<Value>(_ keyPath: KeyPath<EnvironmentValues, Value>) 
 
 private struct EnvironmentHook<Value>: Hook {
     let keyPath: KeyPath<EnvironmentValues, Value>
-    let computation = HookComputation.once
+    let updateStrategy: HookUpdateStrategy? = .once
 
     func makeValue(coordinator: Coordinator) -> Value {
         coordinator.environment[keyPath: keyPath]

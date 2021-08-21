@@ -208,7 +208,11 @@ private struct HookRecord<H: Hook>: HookRecordProtocol {
     }
 
     func shouldRecompute<New: Hook>(for newHook: New) -> Bool {
-        hook.computation.shouldRecompute(for: newHook.computation)
+        guard let newStrategy = newHook.updateStrategy else {
+            return true
+        }
+
+        return hook.updateStrategy?.dependency != newStrategy.dependency
     }
 
     func compute() {

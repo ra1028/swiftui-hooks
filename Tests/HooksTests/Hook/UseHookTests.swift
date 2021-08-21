@@ -10,7 +10,7 @@ final class UseHookTests: XCTestCase {
             var isComputed = false
         }
 
-        let computation = HookComputation.always
+        let updateStrategy: HookUpdateStrategy? = nil
 
         func makeState() -> State {
             State()

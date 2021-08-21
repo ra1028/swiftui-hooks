@@ -12,7 +12,7 @@ public func useRef<T>(_ initialValue: T) -> RefObject<T> {
 
 private struct RefHook<T>: Hook {
     let initialValue: T
-    let computation = HookComputation.once
+    let updateStrategy: HookUpdateStrategy? = .once
 
     func makeState() -> RefObject<T> {
         RefObject(initialValue)

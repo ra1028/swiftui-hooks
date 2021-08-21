@@ -9,17 +9,17 @@ final class HookDispatcherTests: XCTestCase {
     }
 
     final class TestHook: Hook {
-        let computation: HookComputation
+        let updateStrategy: HookUpdateStrategy?
         let shouldDeferredCompute: Bool
         let disposeCounter: Counter
         var disposedAt: Int?
 
         init(
-            computation: HookComputation = .always,
+            updateStrategy: HookUpdateStrategy? = nil,
             shouldDeferredCompute: Bool = false,
             disposeCounter: Counter? = nil
         ) {
-            self.computation = computation
+            self.updateStrategy = updateStrategy
             self.shouldDeferredCompute = shouldDeferredCompute
             self.disposeCounter = disposeCounter ?? Counter()
         }
@@ -43,7 +43,7 @@ final class HookDispatcherTests: XCTestCase {
     }
 
     final class Test2Hook: Hook {
-        let computation = HookComputation.always
+        let updateStrategy: HookUpdateStrategy? = nil
         let disposeCounter: Counter
         var disposedAt: Int?
 
@@ -71,12 +71,12 @@ final class HookDispatcherTests: XCTestCase {
 
     func testUse() {
         let dispatcher = HookDispatcher()
-        let alwaysHook = TestHook(computation: .always)
-        let onceHook = TestHook(computation: .once)
-        let deferredHook = TestHook(computation: .always, shouldDeferredCompute: true)
+        let hookWithoutPreservation = TestHook(updateStrategy: nil)
+        let onceHook = TestHook(updateStrategy: .once)
+        let deferredHook = TestHook(updateStrategy: nil, shouldDeferredCompute: true)
 
         dispatcher.scoped(environment: EnvironmentValues()) {
-            let value1 = useHook(alwaysHook)
+            let value1 = useHook(hookWithoutPreservation)
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
@@ -86,7 +86,7 @@ final class HookDispatcherTests: XCTestCase {
         }
 
         dispatcher.scoped(environment: EnvironmentValues()) {
-            let value1 = useHook(alwaysHook)
+            let value1 = useHook(hookWithoutPreservation)
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
@@ -96,7 +96,7 @@ final class HookDispatcherTests: XCTestCase {
         }
 
         dispatcher.scoped(environment: EnvironmentValues()) {
-            let value1 = useHook(alwaysHook)
+            let value1 = useHook(hookWithoutPreservation)
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 

@@ -13,7 +13,7 @@ public func useContext<T>(_ context: Context<T>.Type) -> T {
 
 private struct ContextHook<T>: Hook {
     let context: Context<T>.Type
-    let computation = HookComputation.once
+    let updateStrategy: HookUpdateStrategy? = .once
 
     func makeValue(coordinator: Coordinator) -> T {
         guard let value = coordinator.environment[context] else {

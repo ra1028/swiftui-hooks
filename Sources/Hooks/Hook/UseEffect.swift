@@ -15,12 +15,12 @@
 ///   - effect: A closure that typically represents a side-effect.
 ///             It is able to return a closure that to do something when this hook is unmount from the view or when the side-effect function is called again.
 public func useEffect(
-    _ computation: HookComputation,
+    _ updateStrategy: HookUpdateStrategy? = nil,
     _ effect: @escaping () -> (() -> Void)?
 ) {
     useHook(
         EffectHook(
-            computation: computation,
+            updateStrategy: updateStrategy,
             shouldDeferredCompute: true,
             effect: effect
         )
@@ -41,12 +41,12 @@ public func useEffect(
 ///   - effect: A closure that typically represents a side-effect.
 ///             It is able to return a closure that to do something when this hook is unmount from the view or when the side-effect function is called again.
 public func useLayoutEffect(
-    _ computation: HookComputation,
+    _ updateStrategy: HookUpdateStrategy? = nil,
     _ effect: @escaping () -> (() -> Void)?
 ) {
     useHook(
         EffectHook(
-            computation: computation,
+            updateStrategy: updateStrategy,
             shouldDeferredCompute: false,
             effect: effect
         )
@@ -54,7 +54,7 @@ public func useLayoutEffect(
 }
 
 private struct EffectHook: Hook {
-    let computation: HookComputation
+    let updateStrategy: HookUpdateStrategy?
     let shouldDeferredCompute: Bool
     let effect: () -> (() -> Void)?
 

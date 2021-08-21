@@ -14,19 +14,19 @@ import Combine
 /// - Returns: A most recent publisher phase.
 @discardableResult
 public func usePublisher<P: Publisher>(
-    _ computation: HookComputation,
+    _ updateStrategy: HookUpdateStrategy,
     _ makePublisher: @escaping () -> P
 ) -> AsyncPhase<P.Output, P.Failure> {
     useHook(
         PublisherHook(
-            computation: computation,
+            updateStrategy: updateStrategy,
             makePublisher: makePublisher
         )
     )
 }
 
 private struct PublisherHook<P: Publisher>: Hook {
-    let computation: HookComputation
+    let updateStrategy: HookUpdateStrategy?
     let makePublisher: () -> P
 
     func makeState() -> State {

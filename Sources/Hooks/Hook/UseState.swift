@@ -14,7 +14,7 @@ public func useState<State>(_ initialState: State) -> Binding<State> {
 
 private struct StateHook<State>: Hook {
     let initialState: State
-    let computation = HookComputation.once
+    var updateStrategy: HookUpdateStrategy? = .once
 
     func makeState() -> Ref {
         Ref(initialState: initialState)

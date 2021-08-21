@@ -5,31 +5,6 @@ import XCTest
 @testable import Hooks
 
 final class UsePublisherTests: XCTestCase {
-    func testUpdateAlways() {
-        let subject = PassthroughSubject<Void, Never>()
-        let tester = HookTester(0) { value in
-            usePublisher(.always) {
-                subject.map { value }
-            }
-        }
-
-        XCTAssertEqual(tester.value, .running)
-
-        subject.send()
-
-        XCTAssertEqual(tester.value, .running)
-
-        tester.update(with: 1)
-        subject.send()
-
-        XCTAssertEqual(tester.value, .running)
-
-        tester.update(with: 2)
-        subject.send()
-
-        XCTAssertEqual(tester.value, .running)
-    }
-
     func testUpdateOnce() {
         let subject = PassthroughSubject<Void, Never>()
         let tester = HookTester(0) { value in
@@ -55,10 +30,10 @@ final class UsePublisherTests: XCTestCase {
         XCTAssertEqual(tester.value.value, 0)
     }
 
-    func testUpdatePreserved() {
+    func testUpdatePrevented() {
         let subject = PassthroughSubject<Void, Never>()
         let tester = HookTester((0, false)) { value, flag in
-            usePublisher(.preserved(by: flag)) {
+            usePublisher(.prevented(by: flag)) {
                 subject.map { value }
             }
         }
@@ -103,7 +78,7 @@ final class UsePublisherTests: XCTestCase {
     func testDispose() {
         let subject = PassthroughSubject<Int, Never>()
         let tester = HookTester {
-            usePublisher(.always) {
+            usePublisher(.once) {
                 subject
             }
         }

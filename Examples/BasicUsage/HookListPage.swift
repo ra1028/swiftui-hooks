@@ -68,7 +68,7 @@ struct HookListPage: HookView {
         let isOn = useState(false)
         let count = useState(0)
 
-        useEffect(.prevented(by: isOn.wrappedValue)) {
+        useEffect(.preserved(by: isOn.wrappedValue)) {
             guard isOn.wrappedValue else { return nil }
 
             let timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
@@ -90,7 +90,7 @@ struct HookListPage: HookView {
         let flag = useState(false)
         let random = useState(0)
 
-        useLayoutEffect(.prevented(by: flag.wrappedValue)) {
+        useLayoutEffect(.preserved(by: flag.wrappedValue)) {
             random.wrappedValue = Int.random(in: 0...100000)
             return nil
         }
@@ -106,7 +106,7 @@ struct HookListPage: HookView {
 
     var useMemoRow: some View {
         let flag = useState(false)
-        let randomColor = useMemo(.prevented(by: flag.wrappedValue)) {
+        let randomColor = useMemo(.preserved(by: flag.wrappedValue)) {
             Color(hue: .random(in: 0...1), saturation: 1, brightness: 1)
         }
 
@@ -125,7 +125,7 @@ struct HookListPage: HookView {
         let n2 = useRef(1)
         let fibonacci = useState(2)
 
-        useEffect(.prevented(by: flag.wrappedValue)) {
+        useEffect(.preserved(by: flag.wrappedValue)) {
             n2.current = n1.current
             n1.current = fibonacci.wrappedValue
             fibonacci.wrappedValue = n1.current + n2.current

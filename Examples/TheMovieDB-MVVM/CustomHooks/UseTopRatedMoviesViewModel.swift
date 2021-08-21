@@ -16,12 +16,12 @@ func useTopRatedMoviesViewModel() -> TopRatedMoviesViewModel {
     let (loadNextPhase, loadNext) = useLoadMovies()
     let latestResponse = loadNextPhase.value ?? loadPhase.value
 
-    useLayoutEffect(.prevented(by: loadPhase.isSuccess)) {
+    useLayoutEffect(.preserved(by: loadPhase.isSuccess)) {
         nextMovies.current = []
         return nil
     }
 
-    useLayoutEffect(.prevented(by: loadNextPhase.isSuccess)) {
+    useLayoutEffect(.preserved(by: loadNextPhase.isSuccess)) {
         nextMovies.current += loadNextPhase.value?.results ?? []
         return nil
     }

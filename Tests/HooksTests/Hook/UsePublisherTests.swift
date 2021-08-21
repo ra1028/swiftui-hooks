@@ -30,10 +30,10 @@ final class UsePublisherTests: XCTestCase {
         XCTAssertEqual(tester.value.value, 0)
     }
 
-    func testUpdatePrevented() {
+    func testUpdatePreserved() {
         let subject = PassthroughSubject<Void, Never>()
         let tester = HookTester((0, false)) { value, flag in
-            usePublisher(.prevented(by: flag)) {
+            usePublisher(.preserved(by: flag)) {
                 subject.map { value }
             }
         }

@@ -13,10 +13,10 @@ final class HookUpdateStrategyTests: XCTestCase {
         XCTAssertNotEqual(key.dependency, unexpected.dependency)
     }
 
-    func testPreventedByEquatable() {
-        let key = HookUpdateStrategy.prevented(by: 100)
-        let expected = HookUpdateStrategy.prevented(by: 100)
-        let unexpected = HookUpdateStrategy.prevented(by: 1)
+    func testPreservedByEquatable() {
+        let key = HookUpdateStrategy.preserved(by: 100)
+        let expected = HookUpdateStrategy.preserved(by: 100)
+        let unexpected = HookUpdateStrategy.preserved(by: 1)
 
         XCTAssertEqual(key.dependency, expected.dependency)
         XCTAssertNotEqual(key.dependency, unexpected.dependency)

@@ -8,7 +8,7 @@ public extension HookUpdateStrategy {
     /// Returns a strategy that a hook will update its state when the given value is changed.
     /// - Parameter value: The value to check against when determining whether to update a state of hook.
     /// - Returns: A strategy that a hook will update its state when the given value is changed.
-    static func prevented<Value: Equatable>(by value: Value) -> Self {
+    static func preserved<Value: Equatable>(by value: Value) -> Self {
         self.init(dependency: value)
     }
 }

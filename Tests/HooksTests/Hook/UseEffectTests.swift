@@ -46,12 +46,12 @@ final class UseEffectTests: XCTestCase {
         XCTAssertEqual(effectCount, 1)
     }
 
-    func testEffectPrevented() {
+    func testEffectPreserved() {
         var flag = false
         var effectCount = 0
 
         let tester = HookTester {
-            useEffect(.prevented(by: flag)) {
+            useEffect(.preserved(by: flag)) {
                 effectCount += 1
                 return nil
             }
@@ -140,12 +140,12 @@ final class UseEffectTests: XCTestCase {
         XCTAssertEqual(effectCount, 1)
     }
 
-    func testLayoutEffectPrevented() {
+    func testLayoutEffectPreserved() {
         var flag = false
         var effectCount = 0
 
         let tester = HookTester {
-            useLayoutEffect(.prevented(by: flag)) {
+            useLayoutEffect(.preserved(by: flag)) {
                 effectCount += 1
                 return nil
             }

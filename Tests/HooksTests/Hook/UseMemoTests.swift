@@ -25,11 +25,11 @@ final class UseMemoTests: XCTestCase {
         XCTAssertEqual(tester.value, 0)
     }
 
-    func testPrevented() {
+    func testPreserved() {
         var flag = false
         var value = 0
         let tester = HookTester {
-            useMemo(.prevented(by: flag)) { () -> Int in
+            useMemo(.preserved(by: flag)) { () -> Int in
                 value
             }
         }

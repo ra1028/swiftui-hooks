@@ -17,7 +17,7 @@ final class HookTesterTests: XCTestCase {
 
     func testValueHistory() {
         let tester = HookTester(0) { value in
-            useMemo(.prevented(by: value)) {
+            useMemo(.preserved(by: value)) {
                 value
             }
         }
@@ -31,7 +31,7 @@ final class HookTesterTests: XCTestCase {
 
     func testUpdateWithParameter() {
         let tester = HookTester(0) { value in
-            useMemo(.prevented(by: value)) {
+            useMemo(.preserved(by: value)) {
                 value
             }
         }
@@ -52,7 +52,7 @@ final class HookTesterTests: XCTestCase {
     func testUpdate() {
         var value = 0
         let tester = HookTester {
-            useMemo(.prevented(by: value)) {
+            useMemo(.preserved(by: value)) {
                 value
             }
         }

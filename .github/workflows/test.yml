@@ -1,6 +1,7 @@
 # https://github.com/actions/virtual-environments
 
 name: GitHub Actions
+
 on:
   pull_request:
   push:
@@ -9,45 +10,22 @@ on:
   workflow_dispatch:
     branches:
       - main
+
 jobs:
   test:
     name: Test
-    runs-on: macos-10.15
+    runs-on: macos-11
     strategy:
       matrix:
         xcode_version:
           - 12.4
-          # Should revisit these versions once Big sur will be available.
-          # - 12.5.1
-          # - 13.0
+          - 12.5.1
+          - 13.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode_version }}.app
-    steps:
-      - uses: actions/checkout@v2
-      - name: Show environments
-        run: |
-          swift --version
-          xcodebuild -version
-      - name: Test for macOS
-        run: xcodebuild test -scheme Hooks -destination "platform=macOS"
-      - name: Test for iOS
-        run: xcodebuild test -scheme Hooks -destination "platform=iOS Simulator,name=iPhone 12 Pro"
-      - name: Test for tvOS
-        run: xcodebuild test -scheme Hooks -destination "platform=tvOS Simulator,name=Apple TV"
-      - name: Build for watchOS
-        run: WATCHOS=true xcodebuild build -scheme Hooks -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm"
-
-  build-examples:
-    name: Build examples
-    runs-on: macos-10.15
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_12.4.app
       OLD_XCODE_APP: /Applications/Xcode_11.7.app
       OLD_TARGET_OS: 13.7
       OLD_RUNTIME_NAME: com.apple.CoreSimulator.SimRuntime.iOS-13-7
-    defaults:
-      run:
-        working-directory: Examples
     steps:
       - uses: actions/checkout@v2
       - name: Show environments
@@ -60,13 +38,42 @@ jobs:
           sudo ln -s $OLD_XCODE_APP/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ $OLD_TARGET_OS.simruntime
           xcrun simctl list runtimes
           xcrun simctl list devices $OLD_TARGET_OS
+      - name: Test for macOS
+        run: xcodebuild test -scheme Hooks -destination "platform=macOS"
+      - name: Test for iOS
+        run: xcodebuild test -scheme Hooks -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+      - name: Test for tvOS
+        run: xcodebuild test -scheme Hooks -destination "platform=tvOS Simulator,name=Apple TV"
+      - name: Build for watchOS
+        run: WATCHOS=true xcodebuild build -scheme Hooks -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm"
+      - name: Test for old iOS
+        run: xcodebuild test -scheme Hooks -destination "platform=iOS Simulator,name=iPhone 11 Pro,OS=$OLD_TARGET_OS"
+
+  build-examples:
+    name: Build examples
+    runs-on: macos-11
+    strategy:
+      matrix:
+        xcode_version:
+          - 12.4
+          - 12.5.1
+          - 13.0
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode_version }}.app
+    defaults:
+      run:
+        working-directory: Examples
+    steps:
+      - uses: actions/checkout@v2
+      - name: Show environments
+        run: |
+          swift --version
+          xcodebuild -version
       - name: Build TheMovieDB
         run: xcodebuild build -scheme TheMovieDB-MVVM -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Test TheMovieDB
         run: xcodebuild test -scheme TheMovieDB-MVVM-Tests -destination "platform=iOS Simulator,name=iPhone 12 Pro"
       - name: Build Basic
         run: xcodebuild build -scheme BasicUsage -destination "platform=iOS Simulator,name=iPhone 12 Pro"
-      - name: Build Legacy
+      - name: Build Todo
         run: xcodebuild build -scheme Todo -destination "platform=iOS Simulator,name=iPhone 12 Pro"
-      - name: Build Legacy with iOS13
-        run: xcodebuild build -scheme Todo -destination "platform=iOS Simulator,name=iPhone 11 Pro,OS=$OLD_TARGET_OS"

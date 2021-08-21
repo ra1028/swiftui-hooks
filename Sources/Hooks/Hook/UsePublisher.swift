@@ -1,7 +1,7 @@
 import Combine
 
 /// A hook to use the most recent phase of asynchronous operation of the passed publisher.
-/// The publisher will be subscribed at the first computation and will be re-subscribed according to the strategy specified with the passed `computation`.
+/// The publisher will be subscribed at the first update and will be re-subscribed according to the given `updateStrategy`.
 /// Triggers a view update when the asynchronous phase has been changed.
 ///
 ///     let phase = usePublisher(.once) {
@@ -9,7 +9,7 @@ import Combine
 ///     }
 ///
 /// - Parameters:
-///   - computation: A computation strategy that to determine when to subscribe the effect function again.
+///   - updateStrategy: A strategy that determines when to re-subscribe the given publisher.
 ///   - makePublisher: A closure that to create a new publisher to be subscribed.
 /// - Returns: A most recent publisher phase.
 @discardableResult

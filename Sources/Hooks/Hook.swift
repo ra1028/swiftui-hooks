@@ -1,12 +1,12 @@
-/// `Hook` manages the state and overall behavior of a hook. It has lifecycles to manage the state and when to compute the value.
+/// `Hook` manages the state and overall behavior of a hook. It has lifecycles to manage the state and when to update the value.
 /// It must be immutable, and should not have any state in itself, but should perform appropriate operations on the state managed by the internal system passed to lifecycle functions.
 ///
 /// Use it when your custom hook becomes too complex can not be made with existing hooks composition.
 public protocol Hook {
-    /// The type of state that preserves the value computed by this hook.
+    /// The type of state that is used to preserves the value returned by this hook.
     associatedtype State = Void
 
-    /// The type of value that this hook computes.
+    /// The type of value that this hook returns.
     associatedtype Value
 
     /// The type of contextual information about the state of the hook.

@@ -1,17 +1,17 @@
-/// A hook to use a side effect function that is called the number of times according to the strategy specified by `computation`.
-/// Optionally the function can be cancelled when this hook is unmount from the view tree or when the side-effect function is called again.
-/// Note that the execution is deferred until after all the hooks have been evaluated.
+/// A hook to use a side effect function that is called the number of times according to the strategy specified with `updateStrategy`.
+/// Optionally the function can be cancelled when this hook is disposed or when the side-effect function is called again.
+/// Note that the execution is deferred until after ohter hooks have been updated.
 ///
-///     useEffect(.once) {
-///         print("View is mounted")
+///     useEffect {
+///         print("Do side effects")
 ///
 ///         return {
-///             print("View is unmounted")
+///             print("Do cleanup")
 ///         }
 ///     }
 ///
 /// - Parameters:
-///   - computation: A computation strategy that to determine when to call the effect function again.
+///   - updateStrategy: A strategy that determines when to re-call the given side effect function.
 ///   - effect: A closure that typically represents a side-effect.
 ///             It is able to return a closure that to do something when this hook is unmount from the view or when the side-effect function is called again.
 public func useEffect(
@@ -27,17 +27,17 @@ public func useEffect(
     )
 }
 
-/// A hook to use a side effect function that is called the number of times according to the strategy specified by `computation`.
+/// A hook to use a side effect function that is called the number of times according to the strategy specified with `updateStrategy`.
 /// Optionally the function can be cancelled when this hook is unmount from the view tree or when the side-effect function is called again.
 /// The signature is identical to `useEffect`, but this fires synchronously when the hook is called.
 ///
-///     useLayoutEffect(.always) {
-///         print("View is being evaluated")
+///     useLayoutEffect {
+///         print("Do side effects")
 ///         return nil
 ///     }
 ///
 /// - Parameters:
-///   - computation: A computation strategy that to determine when to call the effect function again.
+///   - updateStrategy: A strategy that determines when to re-call the given side effect function.
 ///   - effect: A closure that typically represents a side-effect.
 ///             It is able to return a closure that to do something when this hook is unmount from the view or when the side-effect function is called again.
 public func useLayoutEffect(

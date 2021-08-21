@@ -2,7 +2,7 @@ import SwiftUI
 
 public extension Context {
     /// A view that consumes the context values that provided by `Provider` through view tree.
-    /// If the value is not provided by the `Provider` from upstream of the view tree, the view's evaluation will be asserted.
+    /// If the value is not provided by the `Provider` from upstream of the view tree, the view's update will be asserted.
     struct Consumer<Content: View>: View {
         private let content: (T) -> Content
 

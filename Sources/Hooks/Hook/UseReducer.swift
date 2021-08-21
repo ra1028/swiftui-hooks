@@ -1,4 +1,4 @@
-/// A hook to use the current state computed with the passed `reducer`, and a `dispatch` function to dispatch an action to mutate the compute a new state.
+/// A hook to use the state returned by the passed `reducer`, and a `dispatch` function to send actions to update the state.
 /// Triggers a view update when the state has been changed.
 ///
 ///     enum Action {
@@ -18,9 +18,9 @@
 ///     let (count, dispatch) = useReducer(reducer, initialState: 0)
 ///
 /// - Parameters:
-///   - reducer: A function that to compute a new state with an action.
+///   - reducer: A function that to return a new state with an action.
 ///   - initialState: An initial state.
-/// - Returns: A current state computed with the passed `reducer`.
+/// - Returns: A tuple value that has a new state returned by the passed `reducer` and a dispatch function to send actions.
 public func useReducer<State, Action>(
     _ reducer: @escaping (State, Action) -> State,
     initialState: State

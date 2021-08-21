@@ -32,38 +32,33 @@ Enhances reusability of stateful logic and gives state and lifecycle to function
 ## Introducing Hooks
 
 ```swift
-struct Example: HookView {
-    var hookBody: some View {
-        let time = useState(Date())
+func timer() -> some View {
+    let time = useState(Date())
 
-        useEffect(.once) {
-            let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {
-                time.wrappedValue = $0.fireDate
-            }
-
-            return {
-                timer.invalidate()
-            }
+    useEffect(.once) {
+        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {
+            time.wrappedValue = $0.fireDate
         }
 
-        return Text("Now: \(time.wrappedValue)")
+        return {
+            timer.invalidate()
+        }
     }
+
+    return Text("Time: \(time.wrappedValue)")
 }
 ```
 
-SwiftUI Hooks is a SwiftUI implementation of React Hooks. Brings the state and lifecycle into the function view, without depending on elements that are only allowed to be used in struct views such as `@State` or `@ObservedObject`.  
+SwiftUI-Hooks is a SwiftUI implementation of React Hooks. Brings the state and lifecycle into the function view, without depending on elements that are only allowed to be used in struct views such as `@State` or `@ObservedObject`.  
 It allows you to reuse stateful logic between views by building custom hooks composed with multiple hooks.  
 Furthermore, hooks such as `useEffect` also solve the problem of lack of lifecycles in SwiftUI.  
 
-The API and behavioral specs of SwiftUI Hooks are entirely based on React Hooks, so you can leverage your knowledge of web applications to your advantage.  
+The API and behavioral specs of SwiftUI-Hooks are entirely based on React Hooks, so you can leverage your knowledge of web applications to your advantage.  
 
 There're already a bunch of documentations on React Hooks, so you can refer to it and learn more about Hooks.  
 
 - [React Hooks Documentation](https://reactjs.org/docs/hooks-intro.html)  
 - [Youtube Video](https://www.youtube.com/watch?v=dpw9EHDh2bM)  
-
-[Flutter Hooks](https://pub.dev/packages/flutter_hooks) encouraged me to create SwiftUI Hooks, and its well implemented design gives me a lot of inspiration.  
-Kudos to [@rrousselGit](https://github.com/rrousselGit) and of course [React Team](https://reactjs.org/community/team.html).  
 
 ---
 
@@ -83,7 +78,10 @@ Triggers a view update when the state has been changed.
 
 ```swift
 let count = useState(0)  // Binding<Int>
-count.wrappedValue = 123
+
+Button("Increment") {
+    count.wrappedValue += 1
+}
 ```
 
 </details>
@@ -92,19 +90,19 @@ count.wrappedValue = 123
 <summary><CODE>useEffect</CODE></summary>
 
 ```swift
-func useEffect(_ computation: HookComputation, _ effect: @escaping () -> (() -> Void)?)
+func useEffect(_ updateStrategy: HookUpdateStrategy? = nil, _ effect: @escaping () -> (() -> Void)?)
 ```
 
-A hook to use a side effect function that is called the number of times according to the strategy specified by `computation`.  
-Optionally the function can be cancelled when this hook is unmount from the view tree or when the side-effect function is called again.  
-Note that the execution is deferred until after all the hooks have been evaluated.  
+A hook to use a side effect function that is called the number of times according to the strategy specified with `updateStrategy`.  
+Optionally the function can be cancelled when this hook is disposed or when the side-effect function is called again.  
+Note that the execution is deferred until after ohter hooks have been updated.  
 
 ```swift
-useEffect(.once) {
-    print("View is mounted")
+useEffect {
+    print("Do side effects")
 
     return {
-        print("View is unmounted")
+        print("Do cleanup")
     }
 }
 ```
@@ -115,16 +113,16 @@ useEffect(.once) {
 <summary><CODE>useLayoutEffect</CODE></summary>
 
 ```swift
-func useLayoutEffect(_ computation: HookComputation, _ effect: @escaping () -> (() -> Void)?)
+func useLayoutEffect(_ updateStrategy: HookUpdateStrategy? = nil, _ effect: @escaping () -> (() -> Void)?)
 ```
 
-A hook to use a side effect function that is called the number of times according to the strategy specified by `computation`.  
+A hook to use a side effect function that is called the number of times according to the strategy specified with `updateStrategy`.  
 Optionally the function can be cancelled when this hook is unmount from the view tree or when the side-effect function is called again.  
 The signature is identical to `useEffect`, but this fires synchronously when the hook is called.  
 
 ```swift
-useLayoutEffect(.always) {
-    print("View is being evaluated")
+useLayoutEffect {
+    print("Do side effects")
     return nil
 }
 ```
@@ -135,10 +133,10 @@ useLayoutEffect(.always) {
 <summary><CODE>useMemo</CODE></summary>
 
 ```swift
-func useMemo<Value>(_ computation: HookComputation, _ makeValue: @escaping () -> Value) -> Value
+func useMemo<Value>(_ updateStrategy: HookUpdateStrategy, _ makeValue: @escaping () -> Value) -> Value
 ```
 
-A hook to use memoized value preserved until it is re-computed at the timing specified with the `computation`  
+A hook to use memoized value preserved until it is updated at the timing determined with given `updateStrategy`.  
 
 ```swift
 let random = useMemo(.once) {
@@ -160,7 +158,10 @@ The essential of this hook is that setting a value to `current` doesn't trigger 
 
 ```swift
 let value = useRef("text")  // RefObject<String>
-value.current = "new text"
+
+Button("Save text") {
+    value.current = "new text"
+}
 ```
 
 </details>
@@ -172,7 +173,7 @@ value.current = "new text"
 func useReducer<State, Action>(_ reducer: @escaping (State, Action) -> State, initialState: State) -> (state: State, dispatch: (Action) -> Void)
 ```
 
-A hook to use the current state computed with the passed `reducer`, and a `dispatch` function to dispatch an action to mutate the compute a new state.  
+A hook to use the state returned by the passed `reducer`, and a `dispatch` function to send actions to update the state.  
 Triggers a view update when the state has been changed.  
 
 ```swift
@@ -214,11 +215,11 @@ let colorScheme = useEnvironment(\.colorScheme)  // ColorScheme
 <summary><CODE>usePublisher</CODE></summary>
 
 ```swift
-func usePublisher<P: Publisher>(_ computation: HookComputation, _ makePublisher: @escaping () -> P) -> AsyncPhase<P.Output, P.Failure>
+func usePublisher<P: Publisher>(_ updateStrategy: HookUpdateStrategy, _ makePublisher: @escaping () -> P) -> AsyncPhase<P.Output, P.Failure>
 ```
 
 A hook to use the most recent phase of asynchronous operation of the passed publisher.  
-The publisher will be subscribed at the first computation and will be re-subscribed according to the strategy specified with the passed `computation`.  
+The publisher will be subscribed at the first update and will be re-subscribed according to the given `updateStrategy`.  
 Triggers a view update when the asynchronous phase has been changed.  
 
 ```swift
@@ -507,6 +508,13 @@ Xcode menu `File > Swift Packages > Add Package Dependency`.
 ```text
 Repository: https://github.com/ra1028/SwiftUI-Hooks
 ```
+
+---
+
+## Acknowledgements
+
+- [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- [Flutter Hooks](https://github.com/rrousselGit/flutter_hooks)
 
 ---
 

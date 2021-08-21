@@ -16,6 +16,7 @@
     "prioritizeKeepingFunctionOutputTogether": false,
     "respectsExistingLineBreaks": true,
     "rules": {
+        "NeverForceUnwrap": false,
         "AllPublicDeclarationsHaveDocumentation": true,
         "AlwaysUseLowerCamelCase": true,
         "AmbiguousTrailingClosureOverload": true,

@@ -33,11 +33,7 @@ private struct PublisherHook<P: Publisher>: Hook {
         State()
     }
 
-    func makeValue(coordinator: Coordinator) -> AsyncPhase<P.Output, P.Failure> {
-        coordinator.state.phase
-    }
-
-    func compute(coordinator: Coordinator) {
+    func updateState(coordinator: Coordinator) {
         coordinator.state.phase = .running
         coordinator.state.cancellable = makePublisher()
             .sink(
@@ -56,6 +52,10 @@ private struct PublisherHook<P: Publisher>: Hook {
                     coordinator.updateView()
                 }
             )
+    }
+
+    func makeValue(coordinator: Coordinator) -> AsyncPhase<P.Output, P.Failure> {
+        coordinator.state.phase
     }
 
     func dispose(state: State) {

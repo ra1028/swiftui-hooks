@@ -21,7 +21,7 @@ public func useEffect(
     useHook(
         EffectHook(
             updateStrategy: updateStrategy,
-            shouldDeferredCompute: true,
+            shouldDeferredUpdate: true,
             effect: effect
         )
     )
@@ -47,7 +47,7 @@ public func useLayoutEffect(
     useHook(
         EffectHook(
             updateStrategy: updateStrategy,
-            shouldDeferredCompute: false,
+            shouldDeferredUpdate: false,
             effect: effect
         )
     )
@@ -55,14 +55,14 @@ public func useLayoutEffect(
 
 private struct EffectHook: Hook {
     let updateStrategy: HookUpdateStrategy?
-    let shouldDeferredCompute: Bool
+    let shouldDeferredUpdate: Bool
     let effect: () -> (() -> Void)?
 
     func makeState() -> State {
         State()
     }
 
-    func compute(coordinator: Coordinator) {
+    func updateState(coordinator: Coordinator) {
         coordinator.state.cleanup = effect()
     }
 

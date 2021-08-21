@@ -37,6 +37,15 @@ private struct ReducerHook<State, Action>: Hook {
         Ref(initialState: initialState)
     }
 
+    func updateState(coordinator: Coordinator) {
+        guard let action = coordinator.state.nextAction else {
+            return
+        }
+
+        coordinator.state.state = reducer(coordinator.state.state, action)
+        coordinator.state.nextAction = nil
+    }
+
     func makeValue(coordinator: Coordinator) -> (
         state: State,
         dispatch: (Action) -> Void
@@ -54,15 +63,6 @@ private struct ReducerHook<State, Action>: Hook {
                 coordinator.updateView()
             }
         )
-    }
-
-    func compute(coordinator: Coordinator) {
-        guard let action = coordinator.state.nextAction else {
-            return
-        }
-
-        coordinator.state.state = reducer(coordinator.state.state, action)
-        coordinator.state.nextAction = nil
     }
 
     func dispose(state: Ref) {

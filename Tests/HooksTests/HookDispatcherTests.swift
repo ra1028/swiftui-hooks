@@ -10,17 +10,17 @@ final class HookDispatcherTests: XCTestCase {
 
     final class TestHook: Hook {
         let updateStrategy: HookUpdateStrategy?
-        let shouldDeferredCompute: Bool
+        let shouldDeferredUpdate: Bool
         let disposeCounter: Counter
         var disposedAt: Int?
 
         init(
             updateStrategy: HookUpdateStrategy? = nil,
-            shouldDeferredCompute: Bool = false,
+            shouldDeferredUpdate: Bool = false,
             disposeCounter: Counter? = nil
         ) {
             self.updateStrategy = updateStrategy
-            self.shouldDeferredCompute = shouldDeferredCompute
+            self.shouldDeferredUpdate = shouldDeferredUpdate
             self.disposeCounter = disposeCounter ?? Counter()
         }
 
@@ -29,7 +29,7 @@ final class HookDispatcherTests: XCTestCase {
             disposedAt = disposeCounter.count
         }
 
-        func compute(coordinator: Coordinator) {
+        func updateState(coordinator: Coordinator) {
             coordinator.state.current += 1
         }
 
@@ -73,16 +73,16 @@ final class HookDispatcherTests: XCTestCase {
         let dispatcher = HookDispatcher()
         let hookWithoutPreservation = TestHook(updateStrategy: nil)
         let onceHook = TestHook(updateStrategy: .once)
-        let deferredHook = TestHook(updateStrategy: nil, shouldDeferredCompute: true)
+        let deferredHook = TestHook(updateStrategy: nil, shouldDeferredUpdate: true)
 
         dispatcher.scoped(environment: EnvironmentValues()) {
             let value1 = useHook(hookWithoutPreservation)
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
-            XCTAssertEqual(value1, 1)  // Compute always
-            XCTAssertEqual(value2, 1)  // Compute once
-            XCTAssertEqual(value3, 0)  // Computation is deferred
+            XCTAssertEqual(value1, 1)  // Update always
+            XCTAssertEqual(value2, 1)  // Update once
+            XCTAssertEqual(value3, 0)  // Update is deferred
         }
 
         dispatcher.scoped(environment: EnvironmentValues()) {
@@ -90,9 +90,9 @@ final class HookDispatcherTests: XCTestCase {
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
-            XCTAssertEqual(value1, 2)  // Compute always
-            XCTAssertEqual(value2, 1)  // Already computed once
-            XCTAssertEqual(value3, 1)  // Computation is deferred
+            XCTAssertEqual(value1, 2)  // Update always
+            XCTAssertEqual(value2, 1)  // Already updated once
+            XCTAssertEqual(value3, 1)  // Update is deferred
         }
 
         dispatcher.scoped(environment: EnvironmentValues()) {
@@ -100,9 +100,9 @@ final class HookDispatcherTests: XCTestCase {
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
-            XCTAssertEqual(value1, 3)  // Compute always
-            XCTAssertEqual(value2, 1)  // Already computed once
-            XCTAssertEqual(value3, 2)  // Computation is deferred
+            XCTAssertEqual(value1, 3)  // Update always
+            XCTAssertEqual(value2, 1)  // Already updated once
+            XCTAssertEqual(value3, 2)  // Update is deferred
         }
     }
 

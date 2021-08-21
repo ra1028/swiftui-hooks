@@ -15,36 +15,34 @@ public protocol Hook {
     /// A strategy that determines when to update the state.
     var updateStrategy: HookUpdateStrategy? { get }
 
-    /// Indicates whether the value should be computed after all hooks have been evaluated.
-    var shouldDeferredCompute: Bool { get }
+    /// Indicates whether the value should be updated after all hooks have been evaluated.
+    var shouldDeferredUpdate: Bool { get }
 
     /// Returns a initial state of this hook.
     /// Internal system calls this function to create a state at first time each hook is evaluated.
     func makeState() -> State
 
+    /// Updates the state when the `updateStrategy` determines that an update is necessary.
+    /// - Parameter coordinator: A contextual information about the state of the hook.
+    func updateState(coordinator: Coordinator)
+
     /// Returns a value for each hook call.
     /// - Parameter coordinator: A contextual information about the state of the hook.
     func makeValue(coordinator: Coordinator) -> Value
-
-    /// Compute the value and store it to the state of the hook.
-    /// The timing at which this function is called is specified by `computation`.
-    /// - Parameter coordinator: A contextual information about the state of the hook.
-    func compute(coordinator: Coordinator)
 
     /// Dispose of the state and interrupt running asynchronous operation.
     func dispose(state: State)
 }
 
 public extension Hook {
-    /// Indicates whether the value should be computed after all hooks have been evaluated.
+    /// Indicates whether the value should be updated after other hooks have been updated.
     /// Default is `false`.
-    var shouldDeferredCompute: Bool { false }
+    var shouldDeferredUpdate: Bool { false }
 
-    /// Compute the value and store it to the state of the hook.
-    /// The timing at which this function is called is specified by `computation`.
+    /// Updates the state when the `updateStrategy` determines that an update is necessary.
     /// Does not do anything by default.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func compute(coordinator: Coordinator) {}
+    func updateState(coordinator: Coordinator) {}
 
     /// Dispose of the state and interrupt running asynchronous operation.
     /// Does not do anything by default.

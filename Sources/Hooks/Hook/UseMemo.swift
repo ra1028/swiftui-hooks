@@ -28,12 +28,12 @@ private struct MemoHook<Value>: Hook {
         State()
     }
 
-    func makeValue(coordinator: Coordinator) -> Value {
-        coordinator.state.value ?? makeValue()
+    func updateState(coordinator: Coordinator) {
+        coordinator.state.value = makeValue()
     }
 
-    func compute(coordinator: Coordinator) {
-        coordinator.state.value = makeValue()
+    func makeValue(coordinator: Coordinator) -> Value {
+        coordinator.state.value ?? makeValue()
     }
 }
 

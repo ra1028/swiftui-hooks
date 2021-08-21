@@ -37,7 +37,7 @@ final class HookDispatcherTests: XCTestCase {
             RefObject(0)
         }
 
-        func makeValue(coordinator: Coordinator) -> Int {
+        func value(coordinator: Coordinator) -> Int {
             coordinator.state.current
         }
     }

@@ -26,9 +26,9 @@ public protocol Hook {
     /// - Parameter coordinator: A contextual information about the state of the hook.
     func updateState(coordinator: Coordinator)
 
-    /// Returns a value for each hook call.
+    /// Returns a value which is returned when this hook is called.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func makeValue(coordinator: Coordinator) -> Value
+    func value(coordinator: Coordinator) -> Value
 
     /// Dispose of the state and interrupt running asynchronous operation.
     func dispose(state: State)
@@ -60,5 +60,5 @@ public extension Hook where Value == Void {
     /// Returns a value for each hook call.
     /// Default is Void.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func makeValue(coordinator: Coordinator) {}
+    func value(coordinator: Coordinator) {}
 }

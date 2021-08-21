@@ -15,7 +15,7 @@ private struct ContextHook<T>: Hook {
     let context: Context<T>.Type
     let updateStrategy: HookUpdateStrategy? = .once
 
-    func makeValue(coordinator: Coordinator) -> T {
+    func value(coordinator: Coordinator) -> T {
         guard let value = coordinator.environment[context] else {
             fatalError(
                 """

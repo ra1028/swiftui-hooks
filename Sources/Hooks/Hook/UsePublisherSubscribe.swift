@@ -27,7 +27,7 @@ private struct PublisherSubscribeHook<P: Publisher>: Hook {
         State()
     }
 
-    func makeValue(coordinator: Coordinator) -> (
+    func value(coordinator: Coordinator) -> (
         phase: AsyncPhase<P.Output, P.Failure>,
         subscribe: () -> Void
     ) {

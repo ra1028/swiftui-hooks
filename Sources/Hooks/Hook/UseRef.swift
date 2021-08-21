@@ -18,7 +18,7 @@ private struct RefHook<T>: Hook {
         RefObject(initialValue)
     }
 
-    func makeValue(coordinator: Coordinator) -> RefObject<T> {
+    func value(coordinator: Coordinator) -> RefObject<T> {
         coordinator.state
     }
 }

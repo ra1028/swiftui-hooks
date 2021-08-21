@@ -32,7 +32,7 @@ private struct MemoHook<Value>: Hook {
         coordinator.state.value = makeValue()
     }
 
-    func makeValue(coordinator: Coordinator) -> Value {
+    func value(coordinator: Coordinator) -> Value {
         coordinator.state.value ?? makeValue()
     }
 }

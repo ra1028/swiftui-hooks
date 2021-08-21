@@ -20,7 +20,7 @@ private struct StateHook<State>: Hook {
         Ref(initialState: initialState)
     }
 
-    func makeValue(coordinator: Coordinator) -> Binding<State> {
+    func value(coordinator: Coordinator) -> Binding<State> {
         Binding(
             get: {
                 coordinator.state.state

@@ -52,7 +52,7 @@ public final class HookDispatcher: ObservableObject {
                 hook.updateState(coordinator: coordinator)
             }
 
-            return hook.makeValue(coordinator: coordinator)
+            return hook.value(coordinator: coordinator)
         }
 
         defer {
@@ -77,7 +77,7 @@ public final class HookDispatcher: ObservableObject {
                 }
             }
 
-            return hook.makeValue(coordinator: coordinator)
+            return hook.value(coordinator: coordinator)
         }
         else {
             scopedState.assertRecordingFailure(hook: hook, record: record.element)

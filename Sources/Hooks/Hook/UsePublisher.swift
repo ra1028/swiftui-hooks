@@ -54,7 +54,7 @@ private struct PublisherHook<P: Publisher>: Hook {
             )
     }
 
-    func makeValue(coordinator: Coordinator) -> AsyncPhase<P.Output, P.Failure> {
+    func value(coordinator: Coordinator) -> AsyncPhase<P.Output, P.Failure> {
         coordinator.state.phase
     }
 

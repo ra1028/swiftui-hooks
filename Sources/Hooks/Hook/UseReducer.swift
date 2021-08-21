@@ -46,7 +46,7 @@ private struct ReducerHook<State, Action>: Hook {
         coordinator.state.nextAction = nil
     }
 
-    func makeValue(coordinator: Coordinator) -> (
+    func value(coordinator: Coordinator) -> (
         state: State,
         dispatch: (Action) -> Void
     ) {

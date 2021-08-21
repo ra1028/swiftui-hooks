@@ -16,7 +16,7 @@ final class UseHookTests: XCTestCase {
             State()
         }
 
-        func makeValue(
+        func value(
             coordinator: Coordinator
         ) -> (flag: Bool, isUpdated: Bool, toggleFlag: () -> Void) {
             (

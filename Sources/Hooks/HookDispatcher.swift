@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 
-/// A class that manages list of states of hooks used inside `HookDispatcher.scoped(disablesAssertion:environment:_)`.
+/// A class that manages list of states of hooks used inside `HookDispatcher.scoped(environment:_)`.
 public final class HookDispatcher: ObservableObject {
     internal private(set) static weak var current: HookDispatcher?
 
@@ -99,13 +99,11 @@ public final class HookDispatcher: ObservableObject {
 
     /// Executes the given `body` function that needs `HookDispatcher` instance with managing hooks state.
     /// - Parameters:
-    ///   - disablesAssertion: A Boolean value indicates whether to disable assertions of hooks rule.
     ///   - environment: A environment values that can be used for hooks used inside the `body`.
     ///   - body: A function that needs `HookDispatcher` and is executed inside.
     /// - Throws: Rethrows an error if the given function throws.
     /// - Returns: A result value that the given `body` function returns.
     public func scoped<Result>(
-        disablesAssertion: Bool = false,
         environment: EnvironmentValues,
         _ body: () throws -> Result
     ) rethrows -> Result {
@@ -116,7 +114,6 @@ public final class HookDispatcher: ObservableObject {
         Self.current = self
 
         let scopedState = ScopedHookState(
-            disablesAssertion: disablesAssertion,
             environment: environment,
             currentRecord: records.first
         )
@@ -154,17 +151,14 @@ private extension HookDispatcher {
 }
 
 private final class ScopedHookState {
-    let disablesAssertion: Bool
     let environment: EnvironmentValues
     var currentRecord: LinkedList<HookRecordProtocol>.Node?
     var deferredUpdateRecords = LinkedList<HookRecordProtocol>()
 
     init(
-        disablesAssertion: Bool,
         environment: EnvironmentValues,
         currentRecord: LinkedList<HookRecordProtocol>.Node?
     ) {
-        self.disablesAssertion = disablesAssertion
         self.environment = environment
         self.currentRecord = currentRecord
     }
@@ -176,7 +170,7 @@ private final class ScopedHookState {
     }
 
     func assertConsumedState() {
-        guard !disablesAssertion else {
+        guard !environment.hooksRulesAssertionDisabled else {
             return
         }
 
@@ -192,7 +186,7 @@ private final class ScopedHookState {
     }
 
     func assertRecordingFailure<H: Hook>(hook: H, record: HookRecordProtocol) {
-        guard !disablesAssertion else {
+        guard !environment.hooksRulesAssertionDisabled else {
             return
         }
 

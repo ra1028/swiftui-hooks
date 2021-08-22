@@ -49,11 +49,11 @@ func timer() -> some View {
 }
 ```
 
-SwiftUI-Hooks is a SwiftUI implementation of React Hooks. Brings the state and lifecycle into the function view, without depending on elements that are only allowed to be used in struct views such as `@State` or `@ObservedObject`.  
+SwiftUI Hooks is a SwiftUI implementation of React Hooks. Brings the state and lifecycle into the function view, without depending on elements that are only allowed to be used in struct views such as `@State` or `@ObservedObject`.  
 It allows you to reuse stateful logic between views by building custom hooks composed with multiple hooks.  
 Furthermore, hooks such as `useEffect` also solve the problem of lack of lifecycles in SwiftUI.  
 
-The API and behavioral specs of SwiftUI-Hooks are entirely based on React Hooks, so you can leverage your knowledge of web applications to your advantage.  
+The API and behavioral specs of SwiftUI Hooks are entirely based on React Hooks, so you can leverage your knowledge of web applications to your advantage.  
 
 There're already a bunch of documentations on React Hooks, so you can refer to it and learn more about Hooks.  
 
@@ -273,6 +273,10 @@ See also: [React Hooks API Reference](https://reactjs.org/docs/hooks-reference.h
 
 In order to take advantage of the wonderful interface of Hooks, the same rules that React hooks has must also be followed by SwiftUI Hooks.  
 
+**[Disclaimer]**: These rules are not technical constraints specific to SwiftUI Hooks, but are necessary based on the design of the Hooks itself. You can see [here](https://reactjs.org/docs/hooks-rules.html) to know more about the rules defined for React Hooks.  
+
+\* In -Onone builds, if a violation against this rules is detected, it asserts by an internal sanity check to help the developer notice the mistake in the use of hooks. However, hooks also has `disableHooksRulesAssertion` modifier in case you want to disable the assertions.  
+
 ### Only Call Hooks at the Function Top Level
 
 Do not call Hooks inside conditions or loops. The order in which hook is called is important since Hooks uses [LinkedList](https://en.wikipedia.org/wiki/Linked_list) to keep track of its state.  
@@ -281,8 +285,8 @@ Do not call Hooks inside conditions or loops. The order in which hook is called 
 
 ```swift
 @ViewBuilder
-var counterButton: some View {
-    let count = useState(0)  // Uses hook at the top level
+func counterButton() -> some View {
+    let count = useState(0)  // 🟢 Uses hook at the top level
 
     Button("You clicked \(count.wrappedValue) times") {
         count.wrappedValue += 1
@@ -294,9 +298,9 @@ var counterButton: some View {
 
 ```swift
 @ViewBuilder
-var counterButton: some View {
+func counterButton() -> some View {
     if condition {
-        let count = useState(0)  // Uses hook inside condition.
+        let count = useState(0)  // 🔴 Uses hook inside condition.
 
         Button("You clicked \(count.wrappedValue) times") {
             count.wrappedValue += 1
@@ -313,7 +317,7 @@ A view that conforms to the `HookView` protocol will automatically be enclosed i
 🟢 **DO**
 
 ```swift
-struct ContentView: HookView {  // `HookView` is used.
+struct CounterButton: HookView {  // 🟢 `HookView` is used.
     var hookBody: some View {
         let count = useState(0)
 
@@ -325,14 +329,30 @@ struct ContentView: HookView {  // `HookView` is used.
 ```
 
 ```swift
-struct ContentView: View {
-    var body: some View {
-        HookScope {  // `HookScope` is used.
-            let count = useState(0)
+func counterButton() -> some View {
+    HookScope {  // 🟢 `HookScope` is used.
+        let count = useState(0)
 
-            Button("You clicked \(count.wrappedValue) times") {
-                count.wrappedValue += 1
-            }
+        Button("You clicked \(count.wrappedValue) times") {
+            count.wrappedValue += 1
+        }
+    }
+}
+```
+
+```swift
+struct ContentView: HookView {
+    var hookBody: some View {
+        counterButton()
+    }
+
+    // 🟢 Called from `HookView.hookBody` or `HookScope`.
+    @ViewBuilder
+    var counterButton: some View {
+        let count = useState(0)
+
+        Button("You clicked \(count.wrappedValue) times") {
+            count.wrappedValue += 1
         }
     }
 }
@@ -341,13 +361,13 @@ struct ContentView: View {
 🔴 **DON'T**
 
 ```swift
-struct ContentView: View {
-    var body: some View {  // Neither `HookScope` nor `HookView` is used.
-        let count = useState(0)
+// 🔴 Neither `HookScope` nor `HookView` is used, and is not called from them.
+@ViewBuilder
+func counterButton() -> some View {
+    let count = useState(0)
 
-        Button("You clicked \(count.wrappedValue) times") {
-            count.wrappedValue += 1
-        }
+    Button("You clicked \(count.wrappedValue) times") {
+        count.wrappedValue += 1
     }
 }
 ```
@@ -404,7 +424,7 @@ See also: [Building Your Own React Hooks](https://reactjs.org/docs/hooks-custom.
 ## How to Test Your Custom Hooks
 
 So far, we have explained that hooks should be called within `HookScope` or `HookView`. Then, how can the custom hook you have created be tested?  
-To making unit testing of your custom hooks easy, SwiftUI-Hooks provides a simple and complete test utility library.  
+To making unit testing of your custom hooks easy, SwiftUI Hooks provides a simple and complete test utility library.  
 
 `HookTester` enables unit testing independent of UI of custom hooks by simulating the behavior on the view of a given hook and managing the result values.  
 
@@ -415,7 +435,7 @@ Example:
 func useCounter() -> (count: Int, increment: () -> Void) {
     let count = useState(0)
 
-    let increment = {
+    func increment() {
         count.wrappedValue += 1
     }
 

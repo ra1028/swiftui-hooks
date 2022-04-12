@@ -31,7 +31,3 @@ let package = Package(
     ],
     swiftLanguageVersions: [.v5]
 )
-
-if ProcessInfo.processInfo.environment["WATCHOS"] == "true" {
-    package.targets.removeAll(where: \.isTest)
-}

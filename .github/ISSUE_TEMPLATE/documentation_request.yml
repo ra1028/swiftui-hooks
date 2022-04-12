@@ -1,0 +1,27 @@
+name: Documentation Request
+description: Suggest a new doc/example or ask a question about an existing one
+title: "[Doc Request]: "
+labels: ["documentation"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: Reviewed the README and documentation.
+          required: true
+        - label: Confirmed that this is uncovered by existing docs or examples.
+          required: true
+        - label: Checked existing issues & PRs to ensure not duplicated.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Description
+      placeholder: Describe what the scenario you think is uncovered by the existing ones and why you think it should be covered.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Motivation & Context
+      placeholder: Feel free to describe any additional context, such as why you thought the scenario should be covered.

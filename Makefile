@@ -18,6 +18,24 @@ format:
 lint:
 	$(TOOL) swift-format lint -s -p -r $(SWIFT_FILE_PATHS)
 
+.PHONY: docs
+docs:
+	$(PACKAGE) \
+	  --allow-writing-to-directory docs \
+	  generate-documentation \
+	  --product Hooks \
+	  --disable-indexing \
+	  --transform-for-static-hosting \
+	  --hosting-base-path swiftui-hooks \
+	  --output-path docs
+
+.PHONY: docs-preview
+docs-preview:
+	$(PACKAGE) \
+	  --disable-sandbox \
+	  preview-documentation \
+	  --product Hooks
+
 .PHONY: test
 test: test-library build-examples
 

@@ -1,0 +1,66 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: This is not a bug caused by platform.
+          required: true
+        - label: Reviewed the README and documentation.
+          required: true
+        - label: Checked existing issues & PRs to ensure not duplicated.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Reproduction Steps
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Swift Version
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Library Version
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - iOS
+        - tvOS
+        - macOS
+        - watchOS
+
+  - type: textarea
+    attributes:
+      label: Scrrenshot/Video/Gif
+      placeholder: |
+        Drag and drop screenshot, video, or gif here if you have.

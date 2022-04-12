@@ -46,4 +46,4 @@ jobs:
       - name: Validate example project
         run: |
           make proj
-          if [ -n "$(git status --porcelain)" ]; then echo "Make sure that 'Examples/App.xcodeproj' is formated by 'make proj'."; exit 1; fi
+          if [ -n "$(git status --porcelain)" ]; then echo "Make sure that 'Examples/Examples.xcodeproj' is formated by 'make proj'."; exit 1; fi

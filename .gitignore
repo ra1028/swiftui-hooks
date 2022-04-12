@@ -19,7 +19,6 @@ DerivedData
 build/
 archive/
 *.xcframework
-
-## SwiftPM
 .swiftpm
 .build
+docs

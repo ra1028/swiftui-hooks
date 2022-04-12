@@ -1,35 +1,28 @@
-<H1 align="center">
-SwiftUI Hooks
-</H1>
-
+<h1 align="center">SwiftUI Hooks</h1>
+<p align="center">A SwiftUI implementation of <a href="https://reactjs.org/docs/hooks-intro.html">React Hooks</a>.</p>
+<p align="center">Enhances reusability of stateful logic and gives state and lifecycle to function view.</p>
 <p align="center">
-A SwiftUI implementation of <a href="https://reactjs.org/docs/hooks-intro.html">React Hooks</a>.
-</p>
-<p align="center">
-Enhances reusability of stateful logic and gives state and lifecycle to function view.
-</p>
-
-<p align="center">
-<a href="https://developer.apple.com/swift"><img alt="Swift5" src="https://img.shields.io/badge/language-Swift5-orange.svg"></a>
-<a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C-green.svg"></a>
-<a href="https://github.com/ra1028/SwiftUI-Hooks/actions"><img alt="GitHub Actions" src="https://github.com/ra1028/SwiftUI-Hooks/workflows/GitHub%20Actions/badge.svg"></a>
+  <a href="https://github.com/ra1028/SwiftUI-Hooks/actions"><img alt="test" src="https://github.com/ra1028/SwiftUI-Hooks/workflows/test/badge.svg"></a>
+  <a href="https://github.com/ra1028/SwiftUI-Hooks/releases/latest"><img alt="release" src="https://img.shields.io/github/v/release/ra1028/SwiftUI-Hooks.svg"/></a>
+  <a href="https://developer.apple.com/swift"><img alt="Swift5" src="https://img.shields.io/badge/language-Swift5-orange.svg"></a>
+  <a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C-green.svg"></a>
+  <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-black.svg"></a>
 </p>
 
 ---
 
-- [Introducing Hooks](#introducing-hooks)
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
 - [Hooks API](#hooks-api)
 - [Rules of Hooks](#rules-of-hooks)
 - [Building Your Own Hooks](#building-your-own-hooks)
 - [How to Test Your Custom Hooks](#how-to-test-your-custom-hooks)
 - [Context](#context)
-- [Requirements](#requirements)
-- [Installation](#installation)
 - [License](#license)
 
 ---
 
-## Introducing Hooks
+## Introduction
 
 ```swift
 func timer() -> some View {
@@ -59,6 +52,53 @@ There're already a bunch of documentations on React Hooks, so you can refer to i
 
 - [React Hooks Documentation](https://reactjs.org/docs/hooks-intro.html)  
 - [Youtube Video](https://www.youtube.com/watch?v=dpw9EHDh2bM)  
+
+---
+
+## Getting Started
+
+### Requirements
+
+|       |Minimum Version|
+|------:|--------------:|
+|Swift  |5.6            |
+|Xcode  |13.3           |
+|iOS    |13.0           |
+|macOS  |10.15          |
+|tvOS   |13.0           |
+|watchOS|6.0            |
+
+## Installation
+
+The module name of the package is `Hooks`. Choose one of the instructions below to install and add the following import statement to your source code.
+
+```swift
+import Hooks
+```
+
+#### [Xcode Package Dependency](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app)
+
+From Xcode menu: `File` > `Swift Packages` > `Add Package Dependency`
+
+```text
+https://github.com/ra1028/SwiftUI-Hooks
+```
+
+#### [Swift Package Manager](https://www.swift.org/package-manager)
+
+In your `Package.swift` file, first add the following to the package `dependencies`:
+
+```swift
+.package(url: "https://github.com/ra1028/SwiftUI-Hooks"),
+```
+
+And then, include "Hooks" as a dependency for your target:
+
+```swift
+.target(name: "<target>", dependencies: [
+    .product(name: "Hooks", package: "SwiftUI-Hooks"),
+]),
+```
 
 ---
 
@@ -505,29 +545,6 @@ var darkModeButton: some View {
 ```
 
 See also: [React Context](https://reactjs.org/docs/context.html)  
-
----
-
-## Requirements
-
-- Swift 5.3+
-- Xcode 12.4.0+
-- iOS 13.0+
-- macOS 10.15+
-- tvOS 13.0+
-- watchOS 6.0+
-
----
-
-## Installation
-
-### [Swift Package Manager for Apple Platforms](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app)
-
-Xcode menu `File > Swift Packages > Add Package Dependency`.  
-
-```text
-Repository: https://github.com/ra1028/SwiftUI-Hooks
-```
 
 ---
 

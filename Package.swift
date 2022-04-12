@@ -1,22 +1,28 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import Foundation
 import PackageDescription
 
 let package = Package(
-    name: "Hooks",
+    name: "SwiftUI-Hooks",
     platforms: [
         .iOS(.v13),
         .macOS(.v10_15),
         .tvOS(.v13),
-        .watchOS(.v6)
+        .watchOS(.v6),
     ],
     products: [
-        .library(name: "Hooks", targets: ["Hooks"]),
+        .library(name: "Hooks", targets: ["Hooks"])
     ],
     targets: [
         .target(
-            name: "Hooks"
+            name: "Hooks",
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-actor-data-race-checks",
+                ])
+            ]
         ),
         .testTarget(
             name: "HooksTests",
@@ -25,7 +31,3 @@ let package = Package(
     ],
     swiftLanguageVersions: [.v5]
 )
-
-if ProcessInfo.processInfo.environment["WATCHOS"] == "true" {
-    package.targets.removeAll(where: \.isTest)
-}

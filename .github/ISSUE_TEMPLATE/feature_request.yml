@@ -1,0 +1,42 @@
+name: Feature Request
+description: Suggest a new idea of feature
+title: "[Feat Request]: "
+labels: ["enhancement"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: Reviewed the README and documentation.
+          required: true
+        - label: Checked existing issues & PRs to ensure not duplicated.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Description
+      placeholder: Describe the feature that you want to propose.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Example Use Case
+      placeholder: Describe an example use case that the feature is useful.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Alternative Solution
+      placeholder: Describe alternatives solutions that you've considered.
+
+  - type: textarea
+    attributes:
+      label: Proposed Solution
+      placeholder: Describe how we can achieve the feature you'd like to suggest.
+
+  - type: textarea
+    attributes:
+      label: Motivation & Context
+      placeholder: Feel free to describe any additional context, such as why you want to suggest this feature.

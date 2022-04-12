@@ -12,7 +12,7 @@ Enhances reusability of stateful logic and gives state and lifecycle to function
 <p align="center">
 <a href="https://developer.apple.com/swift"><img alt="Swift5" src="https://img.shields.io/badge/language-Swift5-orange.svg"></a>
 <a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C-green.svg"></a>
-<a href="https://github.com/ra1028/SwiftUI-Hooks/actions"><img alt="GitHub Actions" src="https://github.com/ra1028/SwiftUI-Hooks/workflows/GitHub%20Actions/badge.svg"></a>
+<a href="https://github.com/ra1028/SwiftUI-Hooks/actions"><img alt="test" src="https://github.com/ra1028/SwiftUI-Hooks/workflows/test/badge.svg"></a>
 </p>
 
 ---

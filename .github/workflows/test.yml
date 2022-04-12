@@ -1,6 +1,6 @@
 # https://github.com/actions/virtual-environments
 
-name: GitHub Actions
+name: test
 
 on:
   pull_request:
@@ -8,74 +8,42 @@ on:
     branches:
       - main
   workflow_dispatch:
-    branches:
-      - main
 
 jobs:
   test:
     name: Test
-    runs-on: macos-11
+    runs-on: macos-12
     strategy:
       matrix:
         xcode_version:
-          - 12.4.0
-          - 12.5.1
-          - 13.0.0
+          - 13.3
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode_version }}.app
-      OLD_XCODE_APP: /Applications/Xcode_11.7.app
-      OLD_TARGET_OS: 13.7
-      OLD_DEVICE: iPhone 11 Pro
-      OLD_RUNTIME_NAME: com.apple.CoreSimulator.SimRuntime.iOS-13-7
     steps:
       - uses: actions/checkout@v2
       - name: Show environments
         run: |
           swift --version
           xcodebuild -version
-      - name: Prepare old OS simulator
-        run: |
-          sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
-          sudo ln -s $OLD_XCODE_APP/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ $OLD_TARGET_OS.simruntime
-          xcrun simctl list runtimes
-          xcrun simctl list devices $OLD_TARGET_OS
-      - name: Test for macOS
-        run: xcodebuild test -scheme Hooks -destination "platform=macOS"
-      - name: Test for iOS
-        run: xcodebuild test -scheme Hooks -destination "platform=iOS Simulator,name=iPhone 12 Pro"
-      - name: Test for tvOS
-        run: xcodebuild test -scheme Hooks -destination "platform=tvOS Simulator,name=Apple TV"
-      - name: Build for watchOS
-        run: WATCHOS=true xcodebuild build -scheme Hooks -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm"
-      - name: Test for old iOS
-        run: xcodebuild test -scheme Hooks -destination "platform=iOS Simulator,name=$OLD_DEVICE,OS=$OLD_TARGET_OS"
-      - name: UI Test Todo
-        working-directory: Examples
-        run: xcodebuild test -scheme Todo-UITests -destination "platform=iOS Simulator,name=$OLD_DEVICE,OS=$OLD_TARGET_OS"
+      - name: Test library
+        run: make test-library
+      - name: Build examples
+        run: make build-examples
 
-  build-examples:
-    name: Build examples
-    runs-on: macos-11
-    strategy:
-      matrix:
-        xcode_version:
-          - 12.5.1
+  validation:
+    name: Validation
+    runs-on: macos-12
     env:
-      DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode_version }}.app
-    defaults:
-      run:
-        working-directory: Examples
+      DEVELOPER_DIR: /Applications/Xcode_13.3.app
     steps:
       - uses: actions/checkout@v2
-      - name: Show environments
+      - name: Validate lint
+        run: make lint
+      - name: Validate format
         run: |
-          swift --version
-          xcodebuild -version
-      - name: Build TheMovieDB
-        run: xcodebuild build -scheme TheMovieDB-MVVM -destination "platform=iOS Simulator,name=iPhone 12 Pro"
-      - name: Test TheMovieDB
-        run: xcodebuild test -scheme TheMovieDB-MVVM-Tests -destination "platform=iOS Simulator,name=iPhone 12 Pro"
-      - name: Build Basic
-        run: xcodebuild build -scheme BasicUsage -destination "platform=iOS Simulator,name=iPhone 12 Pro"
-      - name: Build Todo
-        run: xcodebuild build -scheme Todo -destination "platform=iOS Simulator,name=iPhone 12 Pro"
+          make format
+          if [ -n "$(git status --porcelain)" ]; then echo "Make sure that the code is formated by 'make format'."; exit 1; fi
+      - name: Validate example project
+        run: |
+          make proj
+          if [ -n "$(git status --porcelain)" ]; then echo "Make sure that 'Examples/App.xcodeproj' is formated by 'make proj'."; exit 1; fi

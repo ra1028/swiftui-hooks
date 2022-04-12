@@ -65,7 +65,7 @@
 		5D7A73D3A88005D39142AA01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5EE16AC7E6A5C62C32868DDE /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		65ED06BAB6A47DBDBE4B7D43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		6A4277642C7FCF9F14B33FDC /* SwiftUI-Hooks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "SwiftUI-Hooks"; path = ..; sourceTree = SOURCE_ROOT; };
+		68BC43055108D13B0F54B8D4 /* swiftui-hooks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "swiftui-hooks"; path = ..; sourceTree = SOURCE_ROOT; };
 		6CD5F67CEEAFE74811B93864 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		803EE7E5F67D8627C8A11060 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86069121E82E72BAE07609D9 /* BasicUsage.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BasicUsage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,7 +194,7 @@
 		7E899D0C531F0E3FE49D97BB /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				6A4277642C7FCF9F14B33FDC /* SwiftUI-Hooks */,
+				68BC43055108D13B0F54B8D4 /* swiftui-hooks */,
 			);
 			name = Packages;
 			sourceTree = SOURCE_ROOT;

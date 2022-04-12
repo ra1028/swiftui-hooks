@@ -10,7 +10,7 @@ Furthermore, hooks such as useEffect also solve the problem of lack of lifecycle
 
 ## Source Code
 
-<https://github.com/ra1028/SwiftUI-Hooks>
+<https://github.com/ra1028/swiftui-hooks>
 
 ## Topics
 

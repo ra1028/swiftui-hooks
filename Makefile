@@ -33,5 +33,5 @@ test-library:
 .PHONY: build-examples
 build-examples:
 	cd Examples && for scheme in "TheMovieDB-MVVM" "BasicUsage" "Todo" ; do \
-	    xcodebuild build -scheme iOSExamples -destination platform="$(TEST_PLATFORM_IOS)"; \
+	    xcodebuild build -scheme "$$scheme" -destination platform="$(TEST_PLATFORM_IOS)"; \
 	done

@@ -7,16 +7,15 @@ struct Post: Codable {
     let body: String
 }
 
-func useFetchPosts() -> (phase: AsyncPhase<[Post], Error>, fetch: () -> Void) {
+func useFetchPosts() -> (phase: AsyncPhase<[Post], Error>, fetch: () async -> Void) {
     let url = URL(string: "https://jsonplaceholder.typicode.com/posts")!
-    let (phase, subscribe) = usePublisherSubscribe {
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map(\.data)
-            .decode(type: [Post].self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
+    let (phase, fetch) = useAsyncPerform { () throws -> [Post] in
+        let decoder = JSONDecoder()
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try decoder.decode([Post].self, from: data)
     }
 
-    return (phase: phase, fetch: subscribe)
+    return (phase: phase, fetch: fetch)
 }
 
 struct APIRequestPage: HookView {
@@ -44,7 +43,9 @@ struct APIRequestPage: HookView {
         }
         .navigationTitle("API Request")
         .background(Color(.systemBackground).ignoresSafeArea())
-        .onAppear(perform: fetch)
+        .task {
+            await fetch()
+        }
     }
 
     func postRows(_ posts: [Post]) -> some View {
@@ -58,11 +59,18 @@ struct APIRequestPage: HookView {
         }
     }
 
-    func errorRow(_ error: Error, retry: @escaping () -> Void) -> some View {
+    func errorRow(_ error: Error, retry: @escaping () async -> Void) -> some View {
         VStack {
-            Text("Error: \(error.localizedDescription)").fixedSize(horizontal: false, vertical: true)
+            Text("Error: \(error.localizedDescription)")
+                .fixedSize(horizontal: false, vertical: true)
+
             Divider()
-            Button("Refresh", action: retry)
+
+            Button("Refresh") {
+                Task {
+                    await retry()
+                }
+            }
         }
     }
 }

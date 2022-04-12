@@ -2,8 +2,8 @@ import Combine
 import UIKit
 
 protocol MovieDBServiceProtocol {
-    func getImage(path: String?, size: NetworkImageSize) -> AnyPublisher<UIImage?, URLError>
-    func getTopRated(page: Int) -> AnyPublisher<PagedResponse<Movie>, URLError>
+    func getImage(path: String?, size: NetworkImageSize) async throws -> UIImage?
+    func getTopRated(page: Int) async throws -> PagedResponse<Movie>
 }
 
 struct MovieDBService: MovieDBServiceProtocol {
@@ -20,11 +20,9 @@ struct MovieDBService: MovieDBServiceProtocol {
         return decoder
     }()
 
-    func getImage(path: String?, size: NetworkImageSize) -> AnyPublisher<UIImage?, URLError> {
+    func getImage(path: String?, size: NetworkImageSize) async throws -> UIImage? {
         guard let path = path else {
-            return Just(nil)
-                .setFailureType(to: URLError.self)
-                .eraseToAnyPublisher()
+            return nil
         }
 
         let url =
@@ -32,25 +30,19 @@ struct MovieDBService: MovieDBServiceProtocol {
             .appendingPathComponent(size.rawValue)
             .appendingPathComponent(path)
 
-        return session.dataTaskPublisher(for: url)
-            .map { data, _ in UIImage(data: data) }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        let (data, _) = try await session.data(from: url)
+        return UIImage(data: data)
     }
 
-    func getTopRated(page: Int) -> AnyPublisher<PagedResponse<Movie>, URLError> {
-        get(path: "movie/top_rated", parameters: ["page": String(page)])
+    func getTopRated(page: Int) async throws -> PagedResponse<Movie> {
+        try await get(path: "movie/top_rated", parameters: ["page": String(page)])
     }
 }
 
 private extension MovieDBService {
-    func get<Response: Decodable>(path: String, parameters: [String: String]) -> AnyPublisher<Response, URLError> {
-        session.dataTaskPublisher(for: makeGetRequest(path: path, parameters: parameters))
-            .map(\.data)
-            .decode(type: Response.self, decoder: jsonDecoder)
-            .mapError { $0 as? URLError ?? URLError(.cannotDecodeContentData) }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+    func get<Response: Decodable>(path: String, parameters: [String: String]) async throws -> Response {
+        let (data, _) = try await session.data(for: makeGetRequest(path: path, parameters: parameters))
+        return try jsonDecoder.decode(Response.self, from: data)
     }
 
     func makeGetRequest(path: String, parameters: [String: String]) -> URLRequest {

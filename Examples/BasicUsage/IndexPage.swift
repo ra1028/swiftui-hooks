@@ -5,8 +5,8 @@ struct IndexPage: View {
         NavigationView {
             Form {
                 NavigationLink(
-                    "Hook List",
-                    destination: HookListPage()
+                    "Showcase",
+                    destination: ShowcasePage()
                 )
 
                 NavigationLink(

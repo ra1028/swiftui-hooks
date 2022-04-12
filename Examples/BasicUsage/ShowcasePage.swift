@@ -4,7 +4,7 @@ import SwiftUI
 
 typealias ColorSchemeContext = Context<Binding<ColorScheme>>
 
-struct HookListPage: HookView {
+struct ShowcasePage: HookView {
     var hookBody: some View {
         let colorScheme = useState(useEnvironment(\.colorScheme))
 
@@ -12,47 +12,71 @@ struct HookListPage: HookView {
             ScrollView {
                 VStack {
                     Group {
-                        #if swift(>=5.5)
-                            if #available(iOS 15.0, *) {
-                                useAsyncRow
-                            }
-                        #endif
-
                         useStateRow
                         useReducerRow
                         useEffectRow
                         useLayoutEffectRow
+                        useMemoRow
+                        useRefRow
                     }
 
                     Group {
-                        useMemoRow
-                        useRefRow
-                        useEnvironmentRow
+                        useAsyncRow
+                        useAsyncPerformRow
                         usePublisherRow
                         usePublisherSubscribeRow
+                        useEnvironmentRow
                         useContextRow
                     }
                 }
                 .padding(.vertical, 16)
             }
-            .navigationTitle("Hook List")
+            .navigationTitle("Showcase")
             .background(Color(.systemBackground).ignoresSafeArea())
             .colorScheme(colorScheme.wrappedValue)
         }
     }
 
-    #if swift(>=5.5)
-        @available(iOS 15.0, *)
-        var useAsyncRow: some View {
-            let status = useAsync(.once) { () -> UIImage? in
-                let url = URL(string: "https://source.unsplash.com/random")!
-                let (data, _) = try await URLSession.shared.data(from: url)
-                return UIImage(data: data)
-            }
+    var useAsyncRow: some View {
+        let phase = useAsync(.once) { () -> UIImage? in
+            let url = URL(string: "https://source.unsplash.com/random")!
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data)
+        }
 
-            return Row("useAsync") {
+        return Row("useAsync") {
+            Group {
+                switch phase {
+                case .pending, .running:
+                    ProgressView()
+
+                case .failure(let error):
+                    Text(error.localizedDescription)
+
+                case .success(let image):
+                    image.map { uiImage in
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                }
+            }
+            .frame(width: 100, height: 100)
+            .clipped()
+        }
+    }
+
+    var useAsyncPerformRow: some View {
+        let (phase, fetch) = useAsyncPerform { () -> UIImage? in
+            let url = URL(string: "https://source.unsplash.com/random")!
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data)
+        }
+
+        return Row("useAsyncPerform") {
+            HStack {
                 Group {
-                    switch status {
+                    switch phase {
                     case .pending, .running:
                         ProgressView()
 
@@ -69,9 +93,20 @@ struct HookListPage: HookView {
                 }
                 .frame(width: 100, height: 100)
                 .clipped()
+
+                Spacer()
+
+                Button("Random") {
+                    Task {
+                        await fetch()
+                    }
+                }
+            }
+            .task {
+                await fetch()
             }
         }
-    #endif
+    }
 
     var useStateRow: some View {
         let count = useState(0)
@@ -247,9 +282,9 @@ struct HookListPage: HookView {
     }
 }
 
-struct HookListPage_Previews: PreviewProvider {
+struct ShowcasePage_Previews: PreviewProvider {
     static var previews: some View {
-        HookListPage()
+        ShowcasePage()
     }
 }
 

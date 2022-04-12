@@ -3,10 +3,10 @@ import SwiftUI
 
 struct TopRatedMoviesViewModel {
     let selectedMovie: Binding<Movie?>
-    let loadPhase: AsyncPhase<[Movie], URLError>
+    let loadPhase: AsyncPhase<[Movie], Error>
     let hasNextPage: Bool
-    let load: () -> Void
-    let loadNext: () -> Void
+    let load: () async -> Void
+    let loadNext: () async -> Void
 }
 
 func useTopRatedMoviesViewModel() -> TopRatedMoviesViewModel {
@@ -32,27 +32,29 @@ func useTopRatedMoviesViewModel() -> TopRatedMoviesViewModel {
             $0.results + nextMovies.current
         },
         hasNextPage: latestResponse?.hasNextPage ?? false,
-        load: { load(1) },
+        load: {
+            await load(1)
+        },
         loadNext: {
             if let currentPage = latestResponse?.page {
-                loadNext(currentPage + 1)
+                await loadNext(currentPage + 1)
             }
         }
     )
 }
 
-private func useLoadMovies() -> (phase: AsyncPhase<PagedResponse<Movie>, URLError>, load: (Int) -> Void) {
+private func useLoadMovies() -> (phase: AsyncPhase<PagedResponse<Movie>, Error>, load: (Int) async -> Void) {
     let page = useRef(0)
     let service = useContext(Context<Dependency>.self).service
-    let (phase, load) = usePublisherSubscribe {
-        service.getTopRated(page: page.current)
+    let (phase, load) = useAsyncPerform {
+        try await service.getTopRated(page: page.current)
     }
 
     return (
         phase: phase,
         load: { newPage in
             page.current = newPage
-            load()
+            await load()
         }
     )
 }

@@ -29,15 +29,19 @@ struct TopRatedMoviesPage: HookView {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear(perform: viewModel.load)
+        .task {
+            await viewModel.load()
+        }
     }
 
-    func failure(_ error: URLError, viewModel: TopRatedMoviesViewModel) -> some View {
+    func failure(_ error: Error, viewModel: TopRatedMoviesViewModel) -> some View {
         VStack(spacing: 24) {
             Text("Failed to load movies").font(.system(.title2))
 
-            Button(action: viewModel.load) {
-                Text("Retry").font(.system(.title3)).bold()
+            Button("Retry") {
+                Task {
+                    await viewModel.load()
+                }
             }
         }
     }
@@ -50,7 +54,9 @@ struct TopRatedMoviesPage: HookView {
                         if viewModel.hasNextPage {
                             ProgressView()
                                 .frame(maxWidth: .infinity, minHeight: 100)
-                                .onAppear(perform: viewModel.loadNext)
+                                .task {
+                                    await viewModel.loadNext()
+                                }
                         }
                     },
                     content: {

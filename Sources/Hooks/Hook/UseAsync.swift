@@ -1,34 +1,29 @@
-#if swift(>=5.5)
-
-@available(iOS 15.0, *)
 public func useAsync<Output>(
-    _ computation: HookComputation,
+    _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async -> Output
-) -> AsyncStatus<Output, Never> {
+) -> AsyncPhase<Output, Never> {
     useHook(
         AsyncHook(
-            computation: computation,
+            updateStrategy: updateStrategy,
             operation: operation
         )
     )
 }
 
-@available(iOS 15.0, *)
 public func useAsync<Output>(
-    _ computation: HookComputation,
+    _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async throws -> Output
-) -> AsyncStatus<Output, Error> {
+) -> AsyncPhase<Output, Error> {
     useHook(
         AsyncThrowingHook(
-            computation: computation,
+            updateStrategy: updateStrategy,
             operation: operation
         )
     )
 }
 
-@available(iOS 15.0, *)
 internal struct AsyncHook<Output>: Hook {
-    let computation: HookComputation
+    let updateStrategy: HookUpdateStrategy?
     let shouldDeferredCompute = true
     let operation: () async -> Output
 
@@ -36,38 +31,36 @@ internal struct AsyncHook<Output>: Hook {
         State()
     }
 
-    func makeValue(coordinator: Coordinator) -> AsyncStatus<Output, Never> {
-        coordinator.state.status
+    func value(coordinator: Coordinator) -> AsyncPhase<Output, Never> {
+        coordinator.state.phase
     }
 
-    func compute(coordinator: Coordinator) {
-        coordinator.state.taskHandle = async { @MainActor in
-            coordinator.state.status = .running
+    func updateState(coordinator: Coordinator) {
+        coordinator.state.task = Task { @MainActor in
+            coordinator.state.phase = .running
             coordinator.updateView()
 
             let output = await operation()
-            coordinator.state.status = .success(output)
+            coordinator.state.phase = .success(output)
             coordinator.updateView()
         }
     }
 
     func dispose(state: State) async {
-        state.taskHandle?.cancel()
-        state.taskHandle = nil
+        state.task?.cancel()
+        state.task = nil
     }
 }
 
-@available(iOS 15.0, *)
 internal extension AsyncHook {
     final class State {
-        var status = AsyncStatus<Output, Never>.pending
-        var taskHandle: Task.Handle<Void, Never>?
+        var phase = AsyncPhase<Output, Never>.pending
+        var task: Task<Void, Never>?
     }
 }
 
-@available(iOS 15.0, *)
 internal struct AsyncThrowingHook<Output>: Hook {
-    let computation: HookComputation
+    let updateStrategy: HookUpdateStrategy?
     let shouldDeferredCompute = true
     let operation: () async throws -> Output
 
@@ -75,21 +68,21 @@ internal struct AsyncThrowingHook<Output>: Hook {
         State()
     }
 
-    func makeValue(coordinator: Coordinator) -> AsyncStatus<Output, Error> {
-        coordinator.state.status
+    func value(coordinator: Coordinator) -> AsyncPhase<Output, Error> {
+        coordinator.state.phase
     }
 
-    func compute(coordinator: Coordinator) {
-        coordinator.state.taskHandle = async { @MainActor in
-            coordinator.state.status = .running
+    func updateState(coordinator: Coordinator) {
+        coordinator.state.task = Task { @MainActor in
+            coordinator.state.phase = .running
             coordinator.updateView()
 
             do {
                 let output = try await operation()
-                coordinator.state.status = .success(output)
+                coordinator.state.phase = .success(output)
             }
             catch {
-                coordinator.state.status = .failure(error)
+                coordinator.state.phase = .failure(error)
             }
 
             coordinator.updateView()
@@ -97,17 +90,14 @@ internal struct AsyncThrowingHook<Output>: Hook {
     }
 
     func dispose(state: State) async {
-        state.taskHandle?.cancel()
-        state.taskHandle = nil
+        state.task?.cancel()
+        state.task = nil
     }
 }
 
-@available(iOS 15.0, *)
 internal extension AsyncThrowingHook {
     final class State {
-        var status = AsyncStatus<Output, Error>.pending
-        var taskHandle: Task.Handle<Void, Never>?
+        var phase = AsyncPhase<Output, Error>.pending
+        var task: Task<Void, Never>?
     }
 }
-
-#endif

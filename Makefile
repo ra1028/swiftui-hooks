@@ -24,7 +24,7 @@ test: test-library build-examples
 .PHONY: test-library
 test-library:
 	for platform in "$(TEST_PLATFORM_IOS)" "$(TEST_PLATFORM_MACOS)" "$(TEST_PLATFORM_TVOS)" "$(TEST_PLATFORM_WATCHOS)"; do \
-	    xcodebuild test -scheme Hooks -destination platform="$$platform"; \
+	    xcodebuild test -scheme SwiftUI-Hooks -destination platform="$$platform"; \
 	done
 	cd Examples \
 	  && xcodebuild test -scheme Todo-UITests -destination platform="$(TEST_PLATFORM_IOS)" \

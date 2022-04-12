@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import Foundation
 import PackageDescription
@@ -16,7 +16,13 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Hooks"
+            name: "Hooks",
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-actor-data-race-checks",
+                ])
+            ]
         ),
         .testTarget(
             name: "HooksTests",

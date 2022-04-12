@@ -510,8 +510,8 @@ See also: [React Context](https://reactjs.org/docs/context.html)
 
 ## Requirements
 
-- Swift 5.3+
-- Xcode 12.4.0+
+- Swift 5.6+
+- Xcode 13.3.0+
 - iOS 13.0+
 - macOS 10.15+
 - tvOS 13.0+

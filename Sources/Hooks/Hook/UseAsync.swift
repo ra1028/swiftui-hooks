@@ -48,7 +48,6 @@ public func useAsync<Output>(
 
 internal struct AsyncHook<Output>: Hook {
     let updateStrategy: HookUpdateStrategy?
-    let shouldDeferredCompute = true
     let operation: () async -> Output
 
     func makeState() -> State {
@@ -60,18 +59,18 @@ internal struct AsyncHook<Output>: Hook {
     }
 
     func updateState(coordinator: Coordinator) {
+        coordinator.state.phase = .running
         coordinator.state.task = Task { @MainActor in
-            coordinator.state.phase = .running
-            coordinator.updateView()
-
             let output = await operation()
-            coordinator.state.phase = .success(output)
-            coordinator.updateView()
+
+            if !Task.isCancelled {
+                coordinator.state.phase = .success(output)
+                coordinator.updateView()
+            }
         }
     }
 
-    func dispose(state: State) async {
-        state.task?.cancel()
+    func dispose(state: State) {
         state.task = nil
     }
 }
@@ -79,13 +78,16 @@ internal struct AsyncHook<Output>: Hook {
 internal extension AsyncHook {
     final class State {
         var phase = AsyncPhase<Output, Never>.pending
-        var task: Task<Void, Never>?
+        var task: Task<Void, Never>? {
+            didSet {
+                oldValue?.cancel()
+            }
+        }
     }
 }
 
 internal struct AsyncThrowingHook<Output>: Hook {
     let updateStrategy: HookUpdateStrategy?
-    let shouldDeferredCompute = true
     let operation: () async throws -> Output
 
     func makeState() -> State {
@@ -97,24 +99,26 @@ internal struct AsyncThrowingHook<Output>: Hook {
     }
 
     func updateState(coordinator: Coordinator) {
+        coordinator.state.phase = .running
         coordinator.state.task = Task { @MainActor in
-            coordinator.state.phase = .running
-            coordinator.updateView()
+            let phase: AsyncPhase<Output, Error>
 
             do {
                 let output = try await operation()
-                coordinator.state.phase = .success(output)
+                phase = .success(output)
             }
             catch {
-                coordinator.state.phase = .failure(error)
+                phase = .failure(error)
             }
 
-            coordinator.updateView()
+            if !Task.isCancelled {
+                coordinator.state.phase = phase
+                coordinator.updateView()
+            }
         }
     }
 
-    func dispose(state: State) async {
-        state.task?.cancel()
+    func dispose(state: State) {
         state.task = nil
     }
 }
@@ -122,6 +126,10 @@ internal struct AsyncThrowingHook<Output>: Hook {
 internal extension AsyncThrowingHook {
     final class State {
         var phase = AsyncPhase<Output, Error>.pending
-        var task: Task<Void, Never>?
+        var task: Task<Void, Never>? {
+            didSet {
+                oldValue?.cancel()
+            }
+        }
     }
 }

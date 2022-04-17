@@ -5,6 +5,9 @@ import XCTest
 
 final class UseMovieImageTests: XCTestCase {
     func testSuccess() {
+        let image1 = UIImage()
+        let image2 = UIImage()
+        let image3 = UIImage()
         let service = MovieDBServiceMock()
         let tester = HookTester(("path1", .medium)) { path, size in
             useMovieImage(for: path, size: size)
@@ -12,17 +15,15 @@ final class UseMovieImageTests: XCTestCase {
             $0[Context<Dependency>.self] = Dependency(service: service)
         }
 
-        let image1 = UIImage()
-        let image2 = UIImage()
-        let image3 = UIImage()
-
         XCTAssertNil(tester.value)
 
-        service.imageSubject.send(image1)
+        service.imageResult = .success(image1)
+        wait(timeout: 0.1)
 
         XCTAssertTrue(tester.value === image1)
 
         tester.update()
+        wait(timeout: 0.1)
 
         XCTAssertTrue(tester.value === image1)
 
@@ -30,7 +31,8 @@ final class UseMovieImageTests: XCTestCase {
 
         XCTAssertNil(tester.value)
 
-        service.imageSubject.send(image2)
+        service.imageResult = .success(image2)
+        wait(timeout: 0.1)
 
         XCTAssertTrue(tester.value === image2)
 
@@ -38,12 +40,14 @@ final class UseMovieImageTests: XCTestCase {
 
         XCTAssertNil(tester.value)
 
-        service.imageSubject.send(image3)
+        service.imageResult = .success(image3)
+        wait(timeout: 0.1)
 
         XCTAssertTrue(tester.value === image3)
     }
 
     func testFailure() {
+        let error = URLError(.badURL)
         let service = MovieDBServiceMock()
         let tester = HookTester(("path1", .medium)) { path, size in
             useMovieImage(for: path, size: size)
@@ -51,11 +55,10 @@ final class UseMovieImageTests: XCTestCase {
             $0[Context<Dependency>.self] = Dependency(service: service)
         }
 
-        let error = URLError(.badURL)
-
         XCTAssertNil(tester.value)
 
-        service.imageSubject.send(completion: .failure(error))
+        service.imageResult = .failure(error)
+        wait(timeout: 0.1)
 
         XCTAssertNil(tester.value)
     }

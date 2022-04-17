@@ -23,6 +23,10 @@ Furthermore, hooks such as useEffect also solve the problem of lack of lifecycle
 - ``useRef(_:)``
 - ``useReducer(_:initialState:)``
 - ``useEnvironment(_:)``
+- ``useAsync(_:_:)-14qp9``
+- ``useAsync(_:_:)-cow``
+- ``useAsyncPerform(_:)-6w8mq``
+- ``useAsyncPerform(_:)-5qq2h``
 - ``usePublisher(_:_:)``
 - ``usePublisherSubscribe(_:)``
 - ``useContext(_:)``

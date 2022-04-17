@@ -243,16 +243,38 @@ let (count, dispatch) = useReducer(reducer, initialState: 0)
 </details>
 
 <details>
-<summary><CODE>useEnvironment</CODE></summary>
+<summary><CODE>useAsync</CODE></summary>
 
 ```swift
-func useEnvironment<Value>(_ keyPath: KeyPath<EnvironmentValues, Value>) -> Value
+func useAsync<Output>(_ updateStrategy: HookUpdateStrategy, _ operation: @escaping () async -> Output) -> AsyncPhase<Output, Never>
+func useAsync<Output>(_ updateStrategy: HookUpdateStrategy, _ operation: @escaping () async throws -> Output) -> AsyncPhase<Output, Error>
 ```
 
-A hook to use environment value passed through the view tree without `@Environment` property wrapper.  
+A hook to use the most recent phase of asynchronous operation of the passed function.  
+The function will be performed at the first update and will be re-performed according to the given `updateStrategy`.  
 
 ```swift
-let colorScheme = useEnvironment(\.colorScheme)  // ColorScheme
+let phase = useAsync(.once) {
+    try await URLSession.shared.data(from: url)
+}
+```
+
+</details>
+
+<details>
+<summary><CODE>useAsyncPerform</CODE></summary>
+
+```swift
+func useAsyncPerform<Output>(_ operation: @escaping @MainActor () async -> Output) -> (phase: AsyncPhase<Output, Never>, perform: @MainActor () async -> Void)
+func useAsyncPerform<Output>(_ operation: @escaping @MainActor () async throws -> Output) -> (phase: AsyncPhase<Output, Error>, perform: @MainActor () async -> Void)
+```
+
+A hook to use the most recent phase of the passed asynchronous operation, and a `perform` function to call the it at arbitrary timing.  
+
+```swift
+let (phase, perform) = useAsyncPerform {
+    try await URLSession.shared.data(from: url)
+}
 ```
 
 </details>
@@ -266,7 +288,6 @@ func usePublisher<P: Publisher>(_ updateStrategy: HookUpdateStrategy, _ makePubl
 
 A hook to use the most recent phase of asynchronous operation of the passed publisher.  
 The publisher will be subscribed at the first update and will be re-subscribed according to the given `updateStrategy`.  
-Triggers a view update when the asynchronous phase has been changed.  
 
 ```swift
 let phase = usePublisher(.once) {
@@ -283,13 +304,27 @@ let phase = usePublisher(.once) {
 func usePublisherSubscribe<P: Publisher>(_ makePublisher: @escaping () -> P) -> (phase: AsyncPhase<P.Output, P.Failure>, subscribe: () -> Void)
 ```
 
-A hook to use the most recent phase of asynchronous operation of the passed publisher, and a `subscribe` function to be started to subscribe arbitrary timing.  
-Update the view with the asynchronous phase change.  
+A hook to use the most recent phase of asynchronous operation of the passed publisher, and a `subscribe` function to subscribe to it at arbitrary timing.  
 
 ```swift
 let (phase, subscribe) = usePublisherSubscribe {
     URLSession.shared.dataTaskPublisher(for: url)
 }
+```
+
+</details>
+
+<details>
+<summary><CODE>useEnvironment</CODE></summary>
+
+```swift
+func useEnvironment<Value>(_ keyPath: KeyPath<EnvironmentValues, Value>) -> Value
+```
+
+A hook to use environment value passed through the view tree without `@Environment` property wrapper.  
+
+```swift
+let colorScheme = useEnvironment(\.colorScheme)  // ColorScheme
 ```
 
 </details>

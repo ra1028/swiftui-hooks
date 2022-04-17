@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		003A77A2E11520F9038CD7E0 /* MovieDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D224DD8896BC0368816053 /* MovieDetailPage.swift */; };
 		0413865A55A886125F10E54C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A6874F17F70C8E5EDF84F5 /* AppDelegate.swift */; };
-		1EBF7320D4ABE8B5C4806D7B /* HookListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7504F9563C0F894C2927F8F /* HookListPage.swift */; };
+		18CA358FABAC2BC661161084 /* ShowcasePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5AB757E97B27DC9D7A96E5 /* ShowcasePage.swift */; };
 		22B1EFFA1478D324171D5E75 /* MovieDBServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895CD000DCB5854C20C39119 /* MovieDBServiceMock.swift */; };
 		2563030F0667D6982675CC0D /* PagedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5A16C0EDE1832418D3B44 /* PagedResponse.swift */; };
 		2A64A442C817832C7117EB71 /* MovieDBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF0AE0F7D802B4683AD207 /* MovieDBService.swift */; };
@@ -17,6 +17,7 @@
 		36B24AEDD5199A51EE335F89 /* IndexPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D069A011D27489BADCA6B8C6 /* IndexPage.swift */; };
 		3E9E4DA44DA2932FF3808619 /* Dependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117F627EF5B370FD8AEA502 /* Dependency.swift */; };
 		43FD37F20C5A05C1144D0B71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD5F67CEEAFE74811B93864 /* SceneDelegate.swift */; };
+		4A77333D66DAEEE5D4A47B17 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2DF2C9F23B05D775347070 /* Utilities.swift */; };
 		528D9EB2F42500C40019B919 /* UseTopRatedMoviesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B3D3D179C2DD7456748DBF /* UseTopRatedMoviesViewModel.swift */; };
 		5A4EADB7439DD4B566DBC1FF /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B5863034D96951456EB762 /* Movie.swift */; };
 		5B2A5E7A0AA463A0BF685F71 /* UseTopRatedMoviesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A38A9D88C5F0D2B9CCAC13 /* UseTopRatedMoviesViewModelTests.swift */; };
@@ -56,6 +57,7 @@
 		1117F627EF5B370FD8AEA502 /* Dependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependency.swift; sourceTree = "<group>"; };
 		1AABBBF7596FB58F4051F423 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		20A38A9D88C5F0D2B9CCAC13 /* UseTopRatedMoviesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseTopRatedMoviesViewModelTests.swift; sourceTree = "<group>"; };
+		2A2DF2C9F23B05D775347070 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2AE6CAB1515CCDEDECEC3A1E /* NetworkImageSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImageSize.swift; sourceTree = "<group>"; };
 		2D5F81DFBD08056D0FD7F5BD /* TheMovieDB-MVVM-Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "TheMovieDB-MVVM-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A6874F17F70C8E5EDF84F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -71,11 +73,11 @@
 		86069121E82E72BAE07609D9 /* BasicUsage.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BasicUsage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		895CD000DCB5854C20C39119 /* MovieDBServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBServiceMock.swift; sourceTree = "<group>"; };
 		8AC5A16C0EDE1832418D3B44 /* PagedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagedResponse.swift; sourceTree = "<group>"; };
+		8E5AB757E97B27DC9D7A96E5 /* ShowcasePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcasePage.swift; sourceTree = "<group>"; };
 		94D8757F265C5526C297EFDB /* CounterPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterPage.swift; sourceTree = "<group>"; };
 		959951B8FA9CB35BA897D008 /* TheMovieDB-MVVM.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "TheMovieDB-MVVM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A01793F321BFB68D18E27818 /* TodoPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoPage.swift; sourceTree = "<group>"; };
 		A233EB4C5891C4899B737ACF /* TopRatedMoviesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRatedMoviesPage.swift; sourceTree = "<group>"; };
-		A7504F9563C0F894C2927F8F /* HookListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookListPage.swift; sourceTree = "<group>"; };
 		A80807CB4E7902470EE2CF4E /* Todo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5CDB321485B19447B2E5863 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C56139636BCE9E6B7A5A1CF0 /* APIRequestPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequestPage.swift; sourceTree = "<group>"; };
@@ -144,9 +146,9 @@
 				C56139636BCE9E6B7A5A1CF0 /* APIRequestPage.swift */,
 				5EE16AC7E6A5C62C32868DDE /* App.swift */,
 				94D8757F265C5526C297EFDB /* CounterPage.swift */,
-				A7504F9563C0F894C2927F8F /* HookListPage.swift */,
 				D069A011D27489BADCA6B8C6 /* IndexPage.swift */,
 				C9F47469489E2AC56001C720 /* Info.plist */,
+				8E5AB757E97B27DC9D7A96E5 /* ShowcasePage.swift */,
 			);
 			path = BasicUsage;
 			sourceTree = "<group>";
@@ -206,6 +208,7 @@
 				895CD000DCB5854C20C39119 /* MovieDBServiceMock.swift */,
 				5A76A9D3B40580BCF4FEE209 /* UseMovieImageTests.swift */,
 				20A38A9D88C5F0D2B9CCAC13 /* UseTopRatedMoviesViewModelTests.swift */,
+				2A2DF2C9F23B05D775347070 /* Utilities.swift */,
 			);
 			path = "TheMovieDB-MVVM-Tests";
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				22B1EFFA1478D324171D5E75 /* MovieDBServiceMock.swift in Sources */,
 				E404ADC8590A7823470D6488 /* UseMovieImageTests.swift in Sources */,
 				5B2A5E7A0AA463A0BF685F71 /* UseTopRatedMoviesViewModelTests.swift in Sources */,
+				4A77333D66DAEEE5D4A47B17 /* Utilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,8 +401,8 @@
 				8E4174CA12184B89C04932C3 /* APIRequestPage.swift in Sources */,
 				6691B8C3D71144F41A10F4A6 /* App.swift in Sources */,
 				C078F002FB29736B800B3774 /* CounterPage.swift in Sources */,
-				1EBF7320D4ABE8B5C4806D7B /* HookListPage.swift in Sources */,
 				36B24AEDD5199A51EE335F89 /* IndexPage.swift in Sources */,
+				18CA358FABAC2BC661161084 /* ShowcasePage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,7 +477,7 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "TheMovieDB-MVVM/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -618,7 +622,7 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "TheMovieDB-MVVM/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -642,7 +646,7 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = BasicUsage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -666,7 +670,7 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = BasicUsage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

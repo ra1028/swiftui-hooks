@@ -3,6 +3,7 @@ import XCTest
 
 @testable import TheMovieDB_MVVM
 
+@MainActor
 final class UseTopRatedMoviesViewModelTests: XCTestCase {
     func testSelectedMovie() {
         let tester = HookTester {
@@ -20,7 +21,7 @@ final class UseTopRatedMoviesViewModelTests: XCTestCase {
         XCTAssertEqual(tester.value.selectedMovie.wrappedValue, .stub)
     }
 
-    func testLoad() {
+    func testLoad() async {
         let service = MovieDBServiceMock()
         let tester = HookTester {
             useTopRatedMoviesViewModel()
@@ -30,26 +31,15 @@ final class UseTopRatedMoviesViewModelTests: XCTestCase {
 
         let movies = Array(repeating: Movie.stub, count: 3)
 
-        XCTAssertEqual(tester.value.loadPhase, .pending)
+        XCTAssertTrue(tester.value.loadPhase.isPending)
 
-        tester.value.load()
+        service.moviesResult = .success(movies)
+        await tester.value.load()
 
-        XCTAssertEqual(tester.value.loadPhase, .running)
-
-        service.moviesSubject.send(movies)
-
-        XCTAssertEqual(tester.value.loadPhase, .success(movies))
-
-        tester.value.load()
-
-        XCTAssertEqual(tester.value.loadPhase, .running)
-
-        service.moviesSubject.send(movies)
-
-        XCTAssertEqual(tester.value.loadPhase, .success(movies))
+        XCTAssertEqual(tester.value.loadPhase.value, movies)
     }
 
-    func testLoadNext() {
+    func testLoadNext() async {
         let service = MovieDBServiceMock()
         let tester = HookTester {
             useTopRatedMoviesViewModel()
@@ -58,28 +48,24 @@ final class UseTopRatedMoviesViewModelTests: XCTestCase {
         }
 
         let movies = Array(repeating: Movie.stub, count: 3)
+        service.moviesResult = .success(movies)
 
-        XCTAssertEqual(tester.value.loadPhase, .pending)
+        XCTAssertTrue(tester.value.loadPhase.isPending)
 
-        tester.value.loadNext()
+        await tester.value.loadNext()
 
-        XCTAssertEqual(tester.value.loadPhase, .pending)
+        XCTAssertTrue(tester.value.loadPhase.isPending)
 
-        tester.value.load()
-        service.moviesSubject.send(movies)
+        await tester.value.load()
 
-        XCTAssertEqual(tester.value.loadPhase, .success(movies))
+        XCTAssertEqual(tester.value.loadPhase.value, movies)
 
-        tester.value.loadNext()
+        await tester.value.loadNext()
 
-        XCTAssertEqual(tester.value.loadPhase, .success(movies))
-
-        service.moviesSubject.send(movies)
-
-        XCTAssertEqual(tester.value.loadPhase, .success(movies + movies))
+        XCTAssertEqual(tester.value.loadPhase.value, movies + movies)
     }
 
-    func testHasNext() {
+    func testHasNext() async {
         let service = MovieDBServiceMock()
         let tester = HookTester {
             useTopRatedMoviesViewModel()
@@ -89,15 +75,13 @@ final class UseTopRatedMoviesViewModelTests: XCTestCase {
 
         XCTAssertFalse(tester.value.hasNextPage)
 
-        tester.value.load()
-        service.moviesSubject.send([])
+        service.moviesResult = .success([])
+        await tester.value.load()
 
         XCTAssertTrue(tester.value.hasNextPage)
 
         service.totalPages = 0
-
-        tester.value.load()
-        service.moviesSubject.send([])
+        await tester.value.load()
 
         XCTAssertFalse(tester.value.hasNextPage)
     }

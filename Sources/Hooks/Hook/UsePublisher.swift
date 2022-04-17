@@ -2,7 +2,6 @@ import Combine
 
 /// A hook to use the most recent phase of asynchronous operation of the passed publisher.
 /// The publisher will be subscribed at the first update and will be re-subscribed according to the given `updateStrategy`.
-/// Triggers a view update when the asynchronous phase has been changed.
 ///
 ///     let phase = usePublisher(.once) {
 ///         URLSession.shared.dataTaskPublisher(for: url)

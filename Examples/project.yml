@@ -62,7 +62,7 @@ targets:
       - TheMovieDB-MVVM
     dependencies:
       - package: Hooks
-    deploymentTarget: 14.0
+    deploymentTarget: 15.0
     settings:
       groups:
         - app
@@ -85,7 +85,7 @@ targets:
       - BasicUsage
     dependencies:
       - package: Hooks
-    deploymentTarget: 14.0
+    deploymentTarget: 15.0
     settings:
       groups:
         - app

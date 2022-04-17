@@ -1,3 +1,4 @@
+@discardableResult
 public func useAsyncPerform<Output>(
     _ operation: @escaping @MainActor () async -> Output
 ) -> (
@@ -7,6 +8,7 @@ public func useAsyncPerform<Output>(
     useHook(AsyncPerformHook(operation: operation))
 }
 
+@discardableResult
 public func useAsyncPerform<Output>(
     _ operation: @escaping @MainActor () async throws -> Output
 ) -> (

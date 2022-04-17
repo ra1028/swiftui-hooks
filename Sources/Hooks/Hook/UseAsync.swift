@@ -1,3 +1,4 @@
+@discardableResult
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async -> Output
@@ -10,6 +11,7 @@ public func useAsync<Output>(
     )
 }
 
+@discardableResult
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async throws -> Output

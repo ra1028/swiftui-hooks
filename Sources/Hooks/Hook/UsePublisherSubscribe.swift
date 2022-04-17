@@ -1,14 +1,13 @@
 import Combine
 
-/// A hook to use the most recent phase of asynchronous operation of the passed publisher, and a `subscribe` function to be started to subscribe arbitrary timing.
-/// Update the view with the asynchronous phase change.
+/// A hook to use the most recent phase of asynchronous operation of the passed publisher, and a `subscribe` function to subscribe to it at arbitrary timing.
 ///
 ///     let (phase, subscribe) = usePublisherSubscribe {
 ///         URLSession.shared.dataTaskPublisher(for: url)
 ///     }
 ///
 /// - Parameter makePublisher: A closure that to create a new publisher to be subscribed.
-/// - Returns: A most recent publisher phase.
+/// - Returns: A tuple of the most recent publisher phase and its subscribe function.
 @discardableResult
 public func usePublisherSubscribe<P: Publisher>(
     _ makePublisher: @escaping () -> P

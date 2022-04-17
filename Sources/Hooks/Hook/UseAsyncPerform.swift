@@ -1,3 +1,11 @@
+/// A hook to use the most recent phase of the passed non-throwing asynchronous operation, and a `perform` function to call the it at arbitrary timing.
+///
+///     let (phase, perform) = useAsyncPerform {
+///         try! await URLSession.shared.data(from: url)
+///     }
+///
+/// - Parameter operation: A closure that produces a resulting value asynchronously.
+/// - Returns: A tuple of the most recent async phase and its perform function.
 @discardableResult
 public func useAsyncPerform<Output>(
     _ operation: @escaping @MainActor () async -> Output
@@ -8,6 +16,14 @@ public func useAsyncPerform<Output>(
     useHook(AsyncPerformHook(operation: operation))
 }
 
+/// A hook to use the most recent phase of the passed throwing asynchronous operation, and a `perform` function to call the it at arbitrary timing.
+///
+///     let (phase, perform) = useAsyncPerform {
+///         try await URLSession.shared.data(from: url)
+///     }
+///
+/// - Parameter operation: A closure that produces a resulting value asynchronously.
+/// - Returns: A most recent async phase.
 @discardableResult
 public func useAsyncPerform<Output>(
     _ operation: @escaping @MainActor () async throws -> Output

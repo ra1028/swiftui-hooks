@@ -1,3 +1,14 @@
+/// A hook to use the most recent phase of asynchronous operation of the passed non-throwing function.
+/// The function will be performed at the first update and will be re-performed according to the given `updateStrategy`.
+///
+///     let phase = useAsync(.once) {
+///         try! await URLSession.shared.data(from: url)
+///     }
+///
+/// - Parameters:
+///   - updateStrategy: A strategy that determines when to re-perform the given function.
+///   - operation: A closure that produces a resulting value asynchronously.
+/// - Returns: A most recent async phase.
 @discardableResult
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,
@@ -11,6 +22,17 @@ public func useAsync<Output>(
     )
 }
 
+/// A hook to use the most recent phase of asynchronous operation of the passed throwing function.
+/// The function will be performed at the first update and will be re-performed according to the given `updateStrategy`.
+///
+///     let phase = useAsync(.once) {
+///         try await URLSession.shared.data(from: url)
+///     }
+///
+/// - Parameters:
+///   - updateStrategy: A strategy that determines when to re-perform the given function.
+///   - operation: A closure that produces a resulting value asynchronously.
+/// - Returns: A most recent async phase.
 @discardableResult
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,

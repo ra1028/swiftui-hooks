@@ -472,10 +472,6 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				"EXCLUDED_ARCHS[sdk=appletv*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "TheMovieDB-MVVM/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -593,10 +589,6 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				"EXCLUDED_ARCHS[sdk=appletv*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Todo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -617,10 +609,6 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				"EXCLUDED_ARCHS[sdk=appletv*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "TheMovieDB-MVVM/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -641,10 +629,6 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				"EXCLUDED_ARCHS[sdk=appletv*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = BasicUsage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -665,10 +649,6 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				"EXCLUDED_ARCHS[sdk=appletv*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = BasicUsage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -744,10 +724,6 @@
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				"EXCLUDED_ARCHS[sdk=appletv*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Todo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (

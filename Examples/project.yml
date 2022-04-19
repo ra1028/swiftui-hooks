@@ -7,10 +7,6 @@ settingGroups:
     CODE_SIGNING_REQUIRED: NO
     CODE_SIGN_IDENTITY: ""
     CODE_SIGN_STYLE: Manual
-    EXCLUDED_ARCHS[sdk=iphoneos*]: x86_64
-    EXCLUDED_ARCHS[sdk=iphonesimulator*]: arm64
-    EXCLUDED_ARCHS[sdk=appletv*]: x86_64
-    EXCLUDED_ARCHS[sdk=appletvsimulator*]: arm64
 
 schemes:
   TheMovieDB-MVVM:

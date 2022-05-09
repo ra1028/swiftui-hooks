@@ -15,15 +15,7 @@ let package = Package(
         .library(name: "Hooks", targets: ["Hooks"])
     ],
     targets: [
-        .target(
-            name: "Hooks",
-            swiftSettings: [
-                .unsafeFlags([
-                    "-Xfrontend",
-                    "-enable-actor-data-race-checks",
-                ])
-            ]
-        ),
+        .target(name: "Hooks"),
         .testTarget(
             name: "HooksTests",
             dependencies: ["Hooks"]

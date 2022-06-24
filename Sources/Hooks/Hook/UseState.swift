@@ -28,15 +28,17 @@ private struct StateHook<State>: Hook {
             get: {
                 coordinator.state.state
             },
-            set: { newState in
+            set: { newState, transaction in
                 assertMainThread()
 
                 guard !coordinator.state.isDisposed else {
                     return
                 }
 
-                coordinator.state.state = newState
-                coordinator.updateView()
+                withAnimation(transaction.animation) {
+                    coordinator.state.state = newState
+                    coordinator.updateView()
+                }
             }
         )
     }

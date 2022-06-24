@@ -63,18 +63,18 @@ private struct EffectHook: Hook {
     }
 
     func updateState(coordinator: Coordinator) {
+        coordinator.state.cleanup?()
         coordinator.state.cleanup = effect()
     }
 
     func dispose(state: State) {
+        state.cleanup?()
         state.cleanup = nil
     }
 }
 
 private extension EffectHook {
     final class State {
-        var cleanup: (() -> Void)? {
-            didSet { oldValue?() }
-        }
+        var cleanup: (() -> Void)?
     }
 }

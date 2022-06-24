@@ -4,6 +4,11 @@ import XCTest
 @testable import Hooks
 
 final class UseEffectTests: XCTestCase {
+    enum EffectOperation: Equatable {
+        case effect(Int)
+        case cleanup(Int)
+    }
+
     func testEffectWithoutPreservationKey() {
         var effectCount = 0
 
@@ -98,6 +103,30 @@ final class UseEffectTests: XCTestCase {
         XCTAssertEqual(cleanupCount, 2)
     }
 
+    func testEffectOperationsOrder() {
+        var operations: [EffectOperation] = []
+        var step = 1
+
+        let tester = HookTester {
+            useEffect(.preserved(by: step)) {
+                let effectStep = step
+                operations.append(.effect(effectStep))
+                return { operations.append(.cleanup(effectStep)) }
+            }
+        }
+
+        XCTAssertEqual(operations, [.effect(1)])
+
+        step += 1
+        tester.update()
+
+        XCTAssertEqual(operations, [.effect(1), .cleanup(1), .effect(2)])
+
+        tester.dispose()
+
+        XCTAssertEqual(operations, [.effect(1), .cleanup(1), .effect(2), .cleanup(2)])
+    }
+
     func testLayoutEffectWithoutPreservationKey() {
         var effectCount = 0
 
@@ -189,5 +218,29 @@ final class UseEffectTests: XCTestCase {
         tester.update()
         tester.dispose()
         XCTAssertEqual(cleanupCount, 2)
+    }
+
+    func testLayoutEffectOperationsOrder() {
+        var operations: [EffectOperation] = []
+        var step = 1
+
+        let tester = HookTester {
+            useLayoutEffect(.preserved(by: step)) {
+                let effectStep = step
+                operations.append(.effect(effectStep))
+                return { operations.append(.cleanup(effectStep)) }
+            }
+        }
+
+        XCTAssertEqual(operations, [.effect(1)])
+
+        step += 1
+        tester.update()
+
+        XCTAssertEqual(operations, [.effect(1), .cleanup(1), .effect(2)])
+
+        tester.dispose()
+
+        XCTAssertEqual(operations, [.effect(1), .cleanup(1), .effect(2), .cleanup(2)])
     }
 }

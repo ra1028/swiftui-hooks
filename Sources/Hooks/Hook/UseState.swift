@@ -35,7 +35,7 @@ private struct StateHook<State>: Hook {
                     return
                 }
 
-                withAnimation(transaction.animation) {
+                withTransaction(transaction) {
                     coordinator.state.state = newState
                     coordinator.updateView()
                 }

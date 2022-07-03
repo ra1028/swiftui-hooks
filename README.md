@@ -117,13 +117,28 @@ And then, include "Hooks" as a dependency for your target:
 
 ```swift
 func useState<State>(_ initialState: State) -> Binding<State>
+func useState<State>(_ initialState: @escaping () -> State) -> Binding<State>
 ```
 
 A hook to use a `Binding<State>` wrapping current state to be updated by setting a new state to `wrappedValue`.  
-Triggers a view update when the state has been changed.  
+Triggers a view update when the state has been changed.
 
 ```swift
 let count = useState(0)  // Binding<Int>
+
+Button("Increment") {
+    count.wrappedValue += 1
+}
+```
+
+If the initial state is the result of an expensive computation, you may provide a closure instead.
+The closure will be executed once, during the initial render.
+
+```swift
+let count = useState {
+    let initialState = expensiveComputation() // Int
+    return initialState
+}                                             // Binding<Int>
 
 Button("Increment") {
     count.wrappedValue += 1

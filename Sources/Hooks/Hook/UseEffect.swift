@@ -1,6 +1,6 @@
 /// A hook to use a side effect function that is called the number of times according to the strategy specified with `updateStrategy`.
 /// Optionally the function can be cancelled when this hook is disposed or when the side-effect function is called again.
-/// Note that the execution is deferred until after ohter hooks have been updated.
+/// Note that the execution is deferred until after other hooks have been updated.
 ///
 ///     useEffect {
 ///         print("Do side effects")

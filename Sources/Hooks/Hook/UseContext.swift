@@ -7,6 +7,7 @@
 ///
 /// - Parameter context: The type of context.
 /// - Returns: A value that provided by provider from upstream of the view tree.
+@MainActor
 public func useContext<T>(_ context: Context<T>.Type) -> T {
     useHook(ContextHook(context: context))
 }

@@ -3,7 +3,7 @@ import XCTest
 
 @testable import Hooks
 
-final class UseEffectTests: XCTestCase {
+@MainActor final class UseEffectTests: XCTestCase {
     enum EffectOperation: Equatable {
         case effect(Int)
         case cleanup(Int)

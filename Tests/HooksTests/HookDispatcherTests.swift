@@ -3,12 +3,12 @@ import XCTest
 
 @testable import Hooks
 
-final class HookDispatcherTests: XCTestCase {
-    final class Counter {
+@MainActor final class HookDispatcherTests: XCTestCase {
+    @MainActor final class Counter {
         var count = 0
     }
 
-    final class TestHook: Hook {
+    @MainActor final class TestHook: Hook {
         let updateStrategy: HookUpdateStrategy?
         let shouldDeferredUpdate: Bool
         let disposeCounter: Counter
@@ -42,7 +42,7 @@ final class HookDispatcherTests: XCTestCase {
         }
     }
 
-    final class Test2Hook: Hook {
+    @MainActor final class Test2Hook: Hook {
         let updateStrategy: HookUpdateStrategy? = nil
         let disposeCounter: Counter
         var disposedAt: Int?

@@ -21,6 +21,7 @@
 ///   - reducer: A function that to return a new state with an action.
 ///   - initialState: An initial state.
 /// - Returns: A tuple value that has a new state returned by the passed `reducer` and a dispatch function to send actions.
+@MainActor
 public func useReducer<State, Action>(
     _ reducer: @escaping (State, Action) -> State,
     initialState: State
@@ -72,7 +73,7 @@ private struct ReducerHook<State, Action>: Hook {
 }
 
 private extension ReducerHook {
-    final class Ref {
+    final class Ref: @unchecked Sendable {
         var state: State
         var nextAction: Action?
         var isDisposed = false

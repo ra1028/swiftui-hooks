@@ -2,11 +2,12 @@ import Combine
 import SwiftUI
 
 /// A class that manages list of states of hooks used inside `HookDispatcher.scoped(environment:_)`.
+@MainActor
 public final class HookDispatcher: ObservableObject {
     internal private(set) static weak var current: HookDispatcher?
 
     /// A publisher that emits before the object has changed.
-    public let objectWillChange = PassthroughSubject<(), Never>()
+    nonisolated public let objectWillChange = PassthroughSubject<(), Never>()
 
     private var records = LinkedList<HookRecordProtocol>()
     private var scopedState: ScopedHookState?
@@ -15,7 +16,9 @@ public final class HookDispatcher: ObservableObject {
     public init() {}
 
     deinit {
-        disposeAll()
+        MainActor.assumeIsolated {
+            disposeAll()
+        }
     }
 
     /// Disposes all hooks that already managed with this instance.
@@ -211,8 +214,8 @@ private struct HookRecord<H: Hook>: HookRecordProtocol {
         String(describing: type(of: hook))
     }
 
-    func state<H: Hook>(of hookType: H.Type) -> H.State? {
-        coordinator.state as? H.State
+    func state<Other: Hook>(of hookType: Other.Type) -> Other.State? {
+        coordinator.state as? Other.State
     }
 
     func shouldUpdate<New: Hook>(newHook: New) -> Bool {
@@ -235,7 +238,7 @@ private struct HookRecord<H: Hook>: HookRecordProtocol {
 private protocol HookRecordProtocol {
     var hookName: String { get }
 
-    func state<H: Hook>(of hookType: H.Type) -> H.State?
+    func state<Other: Hook>(of hookType: Other.Type) -> Other.State?
     func shouldUpdate<New: Hook>(newHook: New) -> Bool
     func updateState()
     func dispose()

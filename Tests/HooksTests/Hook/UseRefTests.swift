@@ -3,7 +3,7 @@ import XCTest
 
 @testable import Hooks
 
-final class UseRefTests: XCTestCase {
+@MainActor final class UseRefTests: XCTestCase {
     func testUpdate() {
         let tester = HookTester {
             useRef(0)

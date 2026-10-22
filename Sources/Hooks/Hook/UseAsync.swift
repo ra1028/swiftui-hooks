@@ -10,6 +10,7 @@
 ///   - operation: A closure that produces a resulting value asynchronously.
 /// - Returns: A most recent async phase.
 @discardableResult
+@MainActor
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async -> Output
@@ -34,6 +35,7 @@ public func useAsync<Output>(
 ///   - operation: A closure that produces a resulting value asynchronously.
 /// - Returns: A most recent async phase.
 @discardableResult
+@MainActor
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async throws -> Output
@@ -76,7 +78,7 @@ internal struct AsyncHook<Output>: Hook {
 }
 
 internal extension AsyncHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Never>.pending
         var task: Task<Void, Never>? {
             didSet {
@@ -124,7 +126,7 @@ internal struct AsyncThrowingHook<Output>: Hook {
 }
 
 internal extension AsyncThrowingHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Error>.pending
         var task: Task<Void, Never>? {
             didSet {

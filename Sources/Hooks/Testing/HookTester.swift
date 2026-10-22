@@ -3,6 +3,7 @@ import SwiftUI
 
 /// A testing tool that simulates the behaviors on a view of a given hook
 /// and manages the resulting values.
+@MainActor
 public final class HookTester<Parameter, Value> {
     /// The latest result value that the given Hook was executed.
     public private(set) var value: Value

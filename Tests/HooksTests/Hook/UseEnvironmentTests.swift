@@ -3,7 +3,7 @@ import XCTest
 
 @testable import Hooks
 
-final class UseEnvironmentTests: XCTestCase {
+@MainActor final class UseEnvironmentTests: XCTestCase {
     func testValue() {
         let tester = HookTester {
             useEnvironment(\.testValue)

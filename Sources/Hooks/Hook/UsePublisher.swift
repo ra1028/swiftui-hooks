@@ -12,6 +12,7 @@ import Combine
 ///   - makePublisher: A closure that to create a new publisher to be subscribed.
 /// - Returns: A most recent publisher phase.
 @discardableResult
+@MainActor
 public func usePublisher<P: Publisher>(
     _ updateStrategy: HookUpdateStrategy,
     _ makePublisher: @escaping () -> P
@@ -63,7 +64,7 @@ private struct PublisherHook<P: Publisher>: Hook {
 }
 
 private extension PublisherHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<P.Output, P.Failure>.pending
         var cancellable: AnyCancellable?
     }

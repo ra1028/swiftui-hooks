@@ -2,7 +2,7 @@ import Hooks
 import SwiftUI
 import XCTest
 
-final class HookTesterTests: XCTestCase {
+@MainActor final class HookTesterTests: XCTestCase {
     func testValue() {
         let tester = HookTester {
             useState(0)

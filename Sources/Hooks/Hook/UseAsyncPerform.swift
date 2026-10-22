@@ -7,6 +7,7 @@
 /// - Parameter operation: A closure that produces a resulting value asynchronously.
 /// - Returns: A tuple of the most recent async phase and its perform function.
 @discardableResult
+@MainActor
 public func useAsyncPerform<Output>(
     _ operation: @escaping @MainActor () async -> Output
 ) -> (
@@ -25,6 +26,7 @@ public func useAsyncPerform<Output>(
 /// - Parameter operation: A closure that produces a resulting value asynchronously.
 /// - Returns: A most recent async phase.
 @discardableResult
+@MainActor
 public func useAsyncPerform<Output>(
     _ operation: @escaping @MainActor () async throws -> Output
 ) -> (
@@ -72,7 +74,7 @@ internal struct AsyncPerformHook<Output>: Hook {
 }
 
 internal extension AsyncPerformHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Never>.pending
         var isDisposed = false
     }
@@ -124,7 +126,7 @@ internal struct AsyncThrowingPerformHook<Output>: Hook {
 }
 
 internal extension AsyncThrowingPerformHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Error>.pending
         var isDisposed = false
     }

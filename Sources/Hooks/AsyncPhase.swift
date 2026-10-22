@@ -127,7 +127,59 @@ public enum AsyncPhase<Success, Failure: Error> {
             return transform(error)
         }
     }
+
+    /// Executes the given closure when the phase is `.success`.
+    /// - Parameter body: A closure that takes the success value.
+    public func ifSuccess(_ body: (Success) -> Void) {
+        if case .success(let value) = self {
+            body(value)
+        }
+    }
+
+    /// Executes the given closure when the phase is `.failure`.
+    /// - Parameter body: A closure that takes the failure value.
+    public func ifFailure(_ body: (Failure) -> Void) {
+        if case .failure(let error) = self {
+            body(error)
+        }
+    }
+
+    /// Returns the success value if the phase is `.success`, otherwise throws the failure error.
+    /// - Throws: The failure error if the phase is `.failure`, or a `PhaseError.incomplete` if the phase is `.pending` or `.running`.
+    /// - Returns: The success value.
+    public func unwrap() throws -> Success {
+        switch self {
+        case .success(let value):
+            return value
+
+        case .failure(let error):
+            throw error
+
+        case .pending, .running:
+            throw PhaseError.incomplete
+        }
+    }
+}
+
+/// Errors that can occur when working with `AsyncPhase`.
+public enum PhaseError: Error, Equatable {
+    /// The phase is incomplete (either `.pending` or `.running`).
+    case incomplete
+}
+
+public extension AsyncPhase {
+    /// Creates a new phase from a `Result`.
+    /// - Parameter result: A result to convert.
+    init(from result: Result<Success, Failure>) {
+        switch result {
+        case .success(let value):
+            self = .success(value)
+        case .failure(let error):
+            self = .failure(error)
+        }
+    }
 }
 
 extension AsyncPhase: Equatable where Success: Equatable, Failure: Equatable {}
 extension AsyncPhase: Hashable where Success: Hashable, Failure: Hashable {}
+extension AsyncPhase: Sendable where Success: Sendable, Failure: Sendable {}

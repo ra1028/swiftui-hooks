@@ -13,7 +13,7 @@ import SwiftUI
 ///         }
 ///     }
 public protocol HookView: View {
-    // The type of view representing the body of this view that can use hooks.
+    /// The type of view representing the body of this view that can use hooks.
     associatedtype HookBody: View
 
     /// The content and behavior of the hook scoped view.

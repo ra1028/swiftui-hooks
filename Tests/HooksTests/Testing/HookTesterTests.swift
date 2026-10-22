@@ -116,7 +116,9 @@ import XCTest
 
 private extension EnvironmentValues {
     enum TestValueKey: EnvironmentKey {
-        static var defaultValue: Int? { nil }
+        static var defaultValue: Int? {
+            nil
+        }
     }
 
     var testValue: Int? {

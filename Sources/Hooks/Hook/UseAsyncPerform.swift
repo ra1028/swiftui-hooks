@@ -36,7 +36,7 @@ public func useAsyncPerform<Output>(
     useHook(AsyncThrowingPerformHook(operation: operation))
 }
 
-internal struct AsyncPerformHook<Output>: Hook {
+struct AsyncPerformHook<Output>: Hook {
     let updateStrategy: HookUpdateStrategy? = .once
     let operation: @MainActor () async -> Output
 
@@ -73,14 +73,14 @@ internal struct AsyncPerformHook<Output>: Hook {
     }
 }
 
-internal extension AsyncPerformHook {
+extension AsyncPerformHook {
     final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Never>.pending
         var isDisposed = false
     }
 }
 
-internal struct AsyncThrowingPerformHook<Output>: Hook {
+struct AsyncThrowingPerformHook<Output>: Hook {
     let updateStrategy: HookUpdateStrategy? = .once
     let operation: @MainActor () async throws -> Output
 
@@ -107,8 +107,7 @@ internal struct AsyncThrowingPerformHook<Output>: Hook {
                 do {
                     let output = try await operation()
                     phase = .success(output)
-                }
-                catch {
+                } catch {
                     phase = .failure(error)
                 }
 
@@ -125,7 +124,7 @@ internal struct AsyncThrowingPerformHook<Output>: Hook {
     }
 }
 
-internal extension AsyncThrowingPerformHook {
+extension AsyncThrowingPerformHook {
     final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Error>.pending
         var isDisposed = false

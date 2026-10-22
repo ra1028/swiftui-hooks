@@ -48,7 +48,7 @@ struct TodoPage: HookView {
     var todoContent: some View {
         let todos = useContext(TodoContext.self)
 
-        return ForEach(0..<todos.wrappedValue.count, id: \.self) { offset in
+        return ForEach(0 ..< todos.wrappedValue.count, id: \.self) { offset in
             let todo = todos.wrappedValue[offset]
 
             Row {
@@ -71,11 +71,7 @@ struct TodoPage: HookView {
 }
 
 private struct Row<Content: View>: View {
-    let content: Content
-
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
+    @ViewBuilder let content: Content
 
     var body: some View {
         VStack(alignment: .leading) {

@@ -47,7 +47,7 @@ public enum AsyncPhase<Success, Failure: Error> {
 
     /// Returns a success value if this instance is `success`, otherwise returns `nil`.
     public var value: Success? {
-        guard case .success(let value) = self else {
+        guard case let .success(value) = self else {
             return nil
         }
         return value
@@ -55,7 +55,7 @@ public enum AsyncPhase<Success, Failure: Error> {
 
     /// Returns an error if this instance is `failure`, otherwise returns `nil`.
     public var error: Failure? {
-        guard case .failure(let error) = self else {
+        guard case let .failure(error) = self else {
             return nil
         }
         return error
@@ -68,10 +68,10 @@ public enum AsyncPhase<Success, Failure: Error> {
         case .pending, .running:
             return nil
 
-        case .success(let success):
+        case let .success(success):
             return .success(success)
 
-        case .failure(let error):
+        case let .failure(error):
             return .failure(error)
         }
     }
@@ -101,10 +101,10 @@ public enum AsyncPhase<Success, Failure: Error> {
         case .running:
             return .running
 
-        case .success(let value):
+        case let .success(value):
             return transform(value)
 
-        case .failure(let error):
+        case let .failure(error):
             return .failure(error)
         }
     }
@@ -120,10 +120,10 @@ public enum AsyncPhase<Success, Failure: Error> {
         case .running:
             return .running
 
-        case .success(let value):
+        case let .success(value):
             return .success(value)
 
-        case .failure(let error):
+        case let .failure(error):
             return transform(error)
         }
     }
@@ -131,7 +131,7 @@ public enum AsyncPhase<Success, Failure: Error> {
     /// Executes the given closure when the phase is `.success`.
     /// - Parameter body: A closure that takes the success value.
     public func ifSuccess(_ body: (Success) -> Void) {
-        if case .success(let value) = self {
+        if case let .success(value) = self {
             body(value)
         }
     }
@@ -139,7 +139,7 @@ public enum AsyncPhase<Success, Failure: Error> {
     /// Executes the given closure when the phase is `.failure`.
     /// - Parameter body: A closure that takes the failure value.
     public func ifFailure(_ body: (Failure) -> Void) {
-        if case .failure(let error) = self {
+        if case let .failure(error) = self {
             body(error)
         }
     }
@@ -149,10 +149,10 @@ public enum AsyncPhase<Success, Failure: Error> {
     /// - Returns: The success value.
     public func unwrap() throws -> Success {
         switch self {
-        case .success(let value):
+        case let .success(value):
             return value
 
-        case .failure(let error):
+        case let .failure(error):
             throw error
 
         case .pending, .running:
@@ -172,9 +172,9 @@ public extension AsyncPhase {
     /// - Parameter result: A result to convert.
     init(from result: Result<Success, Failure>) {
         switch result {
-        case .success(let value):
+        case let .success(value):
             self = .success(value)
-        case .failure(let error):
+        case let .failure(error):
             self = .failure(error)
         }
     }

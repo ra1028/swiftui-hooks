@@ -26,7 +26,7 @@ struct CounterPage: HookView {
                 .background(Color(.secondarySystemBackground))
                 .clipShape(Circle())
 
-            Stepper(value: count, in: 0...(.max), label: EmptyView.init).fixedSize()
+            Stepper(value: count, in: 0 ... .max, label: EmptyView.init).fixedSize()
 
             Toggle("Auto +", isOn: isAutoIncrement).fixedSize()
         }

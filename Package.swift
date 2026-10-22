@@ -12,7 +12,7 @@ let package = Package(
         .watchOS(.v7),
     ],
     products: [
-        .library(name: "Hooks", targets: ["Hooks"])
+        .library(name: "Hooks", targets: ["Hooks"]),
     ],
     targets: [
         .target(name: "Hooks"),

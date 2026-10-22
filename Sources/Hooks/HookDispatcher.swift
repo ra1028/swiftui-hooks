@@ -4,10 +4,10 @@ import SwiftUI
 /// A class that manages list of states of hooks used inside `HookDispatcher.scoped(environment:_)`.
 @MainActor
 public final class HookDispatcher: ObservableObject {
-    internal private(set) static weak var current: HookDispatcher?
+    private(set) weak static var current: HookDispatcher?
 
     /// A publisher that emits before the object has changed.
-    nonisolated public let objectWillChange = PassthroughSubject<(), Never>()
+    public nonisolated let objectWillChange = PassthroughSubject<Void, Never>()
 
     private var records = LinkedList<HookRecordProtocol>()
     private var scopedState: ScopedHookState?
@@ -57,8 +57,7 @@ public final class HookDispatcher: ObservableObject {
 
             if hook.shouldDeferredUpdate {
                 scopedState.deferredUpdateRecords.append(record)
-            }
-            else {
+            } else {
                 hook.updateState(coordinator: coordinator)
             }
 
@@ -81,15 +80,13 @@ public final class HookDispatcher: ObservableObject {
             if oldRecord.shouldUpdate(newHook: hook) {
                 if hook.shouldDeferredUpdate {
                     scopedState.deferredUpdateRecords.append(newRecord)
-                }
-                else {
+                } else {
                     hook.updateState(coordinator: coordinator)
                 }
             }
 
             return hook.value(coordinator: coordinator)
-        }
-        else {
+        } else {
             scopedState.assertRecordingFailure(hook: hook, record: record.element)
 
             // Fallback process for wrong usage.
@@ -214,7 +211,7 @@ private struct HookRecord<H: Hook>: HookRecordProtocol {
         String(describing: type(of: hook))
     }
 
-    func state<Other: Hook>(of hookType: Other.Type) -> Other.State? {
+    func state<Other: Hook>(of _: Other.Type) -> Other.State? {
         coordinator.state as? Other.State
     }
 

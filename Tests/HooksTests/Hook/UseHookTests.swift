@@ -1,7 +1,6 @@
+@testable import Hooks
 import SwiftUI
 import XCTest
-
-@testable import Hooks
 
 @MainActor final class UseHookTests: XCTestCase {
     @MainActor struct TestHook: Hook {

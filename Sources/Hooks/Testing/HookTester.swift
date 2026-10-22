@@ -31,15 +31,15 @@ public final class HookTester<Parameter, Value> {
         var environmentValues = EnvironmentValues()
         environment(&environmentValues)
 
-        self.currentParameter = initialParameter
+        currentParameter = initialParameter
         self.hook = hook
-        self.value = dispatcher.scoped(
+        value = dispatcher.scoped(
             environment: environmentValues,
             { hook(initialParameter) }
         )
-        self.valueHistory = [value]
+        valueHistory = [value]
         self.environment = environmentValues
-        self.cancellable = dispatcher.objectWillChange
+        cancellable = dispatcher.objectWillChange
             .sink(receiveValue: { [weak self] in
                 self?.update()
             })

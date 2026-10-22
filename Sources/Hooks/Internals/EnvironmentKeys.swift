@@ -1,6 +1,6 @@
 import SwiftUI
 
-internal extension EnvironmentValues {
+extension EnvironmentValues {
     var hooksRulesAssertionDisabled: Bool {
         get { self[DisableHooksRulesAssertionKey.self] }
         set { self[DisableHooksRulesAssertionKey.self] = newValue }

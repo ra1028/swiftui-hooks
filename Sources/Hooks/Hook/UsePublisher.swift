@@ -39,7 +39,7 @@ private struct PublisherHook<P: Publisher>: Hook {
             .sink(
                 receiveCompletion: { completion in
                     switch completion {
-                    case .failure(let error):
+                    case let .failure(error):
                         coordinator.state.phase = .failure(error)
 
                     case .finished:

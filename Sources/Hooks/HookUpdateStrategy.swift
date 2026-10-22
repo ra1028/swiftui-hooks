@@ -40,7 +40,7 @@ public extension HookUpdateStrategy {
             }
 
             self.value = value
-            self.equals = { other in
+            equals = { other in
                 value == other.value as? T
             }
         }

@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import Todo
+import XCTest
 
 final class SimpleUITests: XCTestCase {
     func testInsertAndDelete() {

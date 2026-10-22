@@ -37,28 +37,32 @@ public protocol Hook {
 public extension Hook {
     /// Indicates whether the value should be updated after other hooks have been updated.
     /// Default is `false`.
-    var shouldDeferredUpdate: Bool { false }
+    var shouldDeferredUpdate: Bool {
+        false
+    }
 
     /// Updates the state when the `updateStrategy` determines that an update is necessary.
     /// Does not do anything by default.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func updateState(coordinator: Coordinator) {}
+    func updateState(coordinator _: Coordinator) {}
 
     /// Dispose of the state and interrupt running asynchronous operation.
     /// Does not do anything by default.
-    func dispose(state: State) {}
+    func dispose(state _: State) {}
 }
 
 public extension Hook where State == Void {
     /// Returns a initial state of this hook.
     /// Internal system calls this function to create a state at first time each hook is evaluated.
     /// Default is Void.
-    func makeState() -> State { () }
+    func makeState() -> State {
+        ()
+    }
 }
 
 public extension Hook where Value == Void {
     /// Returns a value for each hook call.
     /// Default is Void.
     /// - Parameter coordinator: A contextual information about the state of the hook.
-    func value(coordinator: Coordinator) {}
+    func value(coordinator _: Coordinator) {}
 }

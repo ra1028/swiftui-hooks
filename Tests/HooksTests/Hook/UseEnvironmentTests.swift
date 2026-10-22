@@ -1,7 +1,6 @@
+@testable import Hooks
 import SwiftUI
 import XCTest
-
-@testable import Hooks
 
 @MainActor final class UseEnvironmentTests: XCTestCase {
     func testValue() {
@@ -17,7 +16,9 @@ import XCTest
 
 private extension EnvironmentValues {
     enum TestValueKey: EnvironmentKey {
-        static var defaultValue: Int? { nil }
+        static var defaultValue: Int? {
+            nil
+        }
     }
 
     var testValue: Int? {

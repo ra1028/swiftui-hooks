@@ -1,8 +1,7 @@
 import Combine
+@testable import Hooks
 import SwiftUI
 import XCTest
-
-@testable import Hooks
 
 @MainActor final class UsePublisherTests: XCTestCase {
     func testUpdateOnce() {

@@ -1,7 +1,6 @@
+@testable import Hooks
 import SwiftUI
 import XCTest
-
-@testable import Hooks
 
 @MainActor final class HookDispatcherTests: XCTestCase {
     @MainActor final class Counter {
@@ -24,7 +23,7 @@ import XCTest
             self.disposeCounter = disposeCounter ?? Counter()
         }
 
-        func dispose(state: RefObject<Int>) {
+        func dispose(state _: RefObject<Int>) {
             disposeCounter.count += 1
             disposedAt = disposeCounter.count
         }
@@ -51,7 +50,7 @@ import XCTest
             self.disposeCounter = disposeCounter ?? Counter()
         }
 
-        func dispose(state: Void) {
+        func dispose(state _: Void) {
             disposeCounter.count += 1
             disposedAt = disposeCounter.count
         }
@@ -86,9 +85,9 @@ import XCTest
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
-            XCTAssertEqual(value1, 1)  // Update always
-            XCTAssertEqual(value2, 1)  // Update once
-            XCTAssertEqual(value3, 0)  // Update is deferred
+            XCTAssertEqual(value1, 1) // Update always
+            XCTAssertEqual(value2, 1) // Update once
+            XCTAssertEqual(value3, 0) // Update is deferred
         }
 
         dispatcher.scoped(environment: environment) {
@@ -96,9 +95,9 @@ import XCTest
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
-            XCTAssertEqual(value1, 2)  // Update always
-            XCTAssertEqual(value2, 1)  // Already updated once
-            XCTAssertEqual(value3, 1)  // Update is deferred
+            XCTAssertEqual(value1, 2) // Update always
+            XCTAssertEqual(value2, 1) // Already updated once
+            XCTAssertEqual(value3, 1) // Update is deferred
         }
 
         dispatcher.scoped(environment: environment) {
@@ -106,9 +105,9 @@ import XCTest
             let value2 = useHook(onceHook)
             let value3 = useHook(deferredHook)
 
-            XCTAssertEqual(value1, 3)  // Update always
-            XCTAssertEqual(value2, 1)  // Already updated once
-            XCTAssertEqual(value3, 2)  // Update is deferred
+            XCTAssertEqual(value1, 3) // Update always
+            XCTAssertEqual(value2, 1) // Already updated once
+            XCTAssertEqual(value3, 2) // Update is deferred
         }
     }
 
@@ -136,9 +135,9 @@ import XCTest
             let value3 = useHook(hook3)
             let value4 = useHook(hook4)
 
-            XCTAssertEqual(value1, 2)  // Works correctly
-            XCTAssertEqual(value3, 1)  // State is initialized
-            XCTAssertEqual(value4, 1)  // State is initialized
+            XCTAssertEqual(value1, 2) // Works correctly
+            XCTAssertEqual(value3, 1) // State is initialized
+            XCTAssertEqual(value4, 1) // State is initialized
         }
 
         // Disposed in reverse order
@@ -153,9 +152,9 @@ import XCTest
             let value3 = useHook(hook3)
             let value4 = useHook(hook4)
 
-            XCTAssertEqual(value1, 3)  // Works correctly
-            XCTAssertEqual(value3, 2)  // Works correctly
-            XCTAssertEqual(value4, 2)  // Works correctly
+            XCTAssertEqual(value1, 3) // Works correctly
+            XCTAssertEqual(value3, 2) // Works correctly
+            XCTAssertEqual(value4, 2) // Works correctly
         }
     }
 
@@ -181,7 +180,7 @@ import XCTest
             // There is 1 hook
             let value1 = useHook(hook1)
 
-            XCTAssertEqual(value1, 2)  // Works correctly
+            XCTAssertEqual(value1, 2) // Works correctly
         }
 
         XCTAssertNil(hook1.disposedAt)
@@ -194,9 +193,9 @@ import XCTest
             let value2 = useHook(hook2)
             let value3 = useHook(hook3)
 
-            XCTAssertEqual(value1, 3)  // Works correctly
-            XCTAssertEqual(value2, 1)  // Previous state is initialized
-            XCTAssertEqual(value3, 1)  // Previous state is initialized
+            XCTAssertEqual(value1, 3) // Works correctly
+            XCTAssertEqual(value2, 1) // Previous state is initialized
+            XCTAssertEqual(value3, 1) // Previous state is initialized
         }
 
         dispatcher.scoped(environment: environment) {
@@ -204,9 +203,9 @@ import XCTest
             let value2 = useHook(hook2)
             let value3 = useHook(hook3)
 
-            XCTAssertEqual(value1, 4)  // Works correctly
-            XCTAssertEqual(value2, 2)  // Works correctly
-            XCTAssertEqual(value3, 2)  // Works correctly
+            XCTAssertEqual(value1, 4) // Works correctly
+            XCTAssertEqual(value2, 2) // Works correctly
+            XCTAssertEqual(value3, 2) // Works correctly
         }
     }
 

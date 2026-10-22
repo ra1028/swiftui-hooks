@@ -50,10 +50,10 @@ struct ShowcasePage: HookView {
                 case .pending, .running:
                     ProgressView()
 
-                case .failure(let error):
+                case let .failure(error):
                     Text(error.localizedDescription)
 
-                case .success(let image):
+                case let .success(image):
                     image.map { uiImage in
                         Image(uiImage: uiImage)
                             .resizable()
@@ -80,10 +80,10 @@ struct ShowcasePage: HookView {
                     case .pending, .running:
                         ProgressView()
 
-                    case .failure(let error):
+                    case let .failure(error):
                         Text(error.localizedDescription)
 
-                    case .success(let image):
+                    case let .success(image):
                         image.map { uiImage in
                             Image(uiImage: uiImage)
                                 .resizable()
@@ -169,7 +169,7 @@ struct ShowcasePage: HookView {
         let random = useState(0)
 
         useLayoutEffect(.preserved(by: flag.wrappedValue)) {
-            random.wrappedValue = Int.random(in: 0...100000)
+            random.wrappedValue = Int.random(in: 0 ... 100_000)
             return nil
         }
 
@@ -185,7 +185,7 @@ struct ShowcasePage: HookView {
     var useMemoRow: some View {
         let flag = useState(false)
         let randomColor = useMemo(.preserved(by: flag.wrappedValue)) {
-            Color(hue: .random(in: 0...1), saturation: 1, brightness: 1)
+            Color(hue: .random(in: 0 ... 1), saturation: 1, brightness: 1)
         }
 
         return Row("useMemo") {
@@ -235,7 +235,7 @@ struct ShowcasePage: HookView {
         }
 
         return Row("usePublisher") {
-            if case .success(let date) = phase {
+            if case let .success(date) = phase {
                 Text(DateFormatter.time.string(from: date))
             }
         }
@@ -254,7 +254,7 @@ struct ShowcasePage: HookView {
                 case .running:
                     ProgressView()
 
-                case .success(let uuid):
+                case let .success(uuid):
                     Text(uuid)
 
                 case .pending:

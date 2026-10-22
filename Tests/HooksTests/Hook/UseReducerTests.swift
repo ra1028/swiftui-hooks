@@ -1,9 +1,8 @@
+@testable import Hooks
 import SwiftUI
 import XCTest
 
-@testable import Hooks
-
-final class UseReducerTests: XCTestCase {
+@MainActor final class UseReducerTests: XCTestCase {
     func testUpdate() {
         func reducer(state: Int, action: Int) -> Int {
             state + action

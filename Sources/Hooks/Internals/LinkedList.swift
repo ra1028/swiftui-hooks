@@ -1,4 +1,4 @@
-internal struct LinkedList<Element>: Sequence {
+struct LinkedList<Element>: Sequence {
     final class Node {
         fileprivate(set) var element: Element
         fileprivate(set) var next: Node?
@@ -31,8 +31,7 @@ internal struct LinkedList<Element>: Sequence {
         if let last = last {
             node.previous = last
             last.next = node
-        }
-        else {
+        } else {
             first = node
         }
 
@@ -46,8 +45,7 @@ internal struct LinkedList<Element>: Sequence {
 
         if let previous = node.previous {
             previous.next = nil
-        }
-        else {
+        } else {
             first = nil
         }
 
@@ -66,7 +64,7 @@ internal struct LinkedList<Element>: Sequence {
     }
 }
 
-internal extension LinkedList {
+extension LinkedList {
     struct Reversed: Sequence {
         let last: Node?
 

@@ -8,6 +8,7 @@
 ///   - updateStrategy: A strategy that determines when to update the value.
 ///   - makeValue: A closure that to create a new value.
 /// - Returns: A memoized value.
+@MainActor
 public func useMemo<Value>(
     _ updateStrategy: HookUpdateStrategy,
     _ makeValue: @escaping () -> Value
@@ -38,7 +39,7 @@ private struct MemoHook<Value>: Hook {
 }
 
 private extension MemoHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var value: Value?
     }
 }

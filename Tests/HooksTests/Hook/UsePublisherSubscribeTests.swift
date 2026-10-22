@@ -1,10 +1,9 @@
 import Combine
+@testable import Hooks
 import SwiftUI
 import XCTest
 
-@testable import Hooks
-
-final class UsePublisherSubscribeTests: XCTestCase {
+@MainActor final class UsePublisherSubscribeTests: XCTestCase {
     func testUpdate() {
         let subject = PassthroughSubject<Void, URLError>()
         let tester = HookTester(0) { value in

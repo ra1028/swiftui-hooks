@@ -19,8 +19,7 @@ public extension Context {
         public var body: some View {
             if let value = environment[Context.self] {
                 content(value)
-            }
-            else {
+            } else {
                 assertMissingContext()
             }
         }

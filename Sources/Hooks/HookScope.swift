@@ -17,6 +17,12 @@ import SwiftUI
 ///         }
 ///     }
 public struct HookScope<Content: View>: View {
+    @StateObject
+    private var dispatcher = HookDispatcher()
+
+    @Environment(\.self)
+    private var environment
+
     private let content: () -> Content
 
     /// Creates a `HookScope` that hosts the state of hooks.
@@ -27,67 +33,6 @@ public struct HookScope<Content: View>: View {
 
     /// The content and behavior of the hook scoped view.
     public var body: some View {
-        if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *) {
-            HookScopeBody(content)
-        }
-        else {
-            HookScopeCompatBody(content)
-        }
-    }
-}
-
-@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
-private struct HookScopeBody<Content: View>: View {
-    @StateObject
-    private var dispatcher = HookDispatcher()
-
-    @Environment(\.self)
-    private var environment
-
-    private let content: () -> Content
-
-    init(@ViewBuilder _ content: @escaping () -> Content) {
-        self.content = content
-    }
-
-    var body: some View {
         dispatcher.scoped(environment: environment, content)
-    }
-}
-
-@available(iOS, deprecated: 14.0)
-@available(macOS, deprecated: 11.0)
-@available(tvOS, deprecated: 14.0)
-@available(watchOS, deprecated: 7.0)
-private struct HookScopeCompatBody<Content: View>: View {
-    struct Body: View {
-        @ObservedObject
-        private var dispatcher: HookDispatcher
-
-        @Environment(\.self)
-        private var environment
-
-        private let content: () -> Content
-
-        init(dispatcher: HookDispatcher, @ViewBuilder _ content: @escaping () -> Content) {
-            self.dispatcher = dispatcher
-            self.content = content
-        }
-
-        var body: some View {
-            dispatcher.scoped(environment: environment, content)
-        }
-    }
-
-    @State
-    private var dispatcher = HookDispatcher()
-    private let content: () -> Content
-
-    init(@ViewBuilder _ content: @escaping () -> Content) {
-        self.content = content
-    }
-
-    var body: Body {
-        Body(dispatcher: dispatcher, content)
     }
 }

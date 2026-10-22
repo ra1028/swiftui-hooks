@@ -14,7 +14,7 @@ public extension HookUpdateStrategy {
 }
 
 /// Represents a strategy that determines when to update the state of hooks.
-public struct HookUpdateStrategy {
+public struct HookUpdateStrategy: @unchecked Sendable {
     /// A dependency value for updates. Hooks will attempt to update a state of hook when this value changes.
     public let dependency: Dependency
 
@@ -27,7 +27,7 @@ public struct HookUpdateStrategy {
 
 public extension HookUpdateStrategy {
     /// A type erased dependency value that to determine if a hook should update its state.
-    struct Dependency: Equatable {
+    struct Dependency: Equatable, @unchecked Sendable {
         private let value: Any
         private let equals: (Self) -> Bool
 
@@ -40,7 +40,7 @@ public extension HookUpdateStrategy {
             }
 
             self.value = value
-            self.equals = { other in
+            equals = { other in
                 value == other.value as? T
             }
         }

@@ -9,9 +9,8 @@
 ///
 /// - Parameter hook: A hook to be used.
 /// - Returns: A value that this hook provides.
+@MainActor
 public func useHook<H: Hook>(_ hook: H) -> H.Value {
-    assertMainThread()
-
     guard let dispatcher = HookDispatcher.current else {
         fatalErrorHooksRules()
     }

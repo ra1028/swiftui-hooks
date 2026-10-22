@@ -9,6 +9,7 @@ import Combine
 /// - Parameter makePublisher: A closure that to create a new publisher to be subscribed.
 /// - Returns: A tuple of the most recent publisher phase and its subscribe function.
 @discardableResult
+@MainActor
 public func usePublisherSubscribe<P: Publisher>(
     _ makePublisher: @escaping () -> P
 ) -> (
@@ -46,7 +47,7 @@ private struct PublisherSubscribeHook<P: Publisher>: Hook {
                     .sink(
                         receiveCompletion: { completion in
                             switch completion {
-                            case .failure(let error):
+                            case let .failure(error):
                                 coordinator.state.phase = .failure(error)
                                 coordinator.updateView()
 
@@ -70,7 +71,7 @@ private struct PublisherSubscribeHook<P: Publisher>: Hook {
 }
 
 private extension PublisherSubscribeHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<P.Output, P.Failure>.pending
         var isDisposed = false
         var cancellable: AnyCancellable?

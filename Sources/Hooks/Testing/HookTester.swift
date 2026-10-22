@@ -3,6 +3,7 @@ import SwiftUI
 
 /// A testing tool that simulates the behaviors on a view of a given hook
 /// and manages the resulting values.
+@MainActor
 public final class HookTester<Parameter, Value> {
     /// The latest result value that the given Hook was executed.
     public private(set) var value: Value
@@ -30,15 +31,15 @@ public final class HookTester<Parameter, Value> {
         var environmentValues = EnvironmentValues()
         environment(&environmentValues)
 
-        self.currentParameter = initialParameter
+        currentParameter = initialParameter
         self.hook = hook
-        self.value = dispatcher.scoped(
+        value = dispatcher.scoped(
             environment: environmentValues,
             { hook(initialParameter) }
         )
-        self.valueHistory = [value]
+        valueHistory = [value]
         self.environment = environmentValues
-        self.cancellable = dispatcher.objectWillChange
+        cancellable = dispatcher.objectWillChange
             .sink(receiveValue: { [weak self] in
                 self?.update()
             })

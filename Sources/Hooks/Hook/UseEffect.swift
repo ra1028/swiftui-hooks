@@ -14,6 +14,7 @@
 ///   - updateStrategy: A strategy that determines when to re-call the given side effect function.
 ///   - effect: A closure that typically represents a side-effect.
 ///             It is able to return a closure that to do something when this hook is unmount from the view or when the side-effect function is called again.
+@MainActor
 public func useEffect(
     _ updateStrategy: HookUpdateStrategy? = nil,
     _ effect: @escaping () -> (() -> Void)?
@@ -40,6 +41,7 @@ public func useEffect(
 ///   - updateStrategy: A strategy that determines when to re-call the given side effect function.
 ///   - effect: A closure that typically represents a side-effect.
 ///             It is able to return a closure that to do something when this hook is unmount from the view or when the side-effect function is called again.
+@MainActor
 public func useLayoutEffect(
     _ updateStrategy: HookUpdateStrategy? = nil,
     _ effect: @escaping () -> (() -> Void)?
@@ -74,7 +76,7 @@ private struct EffectHook: Hook {
 }
 
 private extension EffectHook {
-    final class State {
+    final class State: @unchecked Sendable {
         var cleanup: (() -> Void)?
     }
 }

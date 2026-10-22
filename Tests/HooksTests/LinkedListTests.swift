@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import Hooks
+import XCTest
 
 final class LinkedListTests: XCTestCase {
     func testInit() {

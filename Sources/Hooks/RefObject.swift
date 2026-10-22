@@ -1,5 +1,5 @@
 /// A mutable object that referencing a value.
-public final class RefObject<T> {
+public final class RefObject<T>: @unchecked Sendable {
     /// A current value.
     public var current: T
 

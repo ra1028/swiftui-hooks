@@ -230,4 +230,58 @@ final class AsyncPhaseTests: XCTestCase {
             )
         }
     }
+
+    func testIfSuccess() {
+        var successValue: Int?
+        let phase: AsyncPhase<Int, URLError> = .success(42)
+        phase.ifSuccess { successValue = $0 }
+        XCTAssertEqual(successValue, 42)
+
+        var failureCalled = false
+        let failPhase: AsyncPhase<Int, URLError> = .failure(URLError(.badURL))
+        failPhase.ifSuccess { _ in failureCalled = true }
+        XCTAssertFalse(failureCalled)
+    }
+
+    func testIfFailure() {
+        var failureValue: URLError?
+        let phase: AsyncPhase<Int, URLError> = .failure(URLError(.badURL))
+        phase.ifFailure { failureValue = $0 }
+        XCTAssertEqual(failureValue?.code, .badURL)
+
+        var successCalled = false
+        let successPhase: AsyncPhase<Int, URLError> = .success(42)
+        successPhase.ifFailure { _ in successCalled = true }
+        XCTAssertFalse(successCalled)
+    }
+
+    func testUnwrap() throws {
+        let successPhase: AsyncPhase<Int, URLError> = .success(42)
+        XCTAssertEqual(try successPhase.unwrap(), 42)
+
+        let failPhase: AsyncPhase<Int, URLError> = .failure(URLError(.badURL))
+        XCTAssertThrowsError(try failPhase.unwrap()) { error in
+            XCTAssertTrue(error is URLError)
+        }
+
+        let pendingPhase: AsyncPhase<Int, URLError> = .pending
+        XCTAssertThrowsError(try pendingPhase.unwrap()) { error in
+            XCTAssertEqual(error as? PhaseError, .incomplete)
+        }
+
+        let runningPhase: AsyncPhase<Int, URLError> = .running
+        XCTAssertThrowsError(try runningPhase.unwrap()) { error in
+            XCTAssertEqual(error as? PhaseError, .incomplete)
+        }
+    }
+
+    func testInitFromResult() {
+        let successResult: Result<Int, URLError> = .success(42)
+        let successPhase = AsyncPhase(from: successResult)
+        XCTAssertEqual(successPhase, .success(42))
+
+        let failureResult: Result<Int, URLError> = .failure(URLError(.badURL))
+        let failurePhase = AsyncPhase(from: failureResult)
+        XCTAssertEqual(failurePhase, .failure(URLError(.badURL)))
+    }
 }

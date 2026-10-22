@@ -2,11 +2,12 @@ import Combine
 import SwiftUI
 
 /// A class that manages list of states of hooks used inside `HookDispatcher.scoped(environment:_)`.
+@MainActor
 public final class HookDispatcher: ObservableObject {
-    internal private(set) static weak var current: HookDispatcher?
+    private(set) weak static var current: HookDispatcher?
 
     /// A publisher that emits before the object has changed.
-    public let objectWillChange = PassthroughSubject<(), Never>()
+    public nonisolated let objectWillChange = PassthroughSubject<Void, Never>()
 
     private var records = LinkedList<HookRecordProtocol>()
     private var scopedState: ScopedHookState?
@@ -15,7 +16,9 @@ public final class HookDispatcher: ObservableObject {
     public init() {}
 
     deinit {
-        disposeAll()
+        MainActor.assumeIsolated {
+            disposeAll()
+        }
     }
 
     /// Disposes all hooks that already managed with this instance.
@@ -54,8 +57,7 @@ public final class HookDispatcher: ObservableObject {
 
             if hook.shouldDeferredUpdate {
                 scopedState.deferredUpdateRecords.append(record)
-            }
-            else {
+            } else {
                 hook.updateState(coordinator: coordinator)
             }
 
@@ -78,15 +80,13 @@ public final class HookDispatcher: ObservableObject {
             if oldRecord.shouldUpdate(newHook: hook) {
                 if hook.shouldDeferredUpdate {
                     scopedState.deferredUpdateRecords.append(newRecord)
-                }
-                else {
+                } else {
                     hook.updateState(coordinator: coordinator)
                 }
             }
 
             return hook.value(coordinator: coordinator)
-        }
-        else {
+        } else {
             scopedState.assertRecordingFailure(hook: hook, record: record.element)
 
             // Fallback process for wrong usage.
@@ -211,8 +211,8 @@ private struct HookRecord<H: Hook>: HookRecordProtocol {
         String(describing: type(of: hook))
     }
 
-    func state<H: Hook>(of hookType: H.Type) -> H.State? {
-        coordinator.state as? H.State
+    func state<Other: Hook>(of _: Other.Type) -> Other.State? {
+        coordinator.state as? Other.State
     }
 
     func shouldUpdate<New: Hook>(newHook: New) -> Bool {
@@ -235,7 +235,7 @@ private struct HookRecord<H: Hook>: HookRecordProtocol {
 private protocol HookRecordProtocol {
     var hookName: String { get }
 
-    func state<H: Hook>(of hookType: H.Type) -> H.State?
+    func state<Other: Hook>(of hookType: Other.Type) -> Other.State?
     func shouldUpdate<New: Hook>(newHook: New) -> Bool
     func updateState()
     func dispose()

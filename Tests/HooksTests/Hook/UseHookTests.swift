@@ -1,10 +1,9 @@
+@testable import Hooks
 import SwiftUI
 import XCTest
 
-@testable import Hooks
-
-final class UseHookTests: XCTestCase {
-    struct TestHook: Hook {
+@MainActor final class UseHookTests: XCTestCase {
+    @MainActor struct TestHook: Hook {
         final class State {
             var flag = false
             var isUpdated = false

@@ -14,6 +14,7 @@ import SwiftUI
 ///
 /// - Parameter initialState: A closure creating an initial state. The closure will only be called once, during the initial render.
 /// - Returns: A `Binding<State>` wrapping current state.
+@MainActor
 public func useState<State>(_ initialState: @escaping () -> State) -> Binding<State> {
     useHook(StateHook(initialState: initialState))
 }
@@ -29,6 +30,7 @@ public func useState<State>(_ initialState: @escaping () -> State) -> Binding<St
 ///
 /// - Parameter initialState: An initial state.
 /// - Returns: A `Binding<State>` wrapping current state.
+@MainActor
 public func useState<State>(_ initialState: State) -> Binding<State> {
     useState {
         initialState
@@ -69,7 +71,7 @@ private struct StateHook<State>: Hook {
 }
 
 private extension StateHook {
-    final class Ref {
+    final class Ref: @unchecked Sendable {
         var state: State
         var isDisposed = false
 

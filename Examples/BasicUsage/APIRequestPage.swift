@@ -28,10 +28,10 @@ struct APIRequestPage: HookView {
                 case .running:
                     ProgressView()
 
-                case .success(let posts):
+                case let .success(posts):
                     postRows(posts)
 
-                case .failure(let error):
+                case let .failure(error):
                     errorRow(error, retry: fetch)
 
                 case .pending:

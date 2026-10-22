@@ -27,8 +27,8 @@ struct MovieDBService: MovieDBServiceProtocol {
 
         let url =
             imageBaseURL
-            .appendingPathComponent(size.rawValue)
-            .appendingPathComponent(path)
+                .appendingPathComponent(size.rawValue)
+                .appendingPathComponent(path)
 
         let (data, _) = try await session.data(from: url)
         return UIImage(data: data)

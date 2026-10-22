@@ -1,9 +1,8 @@
+@testable import Hooks
 import SwiftUI
 import XCTest
 
-@testable import Hooks
-
-final class UseContextTests: XCTestCase {
+@MainActor final class UseContextTests: XCTestCase {
     func testValue() {
         let tester = HookTester {
             useContext(TestContext.self)

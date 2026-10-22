@@ -1,7 +1,6 @@
 import Hooks
-import XCTest
-
 @testable import TheMovieDB_MVVM
+import XCTest
 
 final class UseMovieImageTests: XCTestCase {
     func testSuccess() {

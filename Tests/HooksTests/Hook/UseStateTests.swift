@@ -1,9 +1,8 @@
+@testable import Hooks
 import SwiftUI
 import XCTest
 
-@testable import Hooks
-
-final class UseStateTests: XCTestCase {
+@MainActor final class UseStateTests: XCTestCase {
     func testUpdate() {
         let tester = HookTester {
             useState(0)

@@ -10,6 +10,7 @@
 ///   - operation: A closure that produces a resulting value asynchronously.
 /// - Returns: A most recent async phase.
 @discardableResult
+@MainActor
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async -> Output
@@ -34,6 +35,7 @@ public func useAsync<Output>(
 ///   - operation: A closure that produces a resulting value asynchronously.
 /// - Returns: A most recent async phase.
 @discardableResult
+@MainActor
 public func useAsync<Output>(
     _ updateStrategy: HookUpdateStrategy,
     _ operation: @escaping () async throws -> Output
@@ -46,7 +48,7 @@ public func useAsync<Output>(
     )
 }
 
-internal struct AsyncHook<Output>: Hook {
+struct AsyncHook<Output>: Hook {
     let updateStrategy: HookUpdateStrategy?
     let operation: () async -> Output
 
@@ -75,8 +77,8 @@ internal struct AsyncHook<Output>: Hook {
     }
 }
 
-internal extension AsyncHook {
-    final class State {
+extension AsyncHook {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Never>.pending
         var task: Task<Void, Never>? {
             didSet {
@@ -86,7 +88,7 @@ internal extension AsyncHook {
     }
 }
 
-internal struct AsyncThrowingHook<Output>: Hook {
+struct AsyncThrowingHook<Output>: Hook {
     let updateStrategy: HookUpdateStrategy?
     let operation: () async throws -> Output
 
@@ -106,8 +108,7 @@ internal struct AsyncThrowingHook<Output>: Hook {
             do {
                 let output = try await operation()
                 phase = .success(output)
-            }
-            catch {
+            } catch {
                 phase = .failure(error)
             }
 
@@ -123,8 +124,8 @@ internal struct AsyncThrowingHook<Output>: Hook {
     }
 }
 
-internal extension AsyncThrowingHook {
-    final class State {
+extension AsyncThrowingHook {
+    final class State: @unchecked Sendable {
         var phase = AsyncPhase<Output, Error>.pending
         var task: Task<Void, Never>? {
             didSet {

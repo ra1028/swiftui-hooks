@@ -9,10 +9,10 @@ struct TopRatedMoviesPage: HookView {
         NavigationView {
             ZStack {
                 switch viewModel.loadPhase {
-                case .success(let movies):
+                case let .success(movies):
                     moviesList(data: movies, viewModel: viewModel)
 
-                case .failure(let error):
+                case let .failure(error):
                     failure(error, viewModel: viewModel)
 
                 case .pending, .running:
@@ -34,7 +34,7 @@ struct TopRatedMoviesPage: HookView {
         }
     }
 
-    func failure(_ error: Error, viewModel: TopRatedMoviesViewModel) -> some View {
+    func failure(_: Error, viewModel: TopRatedMoviesViewModel) -> some View {
         VStack(spacing: 24) {
             Text("Failed to load movies").font(.system(.title2))
 
